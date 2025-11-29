@@ -45,10 +45,43 @@ class Matrix {
     }
 
     public show = () => {
+       /* let request = new XMLHttpRequest();
+        let url = "https://api.openai.com/v1/responses"; // Replace with your actual server endpoint
+
+        request.open("POST", url, true);
+        request.setRequestHeader("Content-Type", "application/json");
+        request.setRequestHeader("Authorization", "Bearer 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");
+       
+        let payload = `{
+        "model": "gpt-5",
+        "input": "Сгенерируй плиз ответ от 'чёткого пацана с района' на вопрос Слышь, братан, чё по движу сегодня — где собираемся и во сколько залетать?" 
+        }`;
+       // res.output[1].content[0].text
+        request.onload =() => {
+            if (request.status >= 200 && request.status < 300) {
+
+                              if (!this.exists()) {
+            this._page.appendChild(this._container);
+           // this.matrixEffect(this._graphic);     
+            this.drawStuff(JSON.parse(request.response).output[1].content[0].text);
+        }  
+       // debugger;
+      //  console.log("Response received:", request.response.output.content[0]);
+        //           } else {
+          //       console.error("Request failed. Status:", request.status, request.statusText);
+          }
+        };
+
+        request.onerror = function() {
+            console.error("A network error occurred during the request.");
+        };
+
+        request.send(payload);*/
+
         if (!this.exists()) {
             this._page.appendChild(this._container);
-            this.matrixEffect(this._graphic);     
-        }   
+            this.matrixEffect(this._graphic);    
+        } 
     }
 
     public hide = () => {
@@ -69,6 +102,37 @@ class Matrix {
 
     private exists = () => {
         return document.getElementById("view-page") && document.getElementById("container");
+    }
+
+    public drawStuff = (stuff: any) => {
+//stuff = stuff.match(/.{1,33}/g).join('\n');
+stuff = stuff.match(/.{1,77}/g) || [];
+        const canvas = this._graphic;
+        const context = canvas.getContext("2d", {willReadFrequently: true});
+
+        const w = (canvas.width = window.innerWidth);
+        const h = (canvas.height = window.innerHeight);
+//
+    //            if (this.exists()) {
+          //  this._graphic.getContext("2d").clearRect(0, 0, window.innerWidth, window.innerHeight);
+          //  this._page.removeChild(this._container);
+         //   clearInterval(this._interval);
+         //   clearTimeout(this._timeout);
+
+          //  this.will();
+   //     }  
+            context.fillStyle = "rgba(0,0,0,.05)";
+            context.fillRect(0, 0, w, h);
+
+            context.fillStyle = "#ff0077ff";            
+           
+            context.font = "18px 'system-ui'";
+
+            stuff.forEach((element: any, index: number) => {
+                            context.fillText(element, 222, 222 + index * 22);
+            });
+    
+
     }
 
 

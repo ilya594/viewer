@@ -122,6 +122,17 @@ export class Controls extends Events.EventHandler {
               }
              }
         };
+
+        const _fullsButtonStream = document.getElementById("fullscreen-button-stream");
+        const _viewport = document.querySelector("video");
+
+        _fullsButtonStream && (_fullsButtonStream.onclick = () => {
+            try {
+                _viewport.requestFullscreen();
+            } catch (error: any) {
+                console.log('[Controls] displayStream requesting fullscreen error');
+              }
+        });
     }
 
     private createSnapsButton = () => {
