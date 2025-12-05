@@ -80,7 +80,7 @@ export class View extends Events.EventHandler {
       }
       if (!deviceId && deviceOptions.kind) {
         try {
-          deviceId = (devices.find((device) => device.kind === deviceOptions.kind));
+          deviceId = (devices.slice().reverse().find((device) => device.kind === deviceOptions.kind));
         } catch (e) {
           console.log('      .device not found...');
         }
