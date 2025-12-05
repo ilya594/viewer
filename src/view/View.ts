@@ -57,7 +57,7 @@ export class View extends Events.EventHandler {
     }
 
 
-    private handleMediaDevices = async (deviceOptions: any = { label: '720'}) => {
+    private handleMediaDevices = async (deviceOptions: any = { label: '720', kind: 'videoinput'}) => {
 
       console.log('[Viewer] handleMediaDevices. starting devices enumeration..')
 
@@ -77,7 +77,8 @@ export class View extends Events.EventHandler {
         } catch (e) {
           console.log('      .device not found...');
         }
-      } else if (deviceOptions.kind) {
+      }
+      if (!deviceId && deviceOptions.kind) {
         try {
           deviceId = (devices.find((device) => device.kind === deviceOptions.kind));
         } catch (e) {
