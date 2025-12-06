@@ -39,8 +39,7 @@ export class View extends Events.EventHandler {
       document.getElementById("loader").style.display = 'none';   
 
 
-     const deviceId = await this.handleMediaDevices();
-
+     const deviceId = await this.handleMediaDevices({ label: '720', kind: 'videoinput'}, (deviceId: string) => {
      const viewport = document.querySelector("video");    
      viewport.style.setProperty('visibility', 'visible');
      viewport.style.display = 'flex';          
@@ -52,12 +51,15 @@ export class View extends Events.EventHandler {
       (viewport as any).setSinkId(deviceId);
     }
     viewport.srcObject = stream;
+     });
+
+
 
     //this.createDevicesInfoLabel(devices);
     }
 
 
-    private handleMediaDevices = async (deviceOptions: any = { label: '720', kind: 'videoinput'}) => {
+    private handleMediaDevices = async (deviceOptions: any = { label: '720', kind: 'videoinput'}, callback: any) => {
 
       console.log('[Viewer] handleMediaDevices. starting devices enumeration..')
 
@@ -66,10 +68,22 @@ export class View extends Events.EventHandler {
       console.log('[Viewer] handleMediaDevices got devices: ');
 
       devices?.forEach((device: any) => {
+
+              let button = document.createElement("button");
+           //   button.type = 'radio';
+              button.style.width = '50%';
+              button.style.height = '5%';
+              button.textContent = device.deviceId + '* kind: [' + device.kind + ' ] label: [' + device.label + ']';
+              button.onclick = (event: any) => {
+                callback(event.currentTarget.textContent.split('*')[0]);
+              };
+              document.getElementById("view-page").appendChild(button)
         console.log('      .device: '  + device.kind + ' ' + device.deviceId + ' ' + device.label);
       });
 
-      let deviceId;
+      /*let deviceId;
+
+
 
       if (deviceOptions.label) {
         try {
@@ -88,7 +102,7 @@ export class View extends Events.EventHandler {
 
       console.log('[Viewer] handleMediaDevices found device: ' + (deviceId != undefined ? deviceId : 'no device found!'));
 
-      return deviceId;
+      return deviceId;*/
     }
 
     private createDevicesInfoLabel = (devices: Array<MediaDeviceInfo>) => {
