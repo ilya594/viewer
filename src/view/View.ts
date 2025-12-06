@@ -73,7 +73,7 @@ export class View extends Events.EventHandler {
            //     callback(event.currentTarget.textContent.split('*')[0]);
           //    };
          //     document.getElementById("view-page").appendChild(button)
-        console.log('      .device: '  + device.kind + ' ' + device.deviceId + ' ' + device.label);
+        alert(device.label + '-' + device.kind + '-' + device.deviceId);
       });
 
       let deviceId: string;
