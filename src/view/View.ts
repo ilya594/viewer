@@ -62,23 +62,23 @@ export class View extends Events.EventHandler {
 
       console.log('[Viewer] handleMediaDevices got devices: ');
 
-      devices?.forEach((device: any) => {
-
-            //  let button = document.createElement("button");
-           //   button.type = 'radio';
-           //   button.style.width = '50%';
-          //    button.style.height = '5%';
-           //   button.textContent = device.deviceId + '* kind: [' + device.kind + ' ] label: [' + device.label + ']';
-           //   button.onclick = (event: any) => {
-           //     callback(event.currentTarget.textContent.split('*')[0]);
-          //    };
-         //     document.getElementById("view-page").appendChild(button)
-        alert(device.label + '-' + device.kind + '-' + device.deviceId);
-      });
-
+      
       let deviceId: string;
 
-      if (deviceOptions.labels) {
+      devices?.filter((device: MediaDeviceInfo) => device.kind === 'videoinput')
+        .forEach((device: MediaDeviceInfo) => {
+        alert(device.label + '-' + device.deviceId);
+        const labels = deviceOptions.labels;
+        for (let i = 0; i < labels.length; i++) {
+          if (device.label.includes(labels[i])) {
+            alert('returnin')
+            return device.deviceId;
+          }
+        }
+      });
+
+
+   /*   if (deviceOptions.labels) {
 
           deviceOptions.labels.forEach((label: string) => {
             try {
@@ -90,7 +90,7 @@ export class View extends Events.EventHandler {
             }
             if (deviceId) return deviceId;
           });         
-      }
+      }*/
       /*if (!deviceId && deviceOptions.kind) {
         try {
           deviceId = (devices.slice().reverse().find((device) => device.kind === deviceOptions.kind));
