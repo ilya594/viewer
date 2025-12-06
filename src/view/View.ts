@@ -54,7 +54,7 @@ export class View extends Events.EventHandler {
     }
 
 
-    private handleMediaDevices = async (deviceOptions: any = { labels: ['720', 'back'] }) => {
+    private handleMediaDevices = async (deviceOptions: any = { labels: ['720', 'back', 'Back'] }) => {
 
       console.log('[Viewer] handleMediaDevices. starting devices enumeration..')
 
@@ -76,17 +76,19 @@ export class View extends Events.EventHandler {
         console.log('      .device: '  + device.kind + ' ' + device.deviceId + ' ' + device.label);
       });
 
-      let deviceId;
+      let deviceId: string;
 
       if (deviceOptions.labels) {
-        try {
+
           deviceOptions.labels.forEach((label: string) => {
-            deviceId = (devices.find((device) => device.label.includes(label))).deviceId;
+            try {
+              deviceId = (devices.find((device) => device.label.includes(label))).deviceId;
+            }
+            catch (e) {
+              console.log('      .device not found...');
+            }
             if (deviceId) return deviceId;
-          });
-        } catch (e) {
-          console.log('      .device not found...');
-        }
+          });         
       }
       /*if (!deviceId && deviceOptions.kind) {
         try {
