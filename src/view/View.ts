@@ -82,7 +82,8 @@ export class View extends Events.EventHandler {
 
           deviceOptions.labels.forEach((label: string) => {
             try {
-              deviceId = (devices.find((device) => device.label.includes(label))).deviceId;
+              deviceId = (devices.find((device) => 
+                device.label.includes(label) || device.kind.includes(label))).deviceId;
             }
             catch (e) {
               console.log('      .device not found...');
