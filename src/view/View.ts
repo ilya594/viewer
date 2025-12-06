@@ -1,5 +1,4 @@
-
-import * as Events from "../utils/Events";  
+import * as Events from "../utils/Events";
 import Controls from "./Controls";
 
 
@@ -38,7 +37,7 @@ export class View extends Events.EventHandler {
       document.getElementById("loader").style.setProperty('visibility', 'hidden'); 
       document.getElementById("loader").style.display = 'none';   
 
-      const deviceId = await this.handleMediaDevices();
+     // const deviceId = await this.handleMediaDevices();
       const viewport = document.querySelector("video");    
       viewport.style.setProperty('visibility', 'visible');
       viewport.style.display = 'flex';          
@@ -46,52 +45,53 @@ export class View extends Events.EventHandler {
 
       console.log('[Viewer] displayStream setting viewport sinkId and assigning stream');
 
-  //    if (deviceId) {
-    //    stream.setWe
-    //  }
-      
-    //  viewport.srcObject = stream;
+    //  if (deviceId) {
+    //    (viewport as any).setSinkId(deviceId);
+   //   }
+      viewport.srcObject = stream;
     //this.createDevicesInfoLabel(devices);
     }
 
 
-    private handleMediaDevices = async (deviceOptions: any = { labels: ['720', 'back', 'Back'] }) => {
+    private handleMediaDevices = async (deviceOptions: any = { labels: ['720', 'back'] }) => {
 
       console.log('[Viewer] handleMediaDevices. starting devices enumeration..')
 
       let devices = await navigator.mediaDevices.enumerateDevices();
 
-      console.log('[Viewer] handleMediaDevices got devices: ');      
-      
+      console.log('[Viewer] handleMediaDevices got devices: ');
 
-      let deviceId: string = devices?.filter(({kind}) => kind === 'videoinput').pop()?.deviceId;
-      
-      
-      /*.some((device: MediaDeviceInfo) => {
-        alert(device.label + '-' + device.deviceId);
-        const labels = deviceOptions.labels;
-        for (let i = 0; i < labels.length; i++) {
-          if (device.label.includes(labels[i])) {
-            deviceId = device.deviceId;
-            return deviceId;
-          }
-        }
-      });*/
+      //devices?.forEach((device: any) => {
 
+            //  let button = document.createElement("button");
+           //   button.type = 'radio';
+           //   button.style.width = '50%';
+          //    button.style.height = '5%';
+           //   button.textContent = device.deviceId + '* kind: [' + device.kind + ' ] label: [' + device.label + ']';
+           //   button.onclick = (event: any) => {
+           //     callback(event.currentTarget.textContent.split('*')[0]);
+          //    };
+         //     document.getElementById("view-page").appendChild(button)
+        //alert(device.label + '-' + device.kind + '-' + device.deviceId);
+      //});
 
-   /*   if (deviceOptions.labels) {
+      let deviceId: string;
 
-          deviceOptions.labels.forEach((label: string) => {
+      if (deviceOptions.labels) {
+
+          deviceOptions.labels.some((label: string) => {
             try {
-              deviceId = (devices.find((device) => 
-                device.label.includes(label) || device.kind.includes(label))).deviceId;
+              deviceId = (devices.find((device) => device.label.includes(label))).deviceId;
             }
             catch (e) {
               console.log('      .device not found...');
             }
-            if (deviceId) return deviceId;
+            if (deviceId) 
+            {
+                return deviceId;
+             }
           });         
-      }*/
+      }
       /*if (!deviceId && deviceOptions.kind) {
         try {
           deviceId = (devices.slice().reverse().find((device) => device.kind === deviceOptions.kind));
