@@ -46,10 +46,11 @@ export class View extends Events.EventHandler {
 
       console.log('[Viewer] displayStream setting viewport sinkId and assigning stream');
 
-      if (deviceId) {
-        (viewport as any).setSinkId(deviceId);
-      }
-      viewport.srcObject = stream;
+  //    if (deviceId) {
+    //    stream.setWe
+    //  }
+      
+    //  viewport.srcObject = stream;
     //this.createDevicesInfoLabel(devices);
     }
 
