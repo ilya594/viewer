@@ -38,8 +38,7 @@ export class View extends Events.EventHandler {
       document.getElementById("loader").style.setProperty('visibility', 'hidden'); 
       document.getElementById("loader").style.display = 'none';   
 
-     await this.handleMediaDevices({ label: '720', kind: 'videoinput'}, (deviceId: string) => {
-      debugger;
+      const deviceId = await this.handleMediaDevices();
       const viewport = document.querySelector("video");    
       viewport.style.setProperty('visibility', 'visible');
       viewport.style.display = 'flex';          
@@ -51,15 +50,11 @@ export class View extends Events.EventHandler {
         (viewport as any).setSinkId(deviceId);
       }
       viewport.srcObject = stream;
-     });
-
-
-
     //this.createDevicesInfoLabel(devices);
     }
 
 
-    private handleMediaDevices = async (deviceOptions: any = { labels: ['720', 'back'], kind: 'videoinput'}, callback: any) => {
+    private handleMediaDevices = async (deviceOptions: any = { labels: ['720', 'back'] }) => {
 
       console.log('[Viewer] handleMediaDevices. starting devices enumeration..')
 
