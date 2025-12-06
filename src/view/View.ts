@@ -65,14 +65,13 @@ export class View extends Events.EventHandler {
       
       let deviceId: string;
 
-      devices?.filter((device: MediaDeviceInfo) => device.kind === 'videoinput')
-        .forEach((device: MediaDeviceInfo) => {
+      devices?.filter(({kind}) => kind === 'videoinput').some((device: MediaDeviceInfo) => {
         alert(device.label + '-' + device.deviceId);
         const labels = deviceOptions.labels;
         for (let i = 0; i < labels.length; i++) {
           if (device.label.includes(labels[i])) {
-            alert('returnin')
-            return device.deviceId;
+            deviceId = device.deviceId;
+            return deviceId;
           }
         }
       });
