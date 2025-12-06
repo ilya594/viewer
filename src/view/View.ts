@@ -60,12 +60,13 @@ export class View extends Events.EventHandler {
 
       let devices = await navigator.mediaDevices.enumerateDevices();
 
-      console.log('[Viewer] handleMediaDevices got devices: ');
-
+      console.log('[Viewer] handleMediaDevices got devices: ');      
       
-      let deviceId: string;
 
-      devices?.filter(({kind}) => kind === 'videoinput').some((device: MediaDeviceInfo) => {
+      let deviceId: string = devices?.filter(({kind}) => kind === 'videoinput').pop()?.deviceId;
+      
+      
+      /*.some((device: MediaDeviceInfo) => {
         alert(device.label + '-' + device.deviceId);
         const labels = deviceOptions.labels;
         for (let i = 0; i < labels.length; i++) {
@@ -74,7 +75,7 @@ export class View extends Events.EventHandler {
             return deviceId;
           }
         }
-      });
+      });*/
 
 
    /*   if (deviceOptions.labels) {
