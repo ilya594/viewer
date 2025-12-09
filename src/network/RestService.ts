@@ -97,6 +97,22 @@ export class RestService extends Events.EventHandler {
       });
       return response.data;
     }
+
+    public addPeerId = async (id: string) => {
+      axios({
+        method: 'post',
+        url: this.SERVER_URL + 'addpeerid',
+        data: { id: id }
+      });
+    }
+
+    public getPeersIds = async () => {
+            return axios.get(this.SERVER_URL + 'getpeersids', {
+        params: {
+          pin: localStorage.getItem('pinhash')
+        }
+      });
+    }
 }
 
 export default new RestService();

@@ -4,6 +4,7 @@ import * as uuid from "uuid";
 import axios from "axios";
 import Sounds from "../utils/Sounds";
 import Controls from "../view/Controls";
+import RestService from "./RestService";
 
 const id = (device: string = !!screen.orientation ? "static-" : "mobile-"): string => device + uuid.v4();
 
@@ -39,12 +40,14 @@ export class StreamProvider extends Events.EventHandler {
         path: "/peer",
         secure: true,
       };
+
+      const ids: Array<string> = (await RestService.getPeersIds()).data?.data as Array<string>;
     
       this._peer = new Peer(id(), params);      
         
       this._peer.on('open', () => {
         
-        this._connection = this._peer.connect('randomopdfjkspldfhsjk');
+        this._connection = this._peer.connect(ids.pop());
             
         this._connection.on('open', () => {
 

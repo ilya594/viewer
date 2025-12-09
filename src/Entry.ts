@@ -52,14 +52,6 @@ class Entry {
     private initializeRoutes = async () => {
 
       switch (route()) {
-        case ('client'): {
-          this.initializeComponents();
-          break;
-        }
-        case ('show'): {
-          await this.initializeIntegratedComponents();
-          break;
-        }
         case ('mix'): {
           await this.initializeIntegratedComponents();
           break;
@@ -73,16 +65,17 @@ class Entry {
 
     private initializeRemoteStream = async () => {
       console.log('[Entry] initializeRemoteStream importing streamer...');
+
       const { Streamer } = await System.import('https://html-peer-streamer.onrender.com/index.js'); 
+
       const streamer = new Streamer();
-      console.log('[Entry] initializeRemoteStream streamer imported. created instance. initializing...');
       
-      //@ts-ignore
-      const { stream } = await streamer.initialize({ audio : document.getElementById('audio_checkbox')?.checked || false });
-      /*(stream as MediaStream).onaddtrack = (event: MediaStreamTrackEvent) => {
-        console.log('[Entry] initializeRemoteStream track added: ' + Boolean(event));
-        debugger;
-      };*/
+      console.log('[Entry] initializeRemoteStream streamer imported. created instance. initializing...');
+
+      const { stream, peerId } = await streamer.initialize();
+
+      await RestService.addPeerId(peerId);
+
       return stream;
     }
 
@@ -99,7 +92,6 @@ class Entry {
 
 
     private initializeComponents = async () => {   
-
       await StreamProvider.initialize();
             StreamProvider.addEventListener(Events.STREAM_RECEIVED, (stream: any) => {
               View.displayStream(stream);
