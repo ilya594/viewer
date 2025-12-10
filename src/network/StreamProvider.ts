@@ -33,6 +33,10 @@ export class StreamProvider extends Events.EventHandler {
         return this;
     }
 
+    private getAllPeersIds = async (): Promise<string[]> => {
+      return (await RestService.getPeersIds()).data?.data as Array<string>;
+    }
+
     private initializePeerStream = async () => {     
 
       const params = {
@@ -41,13 +45,13 @@ export class StreamProvider extends Events.EventHandler {
         secure: true,
       };
 
-      const ids: Array<string> = (await RestService.getPeersIds()).data?.data as Array<string>;
+      const ids: Array<string> = await this.getAllPeersIds();
     
       this._peer = new Peer(id(), params);      
         
       this._peer.on('open', () => {
         
-        this._connection = this._peer.connect(ids.pop());
+        this._connection = this._peer.connect(ids.shift());
             
         this._connection.on('open', () => {
 
