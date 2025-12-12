@@ -54,6 +54,10 @@ export class StreamProvider extends Events.EventHandler {
       this._peer = new Peer(id(), params);      
         
       this._peer.on('open', async () => {
+
+        for (const id of Array.from(this._streamers.keys())) {
+          this.createConnection(id);
+        }
         
         this._peer.on('call', async (call: MediaConnection) => { 
           call.on('stream', (stream: MediaStream) => {
@@ -64,9 +68,7 @@ export class StreamProvider extends Events.EventHandler {
           });
         });
 
-        for (const id of Array.from(this._streamers.keys())) {
-          this.createConnection(id);
-        }
+
       });
     }
 
@@ -78,7 +80,7 @@ export class StreamProvider extends Events.EventHandler {
 
           connection.send({ type: 'custom-media-stream-request' });
        
-          await this.addCallEventHandler();
+          //await this.addCallEventHandler();
 
         }); 
     }
