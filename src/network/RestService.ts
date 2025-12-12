@@ -3,7 +3,7 @@ import axios from "axios";
 
 export class RestService extends Events.EventHandler {
 
-  private SERVER_URL: string = 'https://nodejs-http-server.onrender.com/';
+  public SERVER_URL: string = 'https://nodejs-http-server.onrender.com/';
   private TIME_ZONE: string = 'Europe/Kyiv';
 
   constructor() {

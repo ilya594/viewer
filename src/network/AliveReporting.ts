@@ -4,23 +4,19 @@ class AliveReporting {
 
     private _interval: any;
 
-    constructor() {
-
-    }
+    constructor() {}
 
     public initialize = async (id: string) => {
-        const HEARTBEAT_INTERVAL = 15000; // 15 seconds
+        const HEARTBEAT_INTERVAL = 5000;
         this._interval = setInterval(() => this.sendHeartbeat(id), HEARTBEAT_INTERVAL);
 
         return window.addEventListener('beforeunload', async () => {
             clearInterval(this._interval);
 
-            // Use navigator.sendBeacon for reliable unload request
-            //navigator.sendBeacon(
-            //  `${SERVER_URL}/api/deregister`,
-            //  JSON.stringify({ peerId: myPeerId })
-            //);
-            //});
+            navigator.sendBeacon(
+              RestService.SERVER_URL + 'removepeerid',
+              JSON.stringify({ id: id })
+            );
         });
     }
 
