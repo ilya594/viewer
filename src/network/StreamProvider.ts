@@ -10,7 +10,7 @@ const id = (device: string = !!screen.orientation ? "static-" : "mobile-"): stri
 
 export class StreamProvider extends Events.EventHandler {
 
-    private _ids: Array<string>;
+    private _streamers: Map<string, Streamer> = new Map();
     private _peer: any;
    // private _connection: any;
    // private _call: MediaConnection;
@@ -34,8 +34,11 @@ export class StreamProvider extends Events.EventHandler {
         return this;
     }
 
-    private getAllPeersIds = async (): Promise<string[]> => {
-      return (await RestService.getPeersIds()).data?.data as Array<string>;
+    private getAllPeersIds = async (): Promise<Map<string, Streamer>> => {
+      ((await RestService.getPeersIds()).data?.data as Array<string>).forEach((id: string) => {
+        this._streamers.set(id, new Streamer(id));
+      })
+      return this._streamers;
     }
 
     private initializePeerStream = async () => {     
@@ -46,19 +49,29 @@ export class StreamProvider extends Events.EventHandler {
         secure: true,
       };
 
-      this._ids = await this.getAllPeersIds();
+      this._streamers = await this.getAllPeersIds();
     
       this._peer = new Peer(id(), params);      
         
       this._peer.on('open', async () => {
         
-        for (const id of this._ids) {
-          await this.createConnection(id);
+        this._peer.on('call', async (call: MediaConnection) => { 
+          call.on('stream', (stream: MediaStream) => {
+            if (this._streamers.get(call.peer).pending) {
+              this._streamers.get(call.peer).setStream(stream);
+              this.dispatchEvent(Events.STREAM_RECEIVED, stream); 
+            }
+          });
+        });
+
+        for (const id of Array.from(this._streamers.keys())) {
+          this.createConnection(id);
         }
       });
     }
 
     private createConnection = async (id: string) => {
+
         let connection = this._peer.connect(id);
             
         connection.on('open', async () => {
@@ -80,14 +93,17 @@ export class StreamProvider extends Events.EventHandler {
     }*/
 
     private addCallEventHandler = async () => {
-          return new Promise((resolve, _) => {this._peer.on('call', async (call: MediaConnection) => {        
-            call.on('stream', (stream) => {
-              this.dispatchEvent(Events.STREAM_RECEIVED, stream); 
-              this._streams.push(stream);
-              resolve(stream);
-            });
-            call.answer(null);
-          });});
+
+          //  this._peer.on('call', async (call: MediaConnection) => {        
+
+        //    call.on('stream', (stream) => {
+         //     this.dispatchEvent(Events.STREAM_RECEIVED, stream); 
+         //     this._streams.push(stream);
+
+        //    });
+        //    call.answer(null);
+       //   );
+
     }
 
     /*public sendSnaphot = (snapshot: string) => {
@@ -121,9 +137,24 @@ export class StreamProvider extends Events.EventHandler {
         this._peer?.disconnect?.();
         this._peer?.destroy?.();  
     };
+}
 
+class Streamer {
 
+  public id;
+  public stream: MediaStream;
 
+  public get pending(): boolean {
+    return !this.stream;
+  }
+
+  constructor(id: string) {
+    this.id = id;
+  }
+
+  public setStream = (stream: MediaStream) => {
+    this.stream = stream;
+  }
 }
 
 export default new StreamProvider();
