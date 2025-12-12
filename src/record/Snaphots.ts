@@ -85,10 +85,15 @@ class Snaphots extends Events.EventHandler {
     }
 
     private onViewportClick = (event: any) => {   
-        const viewport = document.querySelector("video");    
-        viewport.srcObject = StreamProvider.getNextStream();
+        this.switchStreams();
         //this.createSnaphot(this.drawCanvasFromVideo(this._proxy, this._viewport, "manual"), true);
     };
+
+    private switchStreams = () => {
+        this.dispatchEvent(Events.STREAM_SWITCHED);
+        const viewport = document.querySelector("video");    
+        viewport.srcObject = StreamProvider.getNextStream();
+    }
 
     private drawCanvasFromVideo(canvas: HTMLCanvasElement, video: any, source: string, data: any = null): HTMLCanvasElement {
         const w:number = canvas.width = video.getBoundingClientRect().width;

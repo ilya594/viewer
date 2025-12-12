@@ -1,3 +1,4 @@
+import Snaphots from "../record/Snaphots";
 import { MOTION_DETECT_CHECKPOINT_SIZE, MOTION_DETECT_DELAY, MOTION_DETECT_HEAP_SIZE, MOTION_DETECT_PIXEL_COEF } from "../utils/Constants";
 import * as Events from "../utils/Events";    
 import * as Utils from "../utils/Utils";
@@ -41,6 +42,8 @@ export class MotionDetector extends Events.EventHandler {
     public initialize = async () => {
 
         this._viewport = document.querySelector("video");   
+
+        Snaphots.addEventListener(Events.STREAM_SWITCHED, () => this._values = new DeltaValues());
 
         this.startDetector();
         
