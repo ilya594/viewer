@@ -338,8 +338,12 @@
       <input type="checkbox" id="audio_checkbox" name="audio_checkbox" />
       <label for="audio_checkbox" style="  font-size: 18px; font-family: 'Courier New', Courier, monospace; 	color: #ffffff; font-weight: 900;">ෲудио੦ഠ〇?</label>
     </div>
-
   </div>
+
+
+  
+
+
 
   <div id="view-page" class="container" style="position: relative; visibility: hidden; display: none; background-repeat: no-repeat; background-size: cover;">
     <div id="loader" class="center">
@@ -352,8 +356,8 @@
 
     <video autoplay style="display: none; visibility: hidden; width: 1280px; height: 720px; border-style:solid; border-color: #28e717; border-left-width: 0"></video>
     <audio id="audio-container"></audio>
-    <div style="position: absolute; bottom: 7%; left: 7%;">
-      <img src="./images/zadov.png" width="30%" height="30%" style="opacity: 44%;"/>
+    <div style="position: absolute; bottom: 7%; left: 7%; display: none">
+      <img src="./images/zadov.png" width="30%" height="30%" style="opacity: 44%; display: none"/>
     </div>
     <div id="controls" style="position: absolute; top: 6%; left: 1%; visibility: hidden; background: linear-gradient(.25turn, black, 78%, transparent);">
 
@@ -361,10 +365,8 @@
         <button class="button" style="background-image: url(images/photo_camera.png);" id="tmpID" ><div id="snaps-button" style="opacity: 70%;" tabindex="-1"></div></button>
 
 
-          <button id="watch-button" class="button" style="background-image: url(./images/guy_watching.png); z-index: 9990;">
-
-            <div style="visibility: hidden;"  tabindex="0">
-
+        <button id="watch-button" class="button" style="background-image: url(./images/guy_watching.png); z-index: 9990;">
+          <div style="visibility: hidden;"  tabindex="0">
               <div style="display: flex; flex-direction: column; position: absolute; left: 130px; height: 560px; min-width: 20px; top: 14%; background:#16161605"></div>
               <div id="watch-toggle-month" style="display: flex; flex-direction: column; border: 1px solid #47fe0f; position: absolute; left: 150px; height: 560px; min-width: 200px; top: 14%; background: linear-gradient(.25turn, black, 58%, transparent);"  >
                   <div style="position: absolute; color: #28e717; font-size: 28px; top: 25%; right: 100%;">ᐸ</div>
@@ -397,9 +399,9 @@
             <button id="remote-save-button" class="button" style="width: 60px; height: 40px; margin-left: 6px;" tabindex="0">ܟ</button>
           </span>
           <button id="trace-button" class="button" style="background-image: url(./images/6956441_preview.png);" tabindex="0"></button>
-
-
           </div>
+
+
 
 
 
