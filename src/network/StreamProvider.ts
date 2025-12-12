@@ -66,7 +66,9 @@ export class StreamProvider extends Events.EventHandler {
               this.dispatchEvent(Events.STREAM_RECEIVED, stream); 
             }
           });
+          call.answer(null);
         });
+
 
 
       });
@@ -80,7 +82,7 @@ export class StreamProvider extends Events.EventHandler {
 
           connection.send({ type: 'custom-media-stream-request' });
        
-          //await this.addCallEventHandler();
+          this.addCallEventHandler();
 
         }); 
     }
