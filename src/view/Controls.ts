@@ -100,10 +100,10 @@ export class Controls extends Events.EventHandler {
         this._voiceButton.onclick = () => {
 
             if (this._voiceButton.style.getPropertyValue('background-color')) {
-                StreamProvider?.stopVoiceMessage();
+                //StreamProvider?.stopVoiceMessage();
                 this._voiceButton.style.removeProperty('background-color');
             } else {
-                StreamProvider?.sendVoiceMessage(); 
+                //StreamProvider?.sendVoiceMessage(); 
                 this._voiceButton.style.setProperty('background-color', '#00ff0077');
             }
         }       

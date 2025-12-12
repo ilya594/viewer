@@ -10,10 +10,11 @@ const id = (device: string = !!screen.orientation ? "static-" : "mobile-"): stri
 
 export class StreamProvider extends Events.EventHandler {
 
+    private _ids: Array<string>;
     private _peer: any;
-    private _connection: any;
-    private _call: MediaConnection;
-    private _stream: any;
+   // private _connection: any;
+   // private _call: MediaConnection;
+    private _streams: Array<MediaStream> = [];
 
     constructor() {
         super();
@@ -45,38 +46,53 @@ export class StreamProvider extends Events.EventHandler {
         secure: true,
       };
 
-      const ids: Array<string> = await this.getAllPeersIds();
+      this._ids = await this.getAllPeersIds();
     
       this._peer = new Peer(id(), params);      
         
       this._peer.on('open', () => {
         
-        this._connection = this._peer.connect(ids.shift());
+        this._ids.forEach(( id: string ) => {
+          this.createConnection(id);
+        });
+
+
+      });
+    }
+
+    private createConnection = async (id: string) => {
+        let connection = this._peer.connect(this._ids.shift());
             
-        this._connection.on('open', () => {
+        connection.on('open', () => {
 
-          this._connection.send({ type: 'custom-media-stream-request' });
+          connection.send({ type: 'custom-media-stream-request' });
+       
+          this.addCallEventHandler();
 
+        }); 
+    }
+
+    /*private addDataEventHandler = () => {
           this._connection.on('data', (data: any) => {
             if (data?.type === 'sounds-adjust-homie-volume') {
               Controls.adjustVolume(Number(data?.data));
               this.adjustVolume(data?.data);
             }
           });
-        
+    }*/
+
+    private addCallEventHandler = () => {
           this._peer.on('call', async (call: MediaConnection) => {        
             call.on('stream', (stream) => {
               this.dispatchEvent(Events.STREAM_RECEIVED, stream); 
-              this._call = call;
-              this._stream = stream;
+            //  this._call = call;
+              this._streams.push(stream);
             });
             call.answer(null);
           });
-        });   
-      });
     }
 
-    public sendSnaphot = (snapshot: string) => {
+    /*public sendSnaphot = (snapshot: string) => {
       //TODO replace this somewhere
       if (!Controls.remoteSaveEnabled) return false;
       this._connection?.send({ type : 'snapshot-send-homie-message', data: snapshot });     
@@ -96,14 +112,14 @@ export class StreamProvider extends Events.EventHandler {
 
     public stopVoiceMessage = async () => {
       this._call.close();
-    }
+    }*/
 
     private initializeLocalStream = async () => {
       this.dispatchEvent(Events.STREAM_RECEIVED);
     }
 
     private destroy = () => {
-        this._connection?.close?.();
+        //this._connection?.close?.();
         this._peer?.disconnect?.();
         this._peer?.destroy?.();  
     };
