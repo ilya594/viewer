@@ -70,15 +70,15 @@ export class MotionDetector extends Events.EventHandler {
         this._graphic.style.setProperty('left', '0%');
         this._graphic.style.setProperty('height', '40%');
         this._graphic.style.setProperty('width', '100%');
-        this._graphic.style.setProperty('visibility', 'hidden');
+        this._graphic.style.setProperty('display', 'none');
 
         Controls.addEventListener(Events.CHANGE_TRACE_VISIBILITY, () => { 
-            const map = { 'true': 'visible', 'false': 'hidden'};
+            const map = { 'true': 'block', 'false': 'none'};
             this._showTrace = !this._showTrace; 
             //@ts-ignore
-            this._graphic.style.setProperty('visibility', String(map[String(this._showTrace)]));
+            this._graphic.style.setProperty('display', String(map[String(this._showTrace)]));
             //@ts-ignore
-            this._label.style.setProperty('visibility', String(map[String(this._showTrace)]));
+            this._label.style.setProperty('display', String(map[String(this._showTrace)]));
         });
 
         this._viewport.requestVideoFrameCallback(this.onVideoEnterFrame);
