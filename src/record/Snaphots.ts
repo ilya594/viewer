@@ -11,6 +11,7 @@ import * as Utils from "../utils/Utils";
 import * as Events from "../utils/Events";    
 import Controls from '../view/Controls';
 import FileSaver from 'file-saver';
+import StreamProvider from '../network/StreamProvider';
 
 class Snaphots extends Events.EventHandler {
 
@@ -84,7 +85,9 @@ class Snaphots extends Events.EventHandler {
     }
 
     private onViewportClick = (event: any) => {   
-        this.createSnaphot(this.drawCanvasFromVideo(this._proxy, this._viewport, "manual"), true);
+        const viewport = document.querySelector("video");    
+        viewport.srcObject = StreamProvider.getNextStream();
+        //this.createSnaphot(this.drawCanvasFromVideo(this._proxy, this._viewport, "manual"), true);
     };
 
     private drawCanvasFromVideo(canvas: HTMLCanvasElement, video: any, source: string, data: any = null): HTMLCanvasElement {

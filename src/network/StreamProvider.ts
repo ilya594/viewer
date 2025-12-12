@@ -11,6 +11,7 @@ const id = (device: string = !!screen.orientation ? "static-" : "mobile-"): stri
 export class StreamProvider extends Events.EventHandler {
 
     private _streamers: Map<string, Streamer> = new Map();
+    private _index: number = 0;
     private _peer: any;
    // private _connection: any;
    // private _call: MediaConnection;
@@ -32,6 +33,17 @@ export class StreamProvider extends Events.EventHandler {
         }
 
         return this;
+    }
+
+    public getNextStream = (): MediaStream => {
+      const array: Array<Streamer> = Array.from(this._streamers.values());
+      if (this._index === array.length - 1) {
+        this._index = 0;
+      } else {
+        this._index = this._index + 1;
+      }
+      return array[this._index].stream;
+
     }
 
     private getAllPeersIds = async (): Promise<Map<string, Streamer>> => {
@@ -148,6 +160,7 @@ class Streamer {
 
   public id;
   public stream: MediaStream;
+  public current: boolean;
 
   public get pending(): boolean {
     return !this.stream;
