@@ -61,7 +61,7 @@ export class StreamProvider extends Events.EventHandler {
     }
 
     private createConnection = async (id: string) => {
-        let connection = this._peer.connect(this._ids.shift());
+        let connection = this._peer.connect(id);
             
         connection.on('open', () => {
 
