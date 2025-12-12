@@ -58,7 +58,7 @@ class Sounds extends Events.EventHandler {
             //const start: number = Math.random() * (audio.buffer.duration - Number(duration));  
            // audio.start(0, 0, audio.buffer.duration);
 
-           this.playYoutube();
+           //this.playYoutube();
         });
     }
 
