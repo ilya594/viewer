@@ -10,6 +10,7 @@ import Controls from "./view/Controls";
 import Sounds from "./utils/Sounds";
 import * as Utils from './utils/Utils';
 import Matrix from "./view/Matrix";
+import AliveReporting from "./network/AliveReporting";
 //import WebStorage from "./store/Storage";
 
 const route = (): string => window.location.search?.substring(1); 
@@ -75,6 +76,7 @@ class Entry {
       const { stream, peerId } = await streamer.initialize();
 
       await RestService.addPeerId(peerId);
+      await AliveReporting.initialize(peerId);
 
       return stream;
     }
