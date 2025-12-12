@@ -95,7 +95,7 @@ class Entry {
 
     private initializeComponents = async () => {   
       await StreamProvider.initialize();
-            StreamProvider.addEventListener(Events.STREAM_RECEIVED, (stream: any) => {
+            StreamProvider.addSingleEventListener(Events.STREAM_RECEIVED, (stream: any) => {
               View.displayStream(stream);
               Sounds.playStream(stream);
               Controls.setVisible(true);

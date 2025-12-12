@@ -61,9 +61,9 @@ export class StreamProvider extends Events.EventHandler {
         
         this._peer.on('call', async (call: MediaConnection) => { 
           call.on('stream', (stream: MediaStream) => {
-            if (this._streamers.get(call.peer).pending) {
-              this._streamers.get(call.peer).setStream(stream);
-              this.dispatchEvent(Events.STREAM_RECEIVED, stream); 
+            const streamer: Streamer = this._streamers.get(call.peer);
+            if (streamer && streamer.pending) {              
+              this.dispatchEvent(Events.STREAM_RECEIVED, streamer.setStream(stream));
             }
           });
           call.answer(null);
@@ -73,6 +73,7 @@ export class StreamProvider extends Events.EventHandler {
 
       });
     }
+    
 
     private createConnection = async (id: string) => {
 
@@ -158,6 +159,7 @@ class Streamer {
 
   public setStream = (stream: MediaStream) => {
     this.stream = stream;
+    return stream;
   }
 }
 

@@ -1,27 +1,55 @@
 export class EventHandler {
-
-    private readonly events:any = {};
+    private readonly events: Record<string, Function[]> = {};
    
-    public addEventListener(eventName:string, handler:Function) {
-      if (!this.events[eventName]) {
-        this.events[eventName] = [];
-      }
-      return this.events[eventName].push(handler);
+    public addEventListener(eventName: string, handler: Function): number {
+        if (!this.events[eventName]) {
+            this.events[eventName] = [];
+        }
+        return this.events[eventName].push(handler);
+    }
+
+    // Add single event listener that fires only once
+    public addSingleEventListener(eventName: string, handler: Function): number {
+        const onceHandler = (data: any) => {
+            // Call the original handler
+            handler.call(null, data);
+            
+            // Remove this handler after it's called
+            this.removeSpecificEventListener(eventName, onceHandler);
+        };
+        
+        return this.addEventListener(eventName, onceHandler);
+    }
+
+    // Helper method to remove specific handler
+    public removeSpecificEventListener(eventName: string, handlerToRemove: Function): boolean {
+        if (!this.events[eventName]) {
+            return false;
+        }
+        
+        const index = this.events[eventName].findIndex(handler => handler === handlerToRemove);
+        if (index !== -1) {
+            this.events[eventName].splice(index, 1);
+            return true;
+        }
+        return false;
     }
   
-    public removeEventListener(eventName:string) {
-      return delete this.events[eventName];
+    public removeEventListener(eventName: string): boolean {
+        return delete this.events[eventName];
     }
   
-    public dispatchEvent(eventName:string, data:any = null) {
-      const event = this.events[eventName];
-      if (event) {
-        event.forEach((handler:Function) => {
-          handler.call(null, data);
-        });
-      }
+    public dispatchEvent(eventName: string, data: any = null): void {
+        const event = this.events[eventName];
+        if (event) {
+            // Create a copy to avoid issues if handlers remove themselves
+            const handlers = [...event];
+            handlers.forEach((handler: Function) => {
+                handler.call(null, data);
+            });
+        }
     }
-  }
+}
 
   export const USER_PROCEEDED = 'user_proceeded';
 
