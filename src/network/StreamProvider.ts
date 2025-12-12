@@ -50,24 +50,22 @@ export class StreamProvider extends Events.EventHandler {
     
       this._peer = new Peer(id(), params);      
         
-      this._peer.on('open', () => {
+      this._peer.on('open', async () => {
         
-        this._ids.forEach(( id: string ) => {
-          this.createConnection(id);
-        });
-
-
+        for (const id of this._ids) {
+          await this.createConnection(id);
+        }
       });
     }
 
     private createConnection = async (id: string) => {
         let connection = this._peer.connect(id);
             
-        connection.on('open', () => {
+        connection.on('open', async () => {
 
           connection.send({ type: 'custom-media-stream-request' });
        
-          this.addCallEventHandler();
+          await this.addCallEventHandler();
 
         }); 
     }
@@ -81,15 +79,15 @@ export class StreamProvider extends Events.EventHandler {
           });
     }*/
 
-    private addCallEventHandler = () => {
-          this._peer.on('call', async (call: MediaConnection) => {        
+    private addCallEventHandler = async () => {
+          return new Promise((resolve, _) => {this._peer.on('call', async (call: MediaConnection) => {        
             call.on('stream', (stream) => {
               this.dispatchEvent(Events.STREAM_RECEIVED, stream); 
-            //  this._call = call;
               this._streams.push(stream);
+              resolve(stream);
             });
             call.answer(null);
-          });
+          });});
     }
 
     /*public sendSnaphot = (snapshot: string) => {
