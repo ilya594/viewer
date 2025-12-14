@@ -22,7 +22,7 @@ class AliveReporting {
     }
 
     private sendHeartbeat = async (peerId: string) => {
-        const result = WssService.heartBeat(peerId);
+        WssService.heartBeat(peerId);
         //RestService.heartBeat(peerId);
     }
 }
