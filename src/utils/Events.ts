@@ -77,3 +77,5 @@ export class EventHandler {
   export const CONSOLE_EXECUTE_COMMAND = 'console_execute_command';
 
   export const VOLUME_ADJUST_SPREAD = 'volume_adjust_spread';
+
+  export const MOBILE_SWIPE_RIGHT = 'mobile_swipe_right';

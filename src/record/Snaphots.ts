@@ -12,6 +12,7 @@ import * as Events from "../utils/Events";
 import Controls from '../view/Controls';
 import FileSaver from 'file-saver';
 import StreamProvider from '../network/StreamProvider';
+import MobileUtils from '../utils/MobileUtils';
 
 class Snaphots extends Events.EventHandler {
 
@@ -34,12 +35,13 @@ class Snaphots extends Events.EventHandler {
 
         this._viewport = document.querySelector("video");
         this._viewport.addEventListener("click", this.onViewportClick);
-        this._viewport.addEventListener("touchstart", this.onViewportClick);
+        MobileUtils.on(document).addEventListener(Events.MOBILE_SWIPE_RIGHT, this.onViewportClick);
+     //   this._viewport.addEventListener("touchstart", this.onViewportClick);
 
         this._snapsaver = document.createElement("canvas"); this._container.appendChild(this._snapsaver);
         this._snapsaver.style.setProperty('position', 'absolute');
         this._snapsaver.addEventListener("click", this.onViewportClick);
-        this._snapsaver.addEventListener("touchstart", this.onViewportClick);
+       // this._snapsaver.addEventListener("touchstart", this.onViewportClick);
         this._snapsaver.style.setProperty('transform', 'translate(' + 0 + 'px,' + 0 + 'px)' + 'scale(' + 1 + ',' + 1 + ')');         
         let context = this._snapsaver.getContext('2d', { willReadFrequently: true });
             context.clearRect(0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);  
@@ -55,7 +57,7 @@ class Snaphots extends Events.EventHandler {
         this._snapshot.getContext('2d').strokeStyle = "black"; 
         this._snapshot.getContext('2d').rect(0, 0, SNAP_WIDTH, SNAP_HEIGHT);
         this._snapshot.getContext('2d').stroke();
-        this._snapshot.onclick = () => this.viewSnapshotCollection();
+        //this._snapshot.onclick = () => this.viewSnapshotCollection();
 
         this._proxy = document.createElement("canvas");
 

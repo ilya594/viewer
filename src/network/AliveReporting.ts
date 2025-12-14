@@ -1,4 +1,5 @@
 import RestService from "./RestService";
+import WssService from "./WssService";
 
 class AliveReporting {
 
@@ -21,7 +22,8 @@ class AliveReporting {
     }
 
     private sendHeartbeat = async (peerId: string) => {
-        const result = await RestService.heartBeat(peerId);
+        const result = WssService.heartBeat(peerId);
+        //RestService.heartBeat(peerId);
     }
 }
 

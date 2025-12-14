@@ -127,7 +127,7 @@ export class RestService extends Events.EventHandler {
       method: 'post',
       url: this.SERVER_URL + 'heartbeat',
       data: { id: peerId },
-      signal: AbortSignal.timeout(5000)
+      //signal: AbortSignal.timeout(5000)
     });  
   }
 }
