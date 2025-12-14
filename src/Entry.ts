@@ -20,7 +20,6 @@ class Entry {
   private stream: any;
 
     constructor() {     
-      
       switch (route()) {
         case ('show'): {
           this.initializeView();

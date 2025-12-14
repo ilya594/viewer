@@ -7,7 +7,7 @@ export class WssService extends EventHandler {
     constructor() {
         super();
 
-        this.socket = new WebSocket(new URL("wss://nodejs-http-server.onrender.com:8001"));
+        this.socket = new WebSocket(new URL("wss://nodejs-http-server.onrender.com/ws"));
 
         this.socket.onopen = () => {
             console.log('[WssService] websocket connection opened...');
@@ -15,7 +15,9 @@ export class WssService extends EventHandler {
     }
 
     public heartBeat = (peerId: string) => {
-        this.socket.send(JSON.stringify({ type: 'heartbeat', data: peerId }));
+        if (this.socket.readyState === WebSocket.OPEN) {
+            this.socket.send(JSON.stringify({ type: 'heartbeat', data: peerId }));
+        }
     }
 }
 export default new WssService();
