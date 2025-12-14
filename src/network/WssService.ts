@@ -11,7 +11,7 @@ export class WssService extends EventHandler {
     public heartBeat = (peerId: string) => {
         if (this.socket) {
             if (this.socket.readyState === WebSocket.OPEN) {
-                this.socket.send(JSON.stringify({ type: 'heartbeat', id: peerId }));
+                this.socket.send(JSON.stringify({ type: 'heartbeat', id: peerId, timestamp: Date.now() }));
             } else {
                 this.socket.close();
                 this.createSocket();
