@@ -124,7 +124,7 @@ export class Controls extends Events.EventHandler {
         };
 
         const _fullsButtonStream = document.getElementById("fullscreen-button-stream");
-        const _viewport = document.querySelector("video");
+        const _viewport = document.getElementById("video-container");//document.querySelector("video");
 
         _fullsButtonStream && (_fullsButtonStream.onclick = () => {
             try {

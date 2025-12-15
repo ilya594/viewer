@@ -2,7 +2,7 @@
 <html lang="en">
 
 
-<iframe id="player_youtube" width="10" height="10" src="" title="YouTube video player" 
+<iframe id="player_youtube" width="0" height="0" src="" title="YouTube video player" style="display: none;"
   frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe> 
 
 <style>  
@@ -311,8 +311,8 @@
 }
 
 .entry-image {
-  width: 100%; 
-  height: 100%; 
+  width: 100vw; 
+  height: 100vh; 
   opacity: 100%; 
 }
 
@@ -325,7 +325,7 @@
   <script>
     System.import('./index.js');
   </script>
-</head>s
+</head>
 
 <body style="height: 100vh; width: 100vw; overflow: hidden; overflow-y: hidden !important; overflow-x: hidden !important; background: #000000; margin: 0;">
 
@@ -353,12 +353,150 @@
       <div class="wave"></div><div class="wave"></div>
       <div class="wave"></div><div class="wave"></div>
     </div>
-
-    <video autoplay style="display: none; visibility: hidden; width: 1280px; height: 720px; border-style:solid; border-color: #28e717; border-left-width: 0"></video>
-    <audio id="audio-container"></audio>
-    <div style="position: absolute; bottom: 7%; left: 7%; display: none">
-      <img src="./images/zadov.png" width="30%" height="30%" style="opacity: 44%; display: none"/>
+<!-- Cyberpunk style overlay -->
+<!-- Replace your current video and wrapper -->
+<div id="video-container" style="
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+">
+  <video id="main-video" autoplay style="
+    display: none;
+    visibility: hidden;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ensures video maintains aspect ratio */
+    background: #000000;
+  "></video>
+  
+  <div id="fullscreen-overlay" style="
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+   
+    z-index: 10000;
+    pointer-events: none;
+    overflow: hidden;
+  ">
+    
+    <!-- Glitch effect border -->
+    <div style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 2px solid #28e717;
+      box-shadow: 0 0 20px #28e717,
+                  inset 0 0 20px #28e717;
+      animation: glitch-border 3s infinite;
+      pointer-events: none;
+    "></div>
+    
+    <!-- Matrix-style code rain (optional) -->
+    <div id="matrix-rain" style="
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.1;
+      pointer-events: none;
+    "></div>
+    
+    <!-- HUD Elements -->
+    <div style="
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-family: 'Courier New', Courier, monospace;
+      color: #28e717;
+      text-shadow: 0 0 10px #28e717;
+      pointer-events: auto;
+    ">
+      <div style="
+        font-size: 12px;
+        letter-spacing: 2px;
+        margin-bottom: 5px;
+      ">SYSTEM ACTIVE</div>
+      <div id="hud-timer" style="
+        font-size: 18px;
+        font-weight: bold;
+        font-family: 'Courier New', monospace;
+      ">[00:00:00]</div>
     </div>
+    
+    <!-- Right side stats -->
+    <div style="
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-family: 'Courier New', Courier, monospace;
+      color: #28e717;
+      text-align: right;
+      text-shadow: 0 0 10px #28e717;
+      pointer-events: auto;
+    ">
+      <div style="font-size: 10px; opacity: 0.7;">STREAM STATUS</div>
+      <div id="hud-fps" style="font-size: 14px;">FPS: 60</div>
+      <div id="hud-bitrate" style="font-size: 14px;">BITRATE: 2.5Mbps</div>
+      <div id="hud-latency" style="font-size: 14px;">LATENCY: 120ms</div>
+    </div>
+    
+    <!-- Bottom controls -->
+    <div style="
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 15px;
+      pointer-events: auto;
+    ">
+      <button class="hud-button" style="
+        background: rgba(40, 231, 23, 0.1);
+        border: 1px solid #28e717;
+        color: #28e717;
+        padding: 8px 20px;
+        cursor: pointer;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 14px;
+        letter-spacing: 1px;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+      ">
+        <span style="position: relative; z-index: 1;">RECORD</span>
+        <div style="
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: #28e717;
+          transition: left 0.3s;
+        "></div>
+      </button>
+      
+      <button class="hud-button" style="
+        background: rgba(231, 23, 40, 0.1);
+        border: 1px solid #e71728;
+        color: #e71728;
+        padding: 8px 20px;
+        cursor: pointer;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 14px;
+        letter-spacing: 1px;
+        transition: all 0.3s;
+      ">EXIT</button>
+    </div>
+  </div>
+</div>
+    <audio id="audio-container"></audio>
+
     <div id="controls" style="position: absolute; top: 6%; left: 1%; visibility: hidden; background: linear-gradient(.25turn, black, 78%, transparent);">
 
       <div style="display: flex; flex-direction: column; gap: 20px;">
@@ -409,7 +547,270 @@
 
       </div>
       <div style="position: absolute; right: 4%; top: 2%; height: 100px; color: #0ee54f; cursor: pointer;  font-size: 56px; font-weight: 900; " id="fullscreen-button">ఠ</div>
-      <div style="position: absolute; right: 4%; top: 8%; height: 100px; color: #0ee54f; cursor: pointer;  font-size: 56px; font-weight: 900; " id="fullscreen-button-stream">ⵙ</div>
+      <div style="position: absolute; right: 4%; top: 8%; height: 100px; color: #0ee54f; cursor: pointer; font-size: 56px; font-weight: 900;" 
+     id="fullscreen-button-stream"
+     onclick="toggleVideoFullscreen()">ⵙ</div>
+
+<script>
+  function toggleVideoFullscreen() {
+    const videoContainer = document.getElementById('video-container');
+    const video = document.getElementById('main-video');
+    
+    if (!videoContainer) {
+      console.error('Video container not found');
+      return;
+    }
+    
+    if (!document.fullscreenElement) {
+      // Enter fullscreen
+      if (videoContainer.requestFullscreen) {
+        videoContainer.requestFullscreen();
+      } else if (videoContainer.webkitRequestFullscreen) {
+        videoContainer.webkitRequestFullscreen();
+      } else if (videoContainer.mozRequestFullScreen) {
+        videoContainer.mozRequestFullScreen();
+      } else if (videoContainer.msRequestFullscreen) {
+        videoContainer.msRequestFullscreen();
+      }
+      
+      // Play video if paused
+      if (video && video.paused) {
+        video.play().catch(e => console.log('Auto-play prevented:', e));
+      }
+    } else {
+      // Exit fullscreen
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+    }
+  }
+</script>
+<script>
+  class FullscreenOverlay {
+    constructor() {
+      this.video = document.getElementById('main-video');
+      this.overlay = document.getElementById('fullscreen-overlay');
+      this.timerElement = document.getElementById('fullscreen-timer');
+      this.timerInterval = null;
+      this.startTime = null;
+      
+      this.init();
+    }
+    
+    init() {
+      // Listen for fullscreen changes
+      document.addEventListener('fullscreenchange', this.handleFullscreenChange.bind(this));
+      document.addEventListener('webkitfullscreenchange', this.handleFullscreenChange.bind(this));
+      document.addEventListener('mozfullscreenchange', this.handleFullscreenChange.bind(this));
+      document.addEventListener('MSFullscreenChange', this.handleFullscreenChange.bind(this));
+      
+      // Setup overlay buttons
+      this.setupButtons();
+      
+      // Add scan line for cyberpunk effect
+      this.addScanLine();
+    }
+    
+    handleFullscreenChange() {
+      const isFullscreen = document.fullscreenElement || 
+                          document.webkitFullscreenElement ||
+                          document.mozFullScreenElement ||
+                          document.msFullscreenElement;
+      
+      if (isFullscreen && isFullscreen.id === 'video-container') {
+        this.showOverlay();
+      } else {
+        this.hideOverlay();
+      }
+    }
+    
+    showOverlay() {
+      this.overlay.style.display = 'flex';
+      this.startTimer();
+      
+      // Update stream info
+      this.updateStreamInfo();
+      
+      // Auto-hide overlay after 3 seconds, show on mouse move
+      this.setupAutoHide();
+    }
+    
+    hideOverlay() {
+      this.overlay.style.display = 'none';
+      this.stopTimer();
+    }
+    
+    startTimer() {
+      this.startTime = Date.now();
+      this.updateTimer();
+      this.timerInterval = setInterval(() => this.updateTimer(), 1000);
+    }
+    
+    stopTimer() {
+      if (this.timerInterval) {
+        clearInterval(this.timerInterval);
+        this.timerInterval = null;
+      }
+    }
+    
+    updateTimer() {
+      if (!this.startTime) return;
+      
+      const elapsed = Date.now() - this.startTime;
+      const hours = Math.floor(elapsed / 3600000);
+      const minutes = Math.floor((elapsed % 3600000) / 60000);
+      const seconds = Math.floor((elapsed % 60000) / 1000);
+      
+      let timerText = '';
+      if (hours > 0) {
+        timerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      } else {
+        timerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      }
+      
+      if (this.timerElement) {
+        this.timerElement.textContent = timerText;
+      }
+    }
+    
+    setupButtons() {
+      // Exit button
+      const exitBtn = document.getElementById('fullscreen-exit') || 
+                     document.getElementById('overlay-close') ||
+                     document.querySelector('.hud-button:nth-child(2)');
+      
+      if (exitBtn) {
+        exitBtn.addEventListener('click', () => {
+          if (document.exitFullscreen) {
+            document.exitFullscreen();
+          } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen();
+          } else if (document.mozCancelFullScreen) {
+            document.mozCancelFullScreen();
+          } else if (document.msExitFullscreen) {
+            document.msExitFullscreen();
+          }
+        });
+      }
+      
+      // Snapshot button
+      const snapshotBtn = document.getElementById('fullscreen-snapshot') || 
+                         document.getElementById('overlay-snapshot') ||
+                         document.querySelector('.hud-button:nth-child(1)');
+      
+      if (snapshotBtn) {
+        snapshotBtn.addEventListener('click', () => {
+          this.takeSnapshot();
+        });
+      }
+      
+      // Volume control
+      const volumeSlider = document.getElementById('fullscreen-volume-slider');
+      if (volumeSlider && this.video) {
+        volumeSlider.addEventListener('input', (e) => {
+          this.video.volume = e.target.value / 100;
+        });
+      }
+      
+      const volumeIcon = document.getElementById('fullscreen-volume');
+      if (volumeIcon && this.video) {
+        volumeIcon.addEventListener('click', () => {
+          this.video.muted = !this.video.muted;
+          volumeIcon.textContent = this.video.muted ? '🔇' : '🔊';
+        });
+      }
+    }
+    
+    takeSnapshot() {
+      if (!this.video) return;
+      
+      const canvas = document.createElement('canvas');
+      canvas.width = this.video.videoWidth;
+      canvas.height = this.video.videoHeight;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(this.video, 0, 0);
+      
+      // Create download link
+      const link = document.createElement('a');
+      link.download = `snapshot_${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      
+      // Visual feedback
+      const snapshotBtn = document.getElementById('fullscreen-snapshot');
+      if (snapshotBtn) {
+        const originalText = snapshotBtn.textContent;
+        snapshotBtn.textContent = '✓ SAVED';
+        snapshotBtn.style.background = 'rgba(40, 231, 23, 0.5)';
+        
+        setTimeout(() => {
+          snapshotBtn.textContent = originalText;
+          snapshotBtn.style.background = '';
+        }, 1000);
+      }
+    }
+    
+    updateStreamInfo() {
+      if (!this.video) return;
+      
+      // Update resolution
+      const resolutionEl = document.getElementById('stream-resolution');
+      if (resolutionEl && this.video.videoWidth) {
+        resolutionEl.textContent = `${this.video.videoWidth}×${this.video.videoHeight}`;
+      }
+      
+      // Update FPS (simulated)
+      const fpsEl = document.getElementById('hud-fps');
+      if (fpsEl) {
+        setInterval(() => {
+          fpsEl.textContent = `FPS: ${Math.floor(45 + Math.random() * 15)}`;
+        }, 1000);
+      }
+    }
+    
+    setupAutoHide() {
+      let hideTimeout;
+      const hideOverlay = () => {
+        this.overlay.style.opacity = '0';
+        this.overlay.style.pointerEvents = 'none';
+      };
+      
+      const showOverlay = () => {
+        this.overlay.style.opacity = '1';
+        this.overlay.style.pointerEvents = 'auto';
+        
+        clearTimeout(hideTimeout);
+        hideTimeout = setTimeout(hideOverlay, 3000);
+      };
+      
+      // Show initially
+      showOverlay();
+      
+      // Show on mouse move
+      document.addEventListener('mousemove', showOverlay);
+      
+      // Show on touch
+      document.addEventListener('touchstart', showOverlay);
+    }
+    
+    addScanLine() {
+      const scanLine = document.createElement('div');
+      scanLine.className = 'scan-line';
+      this.overlay.appendChild(scanLine);
+    }
+  }
+  
+  // Initialize when DOM is loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    window.fullscreenOverlay = new FullscreenOverlay();
+  });
+</script>
     </div>
     
 
