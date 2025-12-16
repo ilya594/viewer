@@ -1,4 +1,3 @@
-import RestService from "./RestService";
 import WssService from "./WssService";
 
 class AliveReporting {
@@ -9,21 +8,23 @@ class AliveReporting {
 
     public initialize = async (id: string) => {
         const HEARTBEAT_INTERVAL = 5000;
-        this._interval = setInterval(() => this.sendHeartbeat(id), HEARTBEAT_INTERVAL);
+        if (this._interval) {
+            clearInterval(this._interval);
+        }
+        return (this._interval = setInterval(() => this.sendHeartbeat(id), HEARTBEAT_INTERVAL));
 
-        return window.addEventListener('beforeunload', async () => {
+        /*return window.addEventListener('beforeunload', async () => {
             clearInterval(this._interval);
 
             navigator.sendBeacon(
               RestService.SERVER_URL + 'removepeerid',
               JSON.stringify({ id: id })
             );
-        });
+        });*/
     }
 
-    private sendHeartbeat = async (peerId: string) => {
+    private sendHeartbeat = (peerId: string) => {
         WssService.heartBeat(peerId);
-        //RestService.heartBeat(peerId);
     }
 }
 

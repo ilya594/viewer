@@ -74,8 +74,8 @@ class Entry {
 
       const { stream, peerId } = await streamer.initialize();
 
-      await RestService.addPeerId(peerId);
-      await AliveReporting.initialize(peerId);
+    //  await RestService.addPeerId(peerId);
+      //await AliveReporting.initialize(peerId);
 
       return stream;
     }
@@ -94,9 +94,9 @@ class Entry {
 
     private initializeComponents = async () => {   
       await StreamProvider.initialize();
-            StreamProvider.addSingleEventListener(Events.STREAM_RECEIVED, (stream: any) => {
-              View.displayStream(stream);
-              Sounds.playStream(stream);
+            StreamProvider.addEventListener(Events.STREAM_RECEIVED, (data: any) => {
+              View.displayStream(data.stream);
+              Sounds.playStream(data.stream);
               Controls.setVisible(true);
             });
 

@@ -1,3 +1,4 @@
+import StreamProvider from "../network/StreamProvider";
 import * as Events from "../utils/Events";
 import Controls from "./Controls";
 
@@ -28,6 +29,7 @@ export class View extends Events.EventHandler {
   
         this.dispatchEvent(Events.USER_PROCEEDED, null);
       };
+
     }
 
 
@@ -37,7 +39,8 @@ export class View extends Events.EventHandler {
       document.getElementById("loader").style.setProperty('visibility', 'hidden'); 
       document.getElementById("loader").style.display = 'none';   
 
-     // const deviceId = await this.handleMediaDevices();
+      const wrapper = document.getElementById("video-container");
+      wrapper.style.setProperty('display', 'block');
       const viewport = document.querySelector("video");    
       viewport.style.setProperty('visibility', 'visible');
       viewport.style.display = 'flex';          
@@ -51,6 +54,8 @@ export class View extends Events.EventHandler {
       viewport.srcObject = stream;
     //this.createDevicesInfoLabel(devices);
     }
+
+    //private onStreamLost
 
 
     private handleMediaDevices = async (deviceOptions: any = { labels: ['720', 'back'] }) => {
