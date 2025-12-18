@@ -419,15 +419,15 @@
       pointer-events: auto;
     ">
       <div style="
-        font-size: 12px;
+        font-size: 22px;
         letter-spacing: 2px;
         margin-bottom: 5px;
       ">SYSTEM ACTIVE</div>
-      <div id="hud-timer" style="
-        font-size: 18px;
+      <span  id="fullscreen-timer" 
+      style="
+        font-size: 38px;
         font-weight: bold;
-        font-family: 'Courier New', monospace;
-      ">[00:00:00]</div>
+        font-family: 'Courier New', monospace;"></span>
     </div>
     
     <!-- Right side stats -->
@@ -449,6 +449,7 @@
     
     <!-- Bottom controls -->
     <div style="
+    display: none;
       position: absolute;
       bottom: 20px;
       left: 50%;
@@ -469,6 +470,7 @@
         transition: all 0.3s;
         position: relative;
         overflow: hidden;
+        display: none;
       ">
         <span style="position: relative; z-index: 1;">RECORD</span>
         <div style="
@@ -483,6 +485,7 @@
       </button>
       
       <button class="hud-button" style="
+      display: none;
         background: rgba(231, 23, 40, 0.1);
         border: 1px solid #e71728;
         color: #e71728;
@@ -553,6 +556,8 @@
      onclick="toggleVideoFullscreen()">ⵙ</div>
 
 <script>
+  function time(){document.getElementById('hud-timer').textContent = Date.now()}
+
   function toggleVideoFullscreen() {
     const videoContainer = document.getElementById('video-container');
     const video = document.getElementById('main-video');
@@ -612,7 +617,7 @@
       document.addEventListener('MSFullscreenChange', this.handleFullscreenChange.bind(this));
       
       // Setup overlay buttons
-      this.setupButtons();
+    //  this.setupButtons();
       
       // Add scan line for cyberpunk effect
       this.addScanLine();
@@ -627,7 +632,7 @@
       if (isFullscreen && isFullscreen.id === 'video-container') {
         this.showOverlay();
       } else {
-        this.hideOverlay();
+        //this.hideOverlay();
       }
     }
     
@@ -639,7 +644,7 @@
       this.updateStreamInfo();
       
       // Auto-hide overlay after 3 seconds, show on mouse move
-      this.setupAutoHide();
+    //  this.setupAutoHide();
     }
     
     hideOverlay() {
