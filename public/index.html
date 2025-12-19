@@ -3,366 +3,431 @@
 
 
 <iframe id="player_youtube" width="0" height="0" src="" title="YouTube video player" style="display: none;"
-  frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe> 
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"></iframe>
 
-<style>  
-
-.center {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #000000;
-}
-.wave {
-  width: 5px;
-  height: 100px;
-  background: linear-gradient(45deg, rgb(0, 255, 34), #161616);
-  margin: 10px;
-  animation: wave 1s linear infinite;
-  border-radius: 20px;
-}
-.wave:nth-child(2) {
-  animation-delay: 0.1s;
-}
-.wave:nth-child(3) {
-  animation-delay: 0.2s;
-}
-.wave:nth-child(4) {
-  animation-delay: 0.3s;
-}
-.wave:nth-child(5) {
-  animation-delay: 0.4s;
-}
-.wave:nth-child(6) {
-  animation-delay: 0.5s;
-}
-.wave:nth-child(7) {
-  animation-delay: 0.6s;
-}
-.wave:nth-child(8) {
-  animation-delay: 0.7s;
-}
-.wave:nth-child(9) {
-  animation-delay: 0.8s;
-}
-.wave:nth-child(10) {
-  animation-delay: 0.9s;
-}
-
-@keyframes wave {
-  0% {
-    transform: scale(0);
+<style>
+  .center {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #000000;
   }
-  50% {
-    transform: scale(1);
+
+  .wave {
+    width: 5px;
+    height: 100px;
+    background: linear-gradient(45deg, rgb(0, 255, 34), #161616);
+    margin: 10px;
+    animation: wave 1s linear infinite;
+    border-radius: 20px;
   }
-  100% {
-    transform: scale(0);
+
+  .wave:nth-child(2) {
+    animation-delay: 0.1s;
   }
-}
 
-.button-months-deleting {
-  background-color: red; 
-	animation: gradient 1s ease infinite; 
-}
+  .wave:nth-child(3) {
+    animation-delay: 0.2s;
+  }
 
-@keyframes gradient {
-	0% {
-    background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 0%, transparent); 
-	}
-	5% {
-    background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 10%, transparent); 
-	}
-	10% {
-    background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 20%, transparent); 
-	}
-	15% {
-    background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 30%, transparent); 
-	}
-  20% {
-    background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 40%, transparent); 
-	}
-  25% {
-    background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 50%, transparent); 
-	}
-  30% {
-    background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 60%, transparent); 
-	}
-  35% {
-    background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 70%, transparent); 
-	}
-  40% {
-    background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 80%, transparent); 
-	}
-  45% {
-    background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 90%, transparent); 
-	}
-  45% {
-    background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 100%, transparent); 
-	}
-  50% {
-    background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 0%, transparent); 
-	}
-	55% {
-    background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 10%, transparent); 
-	}
-	60% {
-    background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 20%, transparent); 
-	}
-	65% {
-    background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 30%, transparent); 
-	}
-  70% {
-    background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 40%, transparent); 
-	}
-  75% {
-    background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 50%, transparent); 
-	}
-  80% {
-    background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 60%, transparent); 
-	}
-  85% {
-    background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 70%, transparent); 
-	}
-  90% {
-    background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 80%, transparent); 
-	}
-  95% {
-    background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 90%, transparent); 
-	}
-  100% {
-    background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 100%, transparent); 
-	}
-}
+  .wave:nth-child(4) {
+    animation-delay: 0.3s;
+  }
 
-.button-months-downloading {
-	animation: gradient 0.7s ease infinite; 
-}
+  .wave:nth-child(5) {
+    animation-delay: 0.4s;
+  }
 
-@keyframes gradient {
-	0% {
-    background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 0%, transparent); 
-	}
-	5% {
-    background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 10%, transparent); 
-	}
-	10% {
-    background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 20%, transparent); 
-	}
-	15% {
-    background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 30%, transparent); 
-	}
-  20% {
-    background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 40%, transparent); 
-	}
-  25% {
-    background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 50%, transparent); 
-	}
-  30% {
-    background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 60%, transparent); 
-	}
-  35% {
-    background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 70%, transparent); 
-	}
-  40% {
-    background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 80%, transparent); 
-	}
-  45% {
-    background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 90%, transparent); 
-	}
-  45% {
-    background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 100%, transparent); 
-	}
-  50% {
-    background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 0%, transparent); 
-	}
-	55% {
-    background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 10%, transparent); 
-	}
-	60% {
-    background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 20%, transparent); 
-	}
-	65% {
-    background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 30%, transparent); 
-	}
-  70% {
-    background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 40%, transparent); 
-	}
-  75% {
-    background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 50%, transparent); 
-	}
-  80% {
-    background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 60%, transparent); 
-	}
-  85% {
-    background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 70%, transparent); 
-	}
-  90% {
-    background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 80%, transparent); 
-	}
-  95% {
-    background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 90%, transparent); 
-	}
-  100% {
-    background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 100%, transparent); 
-	}
-}
+  .wave:nth-child(6) {
+    animation-delay: 0.5s;
+  }
 
-.button {  
-  display: inline-block;
-  outline: none;
-  cursor: pointer;
-  border: 1px solid #47fe0f;
-  vertical-align: top; 
-  background-color: #00000000;
-  font-size: 42px;
-  width: 130px;
-  height: 130px;
-  text-align: right;
-  min-height: 48px;
-  line-height: 1.29;
-  padding-bottom: 50%;
-  padding-right: 10%;
-  color: #67fe0f;
-  font-weight:bold;
-  font-family: 'Courier New', Courier, monospace;
-  transition: background-color 370ms cubic-bezier(0,0,.38,.9), box-shadow 370ms cubic-bezier(0,0,.38,.9), border-color 370ms cubic-bezier(0,0,.38,.9), outline 370ms cubic-bezier(0,0,.38,.9);           
-}
+  .wave:nth-child(7) {
+    animation-delay: 0.6s;
+  }
 
-.button:hover {
-  background-image: none;
-  background-color: #47fe0f;
-  color: #28e717;
-}
+  .wave:nth-child(8) {
+    animation-delay: 0.7s;
+  }
 
-.button-months, .button-months-pending {
-  position: relative;
-  outline: none;
-  cursor: pointer;
-  border: 1px solid #47fe0f;
-  vertical-align: top; 
-  background-color: #00000000;
-  font-size: 28px;
-  width: 92%;
-  text-align: center;
-  left: 4%;
-  gap: 10px;
-  line-height: 1.29;
-  color: #67fe0f;
-  font-weight: 100;
-  font-family: 'Courier New', Courier, monospace;
+  .wave:nth-child(9) {
+    animation-delay: 0.8s;
+  }
 
-}
+  .wave:nth-child(10) {
+    animation-delay: 0.9s;
+  }
 
-.button-months:hover {
-  background-image: none;
-  background-color: #47fe0f;
-  color: #28e717;
-}
+  @keyframes wave {
+    0% {
+      transform: scale(0);
+    }
 
-.container {
-  display: none;
-  width: 100vw; 
-  height: 100vh; 
-  justify-content: center; 
-  align-items: center;
-}
+    50% {
+      transform: scale(1);
+    }
 
-.label {
-	color: #0004ff;
-	font-size: 46px;
-}
+    100% {
+      transform: scale(0);
+    }
+  }
 
-.images-container {
-  display: flex; 
-  flex-direction: column; 
-  border: 1px solid #47fe0f; 
-  position: absolute; 
-  left: 220px; 
-  height: 560px; 
-  min-width: 400px; 
-  background: linear-gradient(.25turn, rgba(0, 0, 0, 0.692), 88%, transparent); 
-  overflow-y: auto;
-  font-weight: 100;
-  font-size: 28px;
-  font-family: 'Courier New', Courier, monospace;
-  line-height: 1.29;
-  color: #67fe0f;
-  text-align: center;
-  vertical-align: top; 
-}
+  .button-months-deleting {
+    background-color: red;
+    animation: gradient 1s ease infinite;
+  }
 
-/* width */
-.images-container::-webkit-scrollbar {
-  width: 10px;
-}
-/* Track */
-.images-container::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px grey; 
-} 
-/* Handle */
-.images-container::-webkit-scrollbar-thumb {
-  background: linear-gradient(.5turn, #28e717, 58%, transparent);
-}
-/* Handle on hover */
-.images-container::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(.5turn, #28e717, 58%, transparent);
-}
+  @keyframes gradient {
+    0% {
+      background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 0%, transparent);
+    }
 
-.entry-image {
-  width: 100vw; 
-  height: 100vh; 
-  opacity: 100%; 
-}
+    5% {
+      background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 10%, transparent);
+    }
 
+    10% {
+      background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 20%, transparent);
+    }
+
+    15% {
+      background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 30%, transparent);
+    }
+
+    20% {
+      background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 40%, transparent);
+    }
+
+    25% {
+      background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 50%, transparent);
+    }
+
+    30% {
+      background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 60%, transparent);
+    }
+
+    35% {
+      background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 70%, transparent);
+    }
+
+    40% {
+      background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 80%, transparent);
+    }
+
+    45% {
+      background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 90%, transparent);
+    }
+
+    45% {
+      background: linear-gradient(.25turn, rgba(255, 0, 0, 0.692), 100%, transparent);
+    }
+
+    50% {
+      background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 0%, transparent);
+    }
+
+    55% {
+      background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 10%, transparent);
+    }
+
+    60% {
+      background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 20%, transparent);
+    }
+
+    65% {
+      background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 30%, transparent);
+    }
+
+    70% {
+      background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 40%, transparent);
+    }
+
+    75% {
+      background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 50%, transparent);
+    }
+
+    80% {
+      background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 60%, transparent);
+    }
+
+    85% {
+      background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 70%, transparent);
+    }
+
+    90% {
+      background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 80%, transparent);
+    }
+
+    95% {
+      background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 90%, transparent);
+    }
+
+    100% {
+      background: linear-gradient(.75turn, rgba(255, 0, 0, 0.692), 100%, transparent);
+    }
+  }
+
+  .button-months-downloading {
+    animation: gradient 0.7s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% {
+      background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 0%, transparent);
+    }
+
+    5% {
+      background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 10%, transparent);
+    }
+
+    10% {
+      background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 20%, transparent);
+    }
+
+    15% {
+      background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 30%, transparent);
+    }
+
+    20% {
+      background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 40%, transparent);
+    }
+
+    25% {
+      background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 50%, transparent);
+    }
+
+    30% {
+      background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 60%, transparent);
+    }
+
+    35% {
+      background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 70%, transparent);
+    }
+
+    40% {
+      background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 80%, transparent);
+    }
+
+    45% {
+      background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 90%, transparent);
+    }
+
+    45% {
+      background: linear-gradient(.25turn, rgba(0, 255, 0, 0.692), 100%, transparent);
+    }
+
+    50% {
+      background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 0%, transparent);
+    }
+
+    55% {
+      background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 10%, transparent);
+    }
+
+    60% {
+      background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 20%, transparent);
+    }
+
+    65% {
+      background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 30%, transparent);
+    }
+
+    70% {
+      background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 40%, transparent);
+    }
+
+    75% {
+      background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 50%, transparent);
+    }
+
+    80% {
+      background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 60%, transparent);
+    }
+
+    85% {
+      background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 70%, transparent);
+    }
+
+    90% {
+      background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 80%, transparent);
+    }
+
+    95% {
+      background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 90%, transparent);
+    }
+
+    100% {
+      background: linear-gradient(.75turn, rgba(0, 255, 0, 0.692), 100%, transparent);
+    }
+  }
+
+  .button {
+    display: inline-block;
+    outline: none;
+    cursor: pointer;
+    border: 1px solid #47fe0f;
+    vertical-align: top;
+    background-color: #00000000;
+    font-size: 42px;
+    width: 130px;
+    height: 130px;
+    text-align: right;
+    min-height: 48px;
+    line-height: 1.29;
+    padding-bottom: 50%;
+    padding-right: 10%;
+    color: #67fe0f;
+    font-weight: bold;
+    font-family: 'Courier New', Courier, monospace;
+    transition: background-color 370ms cubic-bezier(0, 0, .38, .9), box-shadow 370ms cubic-bezier(0, 0, .38, .9), border-color 370ms cubic-bezier(0, 0, .38, .9), outline 370ms cubic-bezier(0, 0, .38, .9);
+  }
+
+  .button:hover {
+    background-image: none;
+    background-color: #47fe0f;
+    color: #28e717;
+  }
+
+  .button-months,
+  .button-months-pending {
+    position: relative;
+    outline: none;
+    cursor: pointer;
+    border: 1px solid #47fe0f;
+    vertical-align: top;
+    background-color: #00000000;
+    font-size: 28px;
+    width: 92%;
+    text-align: center;
+    left: 4%;
+    gap: 10px;
+    line-height: 1.29;
+    color: #67fe0f;
+    font-weight: 100;
+    font-family: 'Courier New', Courier, monospace;
+
+  }
+
+  .button-months:hover {
+    background-image: none;
+    background-color: #47fe0f;
+    color: #28e717;
+  }
+
+  .container {
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .label {
+    color: #0004ff;
+    font-size: 46px;
+  }
+
+  .images-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #47fe0f;
+    position: absolute;
+    left: 220px;
+    height: 560px;
+    min-width: 400px;
+    background: linear-gradient(.25turn, rgba(0, 0, 0, 0.692), 88%, transparent);
+    overflow-y: auto;
+    font-weight: 100;
+    font-size: 28px;
+    font-family: 'Courier New', Courier, monospace;
+    line-height: 1.29;
+    color: #67fe0f;
+    text-align: center;
+    vertical-align: top;
+  }
+
+  /* width */
+  .images-container::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  /* Track */
+  .images-container::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+  }
+
+  /* Handle */
+  .images-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(.5turn, #28e717, 58%, transparent);
+  }
+
+  /* Handle on hover */
+  .images-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(.5turn, #28e717, 58%, transparent);
+  }
+
+  .entry-image {
+    width: 100vw;
+    height: 100vh;
+    opacity: 100%;
+  }
 </style>
-  <meta charset="utf-8">
-  <title>html-peer-viewer</title>
-  <meta name="description" content="HTML5">
-  <meta name="author" content="Author">
-  <script src="system.js"></script>
-  <script>
-    System.import('./index.js');
-  </script>
+<meta charset="utf-8">
+<title>html-peer-viewer</title>
+<meta name="description" content="HTML5">
+<meta name="author" content="Author">
+<script src="system.js"></script>
+<script>
+  System.import('./index.js');
+</script>
 </head>
 
-<body style="height: 100vh; width: 100vw; overflow: hidden; overflow-y: hidden !important; overflow-x: hidden !important; background: #000000; margin: 0;">
+<body
+  style="height: 100vh; width: 100vw; overflow: hidden; overflow-y: hidden !important; overflow-x: hidden !important; background: #000000; margin: 0;">
 
   <div id="entry-page" class="container" style="display: flex; margin-top: 0;">
     <picture style="width: 100%; height: 100%;">
-      <img class="entry-image" fetchPriority="high" src="./images/eye_0.png";/>      
+      <img class="entry-image" fetchPriority="high" src="./images/eye_0.png" ; />
     </picture>
 
     <div style="position: absolute; left: 20%; top: 20%; display: none;">
       <input type="checkbox" id="audio_checkbox" name="audio_checkbox" />
-      <label for="audio_checkbox" style="  font-size: 18px; font-family: 'Courier New', Courier, monospace; 	color: #ffffff; font-weight: 900;">ෲудио੦ഠ〇?</label>
+      <label for="audio_checkbox"
+        style="  font-size: 18px; font-family: 'Courier New', Courier, monospace; 	color: #ffffff; font-weight: 900;">ෲудио੦ഠ〇?</label>
     </div>
   </div>
 
 
-  
 
 
 
-  <div id="view-page" class="container" style="position: relative; visibility: hidden; display: none; background-repeat: no-repeat; background-size: cover;">
+
+  <div id="view-page" class="container"
+    style="position: relative; visibility: hidden; display: none; background-repeat: no-repeat; background-size: cover;">
     <div id="loader" class="center">
-      <div class="wave"></div><div class="wave"></div>
-      <div class="wave"></div><div class="wave"></div>
-      <div class="wave"></div><div class="wave"></div>
-      <div class="wave"></div><div class="wave"></div>
-      <div class="wave"></div><div class="wave"></div>
+      <div class="wave"></div>
+      <div class="wave"></div>
+      <div class="wave"></div>
+      <div class="wave"></div>
+      <div class="wave"></div>
+      <div class="wave"></div>
+      <div class="wave"></div>
+      <div class="wave"></div>
+      <div class="wave"></div>
+      <div class="wave"></div>
     </div>
-<!-- Cyberpunk style overlay -->
-<!-- Replace your current video and wrapper -->
-<div id="video-container" style="
+    <!-- Cyberpunk style overlay -->
+    <!-- Replace your current video and wrapper -->
+    <div id="video-container" style="
   position: relative;
   display: inline-block;
   width: 100%;
   height: 100%;
   display: none;
 ">
-  <video id="main-video" autoplay style="
+      <video id="main-video" autoplay style="
     display: none;
     visibility: hidden;
     width: 100%;
@@ -370,8 +435,8 @@
     object-fit: contain; /* Ensures video maintains aspect ratio */
     background: #000000;
   "></video>
-  
-  <div id="fullscreen-overlay" style="
+
+      <div id="fullscreen-overlay" style="
     position: absolute;
     top: 0;
     left: 0;
@@ -382,9 +447,9 @@
     pointer-events: none;
     overflow: hidden;
   ">
-    
-    <!-- Glitch effect border -->
-    <div style="
+
+        <!-- Glitch effect border -->
+        <div style="
       position: absolute;
       top: 0;
       left: 0;
@@ -396,9 +461,9 @@
       animation: glitch-border 3s infinite;
       pointer-events: none;
     "></div>
-    
-    <!-- Matrix-style code rain (optional) -->
-    <div id="matrix-rain" style="
+
+        <!-- Matrix-style code rain (optional) -->
+        <div id="matrix-rain" style="
       position: absolute;
       top: 0;
       left: 0;
@@ -407,31 +472,26 @@
       opacity: 0.1;
       pointer-events: none;
     "></div>
-    
-    <!-- HUD Elements -->
-    <div style="
+
+        <!-- HUD Elements -->
+        <div style="
       position: absolute;
       top: 10px;
-      left: 10px;
+      left: 20px;
       font-family: 'Courier New', Courier, monospace;
       color: #28e717;
       text-shadow: 0 0 10px #28e717;
       pointer-events: auto;
     ">
-      <div style="
-        font-size: 22px;
-        letter-spacing: 2px;
-        margin-bottom: 5px;
-      ">SYSTEM ACTIVE</div>
-      <span  id="fullscreen-timer" 
-      style="
+          <span id="fullscreen-timer" style="
         font-size: 38px;
         font-weight: bold;
-        font-family: 'Courier New', monospace;"></span>
-    </div>
-    
-    <!-- Right side stats -->
-    <div style="
+        font-family: 'Courier New', monospace;">
+          </span>
+        </div>
+
+        <!-- Right side stats -->
+        <div style="
       position: absolute;
       top: 10px;
       right: 10px;
@@ -440,15 +500,16 @@
       text-align: right;
       text-shadow: 0 0 10px #28e717;
       pointer-events: auto;
+      display: none
     ">
-      <div style="font-size: 10px; opacity: 0.7;">STREAM STATUS</div>
-      <div id="hud-fps" style="font-size: 14px;">FPS: 60</div>
-      <div id="hud-bitrate" style="font-size: 14px;">BITRATE: 2.5Mbps</div>
-      <div id="hud-latency" style="font-size: 14px;">LATENCY: 120ms</div>
-    </div>
-    
-    <!-- Bottom controls -->
-    <div style="
+          <div style="font-size: 10px; opacity: 0.7;">STREAM STATUS</div>
+          <div id="hud-fps" style="font-size: 14px;">FPS: 60</div>
+          <div id="hud-bitrate" style="font-size: 14px;">BITRATE: 2.5Mbps</div>
+          <div id="hud-latency" style="font-size: 14px;">LATENCY: 120ms</div>
+        </div>
+
+        <!-- Bottom controls -->
+        <div style="
     display: none;
       position: absolute;
       bottom: 20px;
@@ -458,7 +519,7 @@
       gap: 15px;
       pointer-events: auto;
     ">
-      <button class="hud-button" style="
+          <button class="hud-button" style="
         background: rgba(40, 231, 23, 0.1);
         border: 1px solid #28e717;
         color: #28e717;
@@ -472,8 +533,8 @@
         overflow: hidden;
         display: none;
       ">
-        <span style="position: relative; z-index: 1;">RECORD</span>
-        <div style="
+            <span style="position: relative; z-index: 1;">RECORD</span>
+            <div style="
           position: absolute;
           top: 0;
           left: -100%;
@@ -482,9 +543,9 @@
           background: #28e717;
           transition: left 0.3s;
         "></div>
-      </button>
-      
-      <button class="hud-button" style="
+          </button>
+
+          <button class="hud-button" style="
       display: none;
         background: rgba(231, 23, 40, 0.1);
         border: 1px solid #e71728;
@@ -496,203 +557,119 @@
         letter-spacing: 1px;
         transition: all 0.3s;
       ">EXIT</button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
     <audio id="audio-container"></audio>
 
-    <div id="controls" style="position: absolute; top: 6%; left: 1%; visibility: hidden; background: linear-gradient(.25turn, black, 78%, transparent);">
+    <div id="controls"
+      style="position: absolute; top: 8%; left: 1%; visibility: hidden; background: linear-gradient(.25turn, black, 78%, transparent);">
 
       <div style="display: flex; flex-direction: column; gap: 20px;">
-        <button class="button" style="background-image: url(images/photo_camera.png);" id="tmpID" ><div id="snaps-button" style="opacity: 70%;" tabindex="-1"></div></button>
+        <button class="button" style="background-image: url(images/photo_camera.png);" id="tmpID">
+          <div id="snaps-button" style="opacity: 70%;" tabindex="-1"></div>
+        </button>
 
 
-        <button id="watch-button" class="button" style="background-image: url(./images/guy_watching.png); z-index: 9990;">
-          <div style="visibility: hidden;"  tabindex="0">
-              <div style="display: flex; flex-direction: column; position: absolute; left: 130px; height: 560px; min-width: 20px; top: 14%; background:#16161605"></div>
-              <div id="watch-toggle-month" style="display: flex; flex-direction: column; border: 1px solid #47fe0f; position: absolute; left: 150px; height: 560px; min-width: 200px; top: 14%; background: linear-gradient(.25turn, black, 58%, transparent);"  >
-                  <div style="position: absolute; color: #28e717; font-size: 28px; top: 25%; right: 100%;">ᐸ</div>
-                  <div id="watch-toggle-month-0" class="button-months" style="margin-top: 4%;">january</div>
-                  <div id="watch-toggle-month-1" class="button-months" style="margin-top: 4%;">february</div>
-                  <div id="watch-toggle-month-2" class="button-months" style="margin-top: 4%;">march</div>
-                  <div id="watch-toggle-month-3" class="button-months" style="margin-top: 4%;">april</div>
-                  <div id="watch-toggle-month-4" class="button-months" style="margin-top: 4%;">may</div>
-                  <div id="watch-toggle-month-5" class="button-months" style="margin-top: 4%;">june</div>
-                  <div id="watch-toggle-month-6" class="button-months" style="margin-top: 4%;">july</div>
-                  <div id="watch-toggle-month-7" class="button-months" style="margin-top: 4%;">august</div>
-                  <div id="watch-toggle-month-8" class="button-months" style="margin-top: 4%;">september</div>
-                  <div id="watch-toggle-month-9" class="button-months" style="margin-top: 4%;">october</div>
-                  <div id="watch-toggle-month-10" class="button-months" style="margin-top: 4%;">november</div>
-                  <div id="watch-toggle-month-11" class="button-months" style="margin-top: 4%;">december</div>
-                  <div style="display: flex; flex-direction: column; position: absolute; left: 200px; height: 560px; min-width: 20px; background:#16161605"></div>
-                  <div id="watch-toggle-item" class="images-container">
-                    <div style="position: absolute; color: #28e717; font-size: 28px; top: 2%; right: 100%; z-index: 9998;">ᐸ</div>
-                    <div id="context-menu" style="display: flex; flex-direction: column; border: 1px solid #47fe0f; position: absolute; left: 150px; height: 100px; min-width: 200px; top: 14%; background: black; z-index: 9991; visibility: hidden;">
-                      <div id="delete-button" class="button-months" style="margin-top: 4%;">delete</div>
-                      <div id="load-delete-button" class="button-months" style="margin-top: 4%;">scissor</div>
-                    </div>
-                  </div>
-                </div>
+        <button id="watch-button" class="button"
+          style="background-image: url(./images/guy_watching.png); z-index: 9990;">
+          <div style="visibility: hidden;" tabindex="0">
+            <div
+              style="display: flex; flex-direction: column; position: absolute; left: 130px; height: 560px; min-width: 20px; top: 14%; background:#16161605">
             </div>
-          </button>
-          <button id="voice-button" class="button" style="background-image: url(./images/music_plant.png); opacity: 100%;" tabindex="0"></button>
-          <span>
-            <button id="local-save-button" class="button" style="width: 60px; height: 40px; font-size: 36px; line-height: 22px;" tabindex="0"><br/>১୪</button>
-            <button id="remote-save-button" class="button" style="width: 60px; height: 40px; margin-left: 6px;" tabindex="0">ܟ</button>
-          </span>
-          <button id="trace-button" class="button" style="background-image: url(./images/6956441_preview.png);" tabindex="0"></button>
+            <div id="watch-toggle-month"
+              style="display: flex; flex-direction: column; border: 1px solid #47fe0f; position: absolute; left: 150px; height: 560px; min-width: 200px; top: 14%; background: linear-gradient(.25turn, black, 58%, transparent);">
+              <div style="position: absolute; color: #28e717; font-size: 28px; top: 25%; right: 100%;">ᐸ</div>
+              <div id="watch-toggle-month-0" class="button-months" style="margin-top: 4%;">january</div>
+              <div id="watch-toggle-month-1" class="button-months" style="margin-top: 4%;">february</div>
+              <div id="watch-toggle-month-2" class="button-months" style="margin-top: 4%;">march</div>
+              <div id="watch-toggle-month-3" class="button-months" style="margin-top: 4%;">april</div>
+              <div id="watch-toggle-month-4" class="button-months" style="margin-top: 4%;">may</div>
+              <div id="watch-toggle-month-5" class="button-months" style="margin-top: 4%;">june</div>
+              <div id="watch-toggle-month-6" class="button-months" style="margin-top: 4%;">july</div>
+              <div id="watch-toggle-month-7" class="button-months" style="margin-top: 4%;">august</div>
+              <div id="watch-toggle-month-8" class="button-months" style="margin-top: 4%;">september</div>
+              <div id="watch-toggle-month-9" class="button-months" style="margin-top: 4%;">october</div>
+              <div id="watch-toggle-month-10" class="button-months" style="margin-top: 4%;">november</div>
+              <div id="watch-toggle-month-11" class="button-months" style="margin-top: 4%;">december</div>
+              <div
+                style="display: flex; flex-direction: column; position: absolute; left: 200px; height: 560px; min-width: 20px; background:#16161605">
+              </div>
+              <div id="watch-toggle-item" class="images-container">
+                <div style="position: absolute; color: #28e717; font-size: 28px; top: 2%; right: 100%; z-index: 9998;">ᐸ
+                </div>
+                <div id="context-menu"
+                  style="display: flex; flex-direction: column; border: 1px solid #47fe0f; position: absolute; left: 150px; height: 100px; min-width: 200px; top: 14%; background: black; z-index: 9991; visibility: hidden;">
+                  <div id="delete-button" class="button-months" style="margin-top: 4%;">delete</div>
+                  <div id="load-delete-button" class="button-months" style="margin-top: 4%;">scissor</div>
+                </div>
+              </div>
+            </div>
           </div>
+        </button>
+        <button id="voice-button" class="button" style="background-image: url(./images/music_plant.png); opacity: 100%;"
+          tabindex="0"></button>
+        <span>
+          <button id="local-save-button" class="button"
+            style="width: 60px; height: 40px; font-size: 36px; line-height: 22px;" tabindex="0"><br />১୪</button>
+          <button id="remote-save-button" class="button" style="width: 60px; height: 40px; margin-left: 6px;"
+            tabindex="0">໗</button>
+        </span>
+        <span>
+          <button id="chart-button" class="button" style="width: 60px; height: 40px; font-size: 36px; line-height: 22px; 
+        background-image: url(./images/chart.png); background-size: contain" tabindex="0">
+            <button id="trace-button" class="button" style="width: 60px; height: 40px; font-size: 36px; margin-left: 10px; line-height: 22px; 
+        background-image: url(./images/6956441_preview.png);" tabindex="0">
+        </span>
 
 
 
-
-
-
-
+        </button>
       </div>
-      <div style="position: absolute; right: 4%; top: 2%; height: 100px; color: #0ee54f; cursor: pointer;  font-size: 56px; font-weight: 900; " id="fullscreen-button">ఠ</div>
-      <div style="position: absolute; right: 4%; top: 8%; height: 100px; color: #0ee54f; cursor: pointer; font-size: 56px; font-weight: 900;" 
-     id="fullscreen-button-stream"
-     onclick="toggleVideoFullscreen()">ⵙ</div>
 
-<script>
-  function time(){document.getElementById('hud-timer').textContent = Date.now()}
 
-  function toggleVideoFullscreen() {
-    const videoContainer = document.getElementById('video-container');
-    const video = document.getElementById('main-video');
-    
-    if (!videoContainer) {
-      console.error('Video container not found');
-      return;
-    }
-    
-    if (!document.fullscreenElement) {
-      // Enter fullscreen
-      if (videoContainer.requestFullscreen) {
-        videoContainer.requestFullscreen();
-      } else if (videoContainer.webkitRequestFullscreen) {
-        videoContainer.webkitRequestFullscreen();
-      } else if (videoContainer.mozRequestFullScreen) {
-        videoContainer.mozRequestFullScreen();
-      } else if (videoContainer.msRequestFullscreen) {
-        videoContainer.msRequestFullscreen();
-      }
-      
-      // Play video if paused
-      if (video && video.paused) {
-        video.play().catch(e => console.log('Auto-play prevented:', e));
-      }
-    } else {
-      // Exit fullscreen
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      }
-    }
-  }
-</script>
-<script>
-  class FullscreenOverlay {
-    constructor() {
-      this.video = document.getElementById('main-video');
-      this.overlay = document.getElementById('fullscreen-overlay');
-      this.timerElement = document.getElementById('fullscreen-timer');
-      this.timerInterval = null;
-      this.startTime = null;
-      
-      this.init();
-    }
-    
-    init() {
-      // Listen for fullscreen changes
-      document.addEventListener('fullscreenchange', this.handleFullscreenChange.bind(this));
-      document.addEventListener('webkitfullscreenchange', this.handleFullscreenChange.bind(this));
-      document.addEventListener('mozfullscreenchange', this.handleFullscreenChange.bind(this));
-      document.addEventListener('MSFullscreenChange', this.handleFullscreenChange.bind(this));
-      
-      // Setup overlay buttons
-    //  this.setupButtons();
-      
-      // Add scan line for cyberpunk effect
-      this.addScanLine();
-    }
-    
-    handleFullscreenChange() {
-      const isFullscreen = document.fullscreenElement || 
-                          document.webkitFullscreenElement ||
-                          document.mozFullScreenElement ||
-                          document.msFullscreenElement;
-      
-      if (isFullscreen && isFullscreen.id === 'video-container') {
-        this.showOverlay();
-      } else {
-        //this.hideOverlay();
-      }
-    }
-    
-    showOverlay() {
-      this.overlay.style.display = 'flex';
-      this.startTimer();
-      
-      // Update stream info
-      this.updateStreamInfo();
-      
-      // Auto-hide overlay after 3 seconds, show on mouse move
-    //  this.setupAutoHide();
-    }
-    
-    hideOverlay() {
-      this.overlay.style.display = 'none';
-      this.stopTimer();
-    }
-    
-    startTimer() {
-      this.startTime = Date.now();
-      this.updateTimer();
-      this.timerInterval = setInterval(() => this.updateTimer(), 1000);
-    }
-    
-    stopTimer() {
-      if (this.timerInterval) {
-        clearInterval(this.timerInterval);
-        this.timerInterval = null;
-      }
-    }
-    
-    updateTimer() {
-      if (!this.startTime) return;
-      
-      const elapsed = Date.now() - this.startTime;
-      const hours = Math.floor(elapsed / 3600000);
-      const minutes = Math.floor((elapsed % 3600000) / 60000);
-      const seconds = Math.floor((elapsed % 60000) / 1000);
-      
-      let timerText = '';
-      if (hours > 0) {
-        timerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-      } else {
-        timerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-      }
-      
-      if (this.timerElement) {
-        this.timerElement.textContent = timerText;
-      }
-    }
-    
-    setupButtons() {
-      // Exit button
-      const exitBtn = document.getElementById('fullscreen-exit') || 
-                     document.getElementById('overlay-close') ||
-                     document.querySelector('.hud-button:nth-child(2)');
-      
-      if (exitBtn) {
-        exitBtn.addEventListener('click', () => {
+
+
+
+
+
+    </div>
+    <div
+      style="position: absolute; right: 4%; top: 2%; height: 100px; color: #0ee54f; cursor: pointer;  font-size: 56px; font-weight: 900; "
+      id="fullscreen-button">ⵔ</div>
+    <div
+      style="position: absolute; right: 4%; top: 10%; height: 100px; color: #0ee54f; cursor: pointer; font-size: 56px; font-weight: 900;"
+      id="fullscreen-button-stream" onclick="toggleVideoFullscreen()">ⵙ</div>
+
+    <script>
+
+      function toggleVideoFullscreen() {
+        const videoContainer = document.getElementById('video-container');
+        const video = document.getElementById('main-video');
+
+        if (!videoContainer) {
+          console.error('Video container not found');
+          return;
+        }
+
+        if (!document.fullscreenElement) {
+          // Enter fullscreen
+          if (videoContainer.requestFullscreen) {
+            videoContainer.requestFullscreen();
+          } else if (videoContainer.webkitRequestFullscreen) {
+            videoContainer.webkitRequestFullscreen();
+          } else if (videoContainer.mozRequestFullScreen) {
+            videoContainer.mozRequestFullScreen();
+          } else if (videoContainer.msRequestFullscreen) {
+            videoContainer.msRequestFullscreen();
+          }
+
+          // Play video if paused
+          if (video && video.paused) {
+            video.play().catch(e => console.log('Auto-play prevented:', e));
+          }
+        } else {
+          // Exit fullscreen
           if (document.exitFullscreen) {
             document.exitFullscreen();
           } else if (document.webkitExitFullscreen) {
@@ -702,128 +679,235 @@
           } else if (document.msExitFullscreen) {
             document.msExitFullscreen();
           }
-        });
+        }
       }
-      
-      // Snapshot button
-      const snapshotBtn = document.getElementById('fullscreen-snapshot') || 
-                         document.getElementById('overlay-snapshot') ||
-                         document.querySelector('.hud-button:nth-child(1)');
-      
-      if (snapshotBtn) {
-        snapshotBtn.addEventListener('click', () => {
-          this.takeSnapshot();
-        });
+    </script>
+    <script>
+      class FullscreenOverlay {
+        constructor() {
+          this.video = document.getElementById('main-video');
+          this.overlay = document.getElementById('fullscreen-overlay');
+          this.timerElement = document.getElementById('fullscreen-timer');
+          this.timerInterval = null;
+          this.startTime = null;
+
+          this.init();
+        }
+
+        init() {
+          // Listen for fullscreen changes
+          document.addEventListener('fullscreenchange', this.handleFullscreenChange.bind(this));
+          document.addEventListener('webkitfullscreenchange', this.handleFullscreenChange.bind(this));
+          document.addEventListener('mozfullscreenchange', this.handleFullscreenChange.bind(this));
+          document.addEventListener('MSFullscreenChange', this.handleFullscreenChange.bind(this));
+
+          // Setup overlay buttons
+          //  this.setupButtons();
+
+          this.startTimer();
+          this.addScanLine();
+        }
+
+        handleFullscreenChange() {
+          const isFullscreen = document.fullscreenElement ||
+            document.webkitFullscreenElement ||
+            document.mozFullScreenElement ||
+            document.msFullscreenElement;
+
+          if (isFullscreen && isFullscreen.id === 'video-container') {
+            this.showOverlay();
+          } else {
+            //this.hideOverlay();
+          }
+        }
+
+        showOverlay() {
+          this.overlay.style.display = 'flex';
+
+
+          // Update stream info
+          this.updateStreamInfo();
+
+        }
+
+        hideOverlay() {
+          this.overlay.style.display = 'none';
+          this.stopTimer();
+        }
+
+        startTimer() {
+          this.startTime = Date.now();
+          this.updateTimer();
+          this.timerInterval = setInterval(() => this.updateTimer(), 1000);
+        }
+
+        stopTimer() {
+          if (this.timerInterval) {
+            clearInterval(this.timerInterval);
+            this.timerInterval = null;
+          }
+        }
+
+        updateTimer() {
+          if (!this.startTime) return;
+
+          const elapsed = Date.now() - this.startTime;
+          const hours = Math.floor(elapsed / 3600000);
+          const minutes = Math.floor((elapsed % 3600000) / 60000);
+          const seconds = Math.floor((elapsed % 60000) / 1000);
+
+          let timerText = '';
+          if (hours > 0) {
+            timerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+          } else {
+            timerText = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+          }
+
+          if (this.timerElement) {
+            this.timerElement.textContent = timerText;
+          }
+        }
+
+        setupButtons() {
+          // Exit button
+          const exitBtn = document.getElementById('fullscreen-exit') ||
+            document.getElementById('overlay-close') ||
+            document.querySelector('.hud-button:nth-child(2)');
+
+          if (exitBtn) {
+            exitBtn.addEventListener('click', () => {
+              if (document.exitFullscreen) {
+                document.exitFullscreen();
+              } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+              } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+              } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+              }
+            });
+          }
+
+          // Snapshot button
+          const snapshotBtn = document.getElementById('fullscreen-snapshot') ||
+            document.getElementById('overlay-snapshot') ||
+            document.querySelector('.hud-button:nth-child(1)');
+
+          if (snapshotBtn) {
+            snapshotBtn.addEventListener('click', () => {
+              this.takeSnapshot();
+            });
+          }
+
+          // Volume control
+          const volumeSlider = document.getElementById('fullscreen-volume-slider');
+          if (volumeSlider && this.video) {
+            volumeSlider.addEventListener('input', (e) => {
+              this.video.volume = e.target.value / 100;
+            });
+          }
+
+          const volumeIcon = document.getElementById('fullscreen-volume');
+          if (volumeIcon && this.video) {
+            volumeIcon.addEventListener('click', () => {
+              this.video.muted = !this.video.muted;
+              volumeIcon.textContent = this.video.muted ? '🔇' : '🔊';
+            });
+          }
+        }
+
+        takeSnapshot() {
+          if (!this.video) return;
+
+          const canvas = document.createElement('canvas');
+          canvas.width = this.video.videoWidth;
+          canvas.height = this.video.videoHeight;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(this.video, 0, 0);
+
+          // Create download link
+          const link = document.createElement('a');
+          link.download = `snapshot_${Date.now()}.png`;
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+
+          // Visual feedback
+          const snapshotBtn = document.getElementById('fullscreen-snapshot');
+          if (snapshotBtn) {
+            const originalText = snapshotBtn.textContent;
+            snapshotBtn.textContent = '✓ SAVED';
+            snapshotBtn.style.background = 'rgba(40, 231, 23, 0.5)';
+
+            setTimeout(() => {
+              snapshotBtn.textContent = originalText;
+              snapshotBtn.style.background = '';
+            }, 1000);
+          }
+        }
+
+        updateStreamInfo() {
+          if (!this.video) return;
+
+          // Update resolution
+          const resolutionEl = document.getElementById('stream-resolution');
+          if (resolutionEl && this.video.videoWidth) {
+            resolutionEl.textContent = `${this.video.videoWidth}×${this.video.videoHeight}`;
+          }
+
+          // Update FPS (simulated)
+          const fpsEl = document.getElementById('hud-fps');
+          if (fpsEl) {
+            setInterval(() => {
+              fpsEl.textContent = `FPS: ${Math.floor(45 + Math.random() * 15)}`;
+            }, 1000);
+          }
+        }
+
+        setupAutoHide() {
+          let hideTimeout;
+          const hideOverlay = () => {
+            this.overlay.style.opacity = '0';
+            this.overlay.style.pointerEvents = 'none';
+          };
+
+          const showOverlay = () => {
+            this.overlay.style.opacity = '1';
+            this.overlay.style.pointerEvents = 'auto';
+
+            clearTimeout(hideTimeout);
+            hideTimeout = setTimeout(hideOverlay, 3000);
+          };
+
+          // Show initially
+          showOverlay();
+
+          // Show on mouse move
+          document.addEventListener('mousemove', showOverlay);
+
+          // Show on touch
+          document.addEventListener('touchstart', showOverlay);
+        }
+
+        addScanLine() {
+          const scanLine = document.createElement('div');
+          scanLine.className = 'scan-line';
+          this.overlay.appendChild(scanLine);
+        }
       }
-      
-      // Volume control
-      const volumeSlider = document.getElementById('fullscreen-volume-slider');
-      if (volumeSlider && this.video) {
-        volumeSlider.addEventListener('input', (e) => {
-          this.video.volume = e.target.value / 100;
-        });
-      }
-      
-      const volumeIcon = document.getElementById('fullscreen-volume');
-      if (volumeIcon && this.video) {
-        volumeIcon.addEventListener('click', () => {
-          this.video.muted = !this.video.muted;
-          volumeIcon.textContent = this.video.muted ? '🔇' : '🔊';
-        });
-      }
-    }
-    
-    takeSnapshot() {
-      if (!this.video) return;
-      
-      const canvas = document.createElement('canvas');
-      canvas.width = this.video.videoWidth;
-      canvas.height = this.video.videoHeight;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(this.video, 0, 0);
-      
-      // Create download link
-      const link = document.createElement('a');
-      link.download = `snapshot_${Date.now()}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-      
-      // Visual feedback
-      const snapshotBtn = document.getElementById('fullscreen-snapshot');
-      if (snapshotBtn) {
-        const originalText = snapshotBtn.textContent;
-        snapshotBtn.textContent = '✓ SAVED';
-        snapshotBtn.style.background = 'rgba(40, 231, 23, 0.5)';
-        
-        setTimeout(() => {
-          snapshotBtn.textContent = originalText;
-          snapshotBtn.style.background = '';
-        }, 1000);
-      }
-    }
-    
-    updateStreamInfo() {
-      if (!this.video) return;
-      
-      // Update resolution
-      const resolutionEl = document.getElementById('stream-resolution');
-      if (resolutionEl && this.video.videoWidth) {
-        resolutionEl.textContent = `${this.video.videoWidth}×${this.video.videoHeight}`;
-      }
-      
-      // Update FPS (simulated)
-      const fpsEl = document.getElementById('hud-fps');
-      if (fpsEl) {
-        setInterval(() => {
-          fpsEl.textContent = `FPS: ${Math.floor(45 + Math.random() * 15)}`;
-        }, 1000);
-      }
-    }
-    
-    setupAutoHide() {
-      let hideTimeout;
-      const hideOverlay = () => {
-        this.overlay.style.opacity = '0';
-        this.overlay.style.pointerEvents = 'none';
-      };
-      
-      const showOverlay = () => {
-        this.overlay.style.opacity = '1';
-        this.overlay.style.pointerEvents = 'auto';
-        
-        clearTimeout(hideTimeout);
-        hideTimeout = setTimeout(hideOverlay, 3000);
-      };
-      
-      // Show initially
-      showOverlay();
-      
-      // Show on mouse move
-      document.addEventListener('mousemove', showOverlay);
-      
-      // Show on touch
-      document.addEventListener('touchstart', showOverlay);
-    }
-    
-    addScanLine() {
-      const scanLine = document.createElement('div');
-      scanLine.className = 'scan-line';
-      this.overlay.appendChild(scanLine);
-    }
-  }
-  
-  // Initialize when DOM is loaded
-  document.addEventListener('DOMContentLoaded', () => {
-    window.fullscreenOverlay = new FullscreenOverlay();
-  });
-</script>
-    </div>
-    
+
+      // Initialize when DOM is loaded
+      document.addEventListener('DOMContentLoaded', () => {
+        window.fullscreenOverlay = new FullscreenOverlay();
+      });
+    </script>
+  </div>
 
 
 
 
-</div>
+
+  </div>
 
 </body>
+
 </html>
