@@ -1,4 +1,4 @@
-import * as Events from "../utils/Events";
+import EventHandler, { ACTIVE_STREAM_RECEIVED, MANUAL_RECONNECT_REQUIRED, NETWORK_OFFLINE, NETWORK_ONLINE, NO_STREAMS_AVAILABLE, PEER_CLOSED, PEER_CONNECTED, PEER_DISCONNECTED, PEER_ERROR, PEER_RECONNECT_FAILED, STREAM_LOST, STREAM_LOST_GENERIC, STREAM_RECEIVED, STREAM_SWITCHED } from "../utils/Events";
 import { MediaConnection, Peer } from "peerjs";
 import * as uuid from "uuid";
 import RestService from "./RestService";
@@ -6,7 +6,7 @@ import Model from "../store/Model";
 
 const id = (device: string = !!screen.orientation ? "static-" : "mobile-"): string => device + uuid.v4();
 
-export class StreamProvider extends Events.EventHandler {
+export class StreamProvider {
   private _streamers: Map<string, Streamer> = new Map();
   private _index: number = 0;
   private _peer: Peer | null = null;
@@ -20,7 +20,6 @@ export class StreamProvider extends Events.EventHandler {
   private readonly RECONNECT_DELAY: number = 3000;
 
   constructor() {
-    super();
 
     window.addEventListener('online', this.handleNetworkOnline.bind(this));
     window.addEventListener('offline', this.handleNetworkOffline.bind(this));
@@ -44,7 +43,7 @@ export class StreamProvider extends Events.EventHandler {
     const activeStreamers = Array.from(this._streamers.values()).filter(s => s.stream);
     
     if (activeStreamers.length === 0) {
-      this.dispatchEvent(Events.NO_STREAMS_AVAILABLE);
+      EventHandler.dispatchEvent(NO_STREAMS_AVAILABLE);
       return null;
     }
 
@@ -119,7 +118,7 @@ export class StreamProvider extends Events.EventHandler {
   private handleNetworkOnline = () => {
     console.log('[StreamProvider] Network is back online');
     this._isNetworkOffline = false;
-    this.dispatchEvent(Events.NETWORK_ONLINE);
+    EventHandler.dispatchEvent(NETWORK_ONLINE);
     
     // Reset reconnect attempts
     this._peerReconnectAttempts = 0;
@@ -137,7 +136,7 @@ export class StreamProvider extends Events.EventHandler {
   private handleNetworkOffline = () => {
     console.log('[StreamProvider] Network went offline');
     this._isNetworkOffline = true;
-    this.dispatchEvent(Events.NETWORK_OFFLINE);
+    EventHandler.dispatchEvent(NETWORK_OFFLINE);
     
     // Clear all streams immediately
     this.clearAllStreams('network_offline');
@@ -150,7 +149,7 @@ export class StreamProvider extends Events.EventHandler {
     if (this._activeStreamerId) {
       const activeStreamer = this._streamers.get(this._activeStreamerId);
       if (activeStreamer?.stream) {
-        this.dispatchEvent(Events.STREAM_LOST, {
+        EventHandler.dispatchEvent(STREAM_LOST, {
           streamerId: this._activeStreamerId,
           reason,
           timestamp: Date.now()
@@ -194,7 +193,7 @@ export class StreamProvider extends Events.EventHandler {
         streamer.stream = null;
         
         // Dispatch generic stream lost event
-        this.dispatchEvent(Events.STREAM_LOST_GENERIC, {
+        EventHandler.dispatchEvent(STREAM_LOST_GENERIC, {
           streamerId,
           reason: 'cleanup',
           timestamp: Date.now()
@@ -275,7 +274,7 @@ export class StreamProvider extends Events.EventHandler {
     this._peer.on('open', () => {
       console.log('[StreamProvider] Peer connected with ID:', this._peer!.id);
       this._peerReconnectAttempts = 0;
-      this.dispatchEvent(Events.PEER_CONNECTED, { peerId: this._peer!.id });
+      EventHandler.dispatchEvent(PEER_CONNECTED, { peerId: this._peer!.id });
       
       // Connect to all streamers
       this.connectToAllStreamers();
@@ -286,14 +285,14 @@ export class StreamProvider extends Events.EventHandler {
     
     this._peer.on('disconnected', () => {
       console.log('[StreamProvider] Peer disconnected');
-      this.dispatchEvent(Events.PEER_DISCONNECTED);
+      EventHandler.dispatchEvent(PEER_DISCONNECTED);
       this.clearAllStreams('peer_disconnected');
       this.reconnectPeer();
     });
     
     this._peer.on('close', () => {
       console.log('[StreamProvider] Peer connection closed');
-      this.dispatchEvent(Events.PEER_CLOSED);
+      EventHandler.dispatchEvent(PEER_CLOSED);
       this.clearAllStreams('peer_closed');
       this.reconnectPeer();
     });
@@ -305,7 +304,7 @@ export class StreamProvider extends Events.EventHandler {
         this.clearAllStreams('network_error');
       }
       
-      this.dispatchEvent(Events.PEER_ERROR, error);
+      EventHandler.dispatchEvent(PEER_ERROR, error);
       this.reconnectPeer();
     });
   }
@@ -329,7 +328,7 @@ export class StreamProvider extends Events.EventHandler {
           
           // Dispatch STREAM_RECEIVED event
           console.log('[StreamProvider] Dispatching STREAM_RECEIVED for:', call.peer);
-          this.dispatchEvent(Events.STREAM_RECEIVED, {
+          EventHandler.dispatchEvent(STREAM_RECEIVED, {
             streamerId: call.peer,
             stream: stream,
             timestamp: Date.now()
@@ -337,7 +336,7 @@ export class StreamProvider extends Events.EventHandler {
           
           // If this is the active streamer, also dispatch active stream received
           if (this._activeStreamerId === call.peer) {
-            this.dispatchEvent(Events.ACTIVE_STREAM_RECEIVED, {
+            EventHandler.dispatchEvent(ACTIVE_STREAM_RECEIVED, {
               streamerId: call.peer,
               stream: stream,
               timestamp: Date.now()
@@ -418,7 +417,7 @@ export class StreamProvider extends Events.EventHandler {
     
     // If this is the active streamer, dispatch STREAM_LOST event
     if (this._activeStreamerId === streamerId) {
-      this.dispatchEvent(Events.STREAM_LOST, {
+      EventHandler.dispatchEvent(STREAM_LOST, {
         streamerId,
         reason,
         timestamp: Date.now()
@@ -427,7 +426,7 @@ export class StreamProvider extends Events.EventHandler {
       // Try to switch to another stream
       const nextStream = this.getNextStream();
       if (nextStream) {
-        this.dispatchEvent(Events.STREAM_SWITCHED, {
+        EventHandler.dispatchEvent(STREAM_SWITCHED, {
           from: streamerId,
           to: this._activeStreamerId,
           stream: nextStream
@@ -446,8 +445,8 @@ export class StreamProvider extends Events.EventHandler {
     // Check max attempts
     if (this._peerReconnectAttempts >= this.MAX_RECONNECT_ATTEMPTS) {
       console.error('[StreamProvider] Max reconnect attempts reached');
-      this.dispatchEvent(Events.PEER_RECONNECT_FAILED);
-      this.dispatchEvent(Events.MANUAL_RECONNECT_REQUIRED);
+      EventHandler.dispatchEvent(PEER_RECONNECT_FAILED);
+      EventHandler.dispatchEvent(MANUAL_RECONNECT_REQUIRED);
       return;
     }
     
@@ -491,7 +490,7 @@ export class StreamProvider extends Events.EventHandler {
 
   private initializeLocalStream = () => {
     this.startPeerListRefresh();
-    this.dispatchEvent(Events.STREAM_RECEIVED);
+    EventHandler.dispatchEvent(STREAM_RECEIVED);
   }
 
   public destroy = () => {

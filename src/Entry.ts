@@ -1,6 +1,6 @@
 import Snaphots from "./record/Snaphots";
 import MotionDetector from "./motion/MotionDetector";
-import * as Events from "./utils/Events";  
+import EventHandler, { NETWORK_AUTH_SUCCESS, STREAM_RECEIVED, USER_PROCEEDED } from "./utils/Events";  
 import StreamProvider from "./network/StreamProvider";
 import View from "./view/View";
 import Console from "./utils/Console";
@@ -21,7 +21,7 @@ class Entry {
     constructor() {     
 
       Model.initialize();
-      
+
       switch (route()) {
         case ('show'): {
           this.initializeView();
@@ -42,13 +42,13 @@ class Entry {
       await Console.initialize();
 
       await Authentification.initialize();
-            Authentification.addEventListener(Events.NETWORK_AUTH_SUCCESS, () => this.initializeView());
+            Authentification.addEventListener(NETWORK_AUTH_SUCCESS, () => this.initializeView());
     }
     
 
     private initializeView = async () => {
       await View.initialize();
-            View.addEventListener(Events.USER_PROCEEDED, () => this.initializeRoutes());
+            View.addEventListener(USER_PROCEEDED, () => this.initializeRoutes());
     }
 
     private initializeRoutes = async () => {
@@ -93,7 +93,7 @@ class Entry {
 
     private initializeComponents = async () => {   
       await StreamProvider.initialize();
-            StreamProvider.addEventListener(Events.STREAM_RECEIVED, (data: any) => {
+            EventHandler.addEventListener(STREAM_RECEIVED, (data: any) => {
               View.displayStream(data.stream);
               Sounds.playStream(data.stream);
               Controls.setVisible(true);
@@ -107,9 +107,7 @@ class Entry {
       await RestService.initialize();
 
       await Snaphots.initialize();
-            Snaphots.addEventListener(Events.SNAPSHOT_SEND_HOMIE, (data: any) => {
-              RestService.sendSnaphot(data);
-            });
+
 
       await MotionDetector.initialize();
          //   MotionDetector.addEventListener(Events.MOTION_DETECTION_STARTED, (data: any) => Snaphots.create('', false, data));

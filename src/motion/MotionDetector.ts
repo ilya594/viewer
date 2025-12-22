@@ -1,5 +1,5 @@
 import Snaphots from "../record/Snaphots";
-import EventHandler, { COLOR_CURVES_STATE_CHANGED, STREAM_SWITCHED } from "../utils/Events";
+import EventHandler, { COLOR_CURVES_STATE_CHANGED, MOTION_DETECTION_STARTED, STREAM_SWITCHED } from "../utils/Events";
 import { MOTION_DETECT_CHECKPOINT_SIZE, MOTION_DETECT_DELAY, MOTION_DETECT_HEAP_SIZE, MOTION_DETECT_PIXEL_COEF } from "../utils/Constants";
 import * as Utils from "../utils/Utils";
 import Controls from "../view/Controls";
@@ -42,7 +42,7 @@ export class MotionDetector {
 
         this._viewport = document.querySelector("video");
 
-        Snaphots.addEventListener(STREAM_SWITCHED, () => this._values = new DeltaValues());
+        EventHandler.addEventListener(STREAM_SWITCHED, () => this._values = new DeltaValues());
 
         this.startDetector();
     };
@@ -147,7 +147,7 @@ export class MotionDetector {
         ) {
             timeout = MOTION_DETECT_DELAY;
             Matrix.hide();
-            //  this.dispatchEvent(Events.MOTION_DETECTION_STARTED, value);
+            EventHandler.dispatchEvent(MOTION_DETECTION_STARTED, value);
         }
 
         this._values.add(value);

@@ -8,13 +8,14 @@ import {
     SNAP_SAVER_OPACITY, 
 } from "../utils/Constants";
 import * as Utils from "../utils/Utils";
-import * as Events from "../utils/Events";    
+
 import Controls from '../view/Controls';
 import FileSaver from 'file-saver';
 import StreamProvider from '../network/StreamProvider';
 import MobileUtils from '../utils/MobileUtils';
+import EventHandler, { MOBILE_SWIPE_RIGHT, MOTION_DETECTION_STARTED, SNAPSHOT_SEND_HOMIE, STREAM_SWITCHED } from '../utils/Events';
 
-class Snaphots extends Events.EventHandler {
+class Snaphots {
 
     private _container: any;
     private _viewport: any;
@@ -35,7 +36,7 @@ class Snaphots extends Events.EventHandler {
 
         this._viewport = document.querySelector("video");
         this._viewport.addEventListener("click", this.onViewportClick);
-        MobileUtils.on(document).addEventListener(Events.MOBILE_SWIPE_RIGHT, this.onViewportClick);
+        MobileUtils.on(document).addEventListener(MOBILE_SWIPE_RIGHT, this.onViewportClick);
      //   this._viewport.addEventListener("touchstart", this.onViewportClick);
 
         this._snapsaver = document.createElement("canvas"); this._container.appendChild(this._snapsaver);
@@ -62,6 +63,8 @@ class Snaphots extends Events.EventHandler {
         this._proxy = document.createElement("canvas");
 
         this.createBufferCanvas();
+
+        EventHandler.addEventListener(MOTION_DETECTION_STARTED, (data: any) => this.create('', false, data));
 
         requestAnimationFrame(this.tick);
     };
@@ -92,7 +95,7 @@ class Snaphots extends Events.EventHandler {
     };
 
     private switchStreams = () => {
-        this.dispatchEvent(Events.STREAM_SWITCHED);
+        EventHandler.dispatchEvent(STREAM_SWITCHED);
         const viewport = document.querySelector("video");    
         viewport.srcObject = StreamProvider.getNextStream();
     }
@@ -203,7 +206,7 @@ class Snaphots extends Events.EventHandler {
     }
 
     private dispatchSendEvent = () => {
-        this.bufferToDataUrl((data: string) => this.dispatchEvent(Events.SNAPSHOT_SEND_HOMIE, data));   
+        this.bufferToDataUrl((data: string) => EventHandler.dispatchEvent(SNAPSHOT_SEND_HOMIE, data));   
     }
 
     private tick = (time: number) => {

@@ -1,17 +1,17 @@
-import * as Events from "../utils/Events";
+import EventHandler, { SNAPSHOT_SEND_HOMIE } from "../utils/Events";
 import axios from "axios";
 
-export class RestService extends Events.EventHandler {
+export class RestService {
 
   public SERVER_URL: string = 'https://nodejs-http-server.onrender.com/';
   private TIME_ZONE: string = 'Europe/Kyiv';
 
   constructor() {
-    super();
+
   }
 
   public initialize = async () => {
-    return this;
+    EventHandler.addEventListener(SNAPSHOT_SEND_HOMIE, (data: any) => this.sendSnaphot(data));
   }
 
   public sendSnaphot = (snapshot: string) => {
