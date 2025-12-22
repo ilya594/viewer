@@ -1,25 +1,24 @@
 import Snaphots from "../record/Snaphots";
+import EventHandler, { COLOR_CURVES_STATE_CHANGED, STREAM_SWITCHED } from "../utils/Events";
 import { MOTION_DETECT_CHECKPOINT_SIZE, MOTION_DETECT_DELAY, MOTION_DETECT_HEAP_SIZE, MOTION_DETECT_PIXEL_COEF } from "../utils/Constants";
-import * as Events from "../utils/Events";    
 import * as Utils from "../utils/Utils";
 import Controls from "../view/Controls";
 import Matrix from "../view/Matrix";
+import Model from "../store/Model";
 
-export class MotionDetector extends Events.EventHandler {
-  
+export class MotionDetector {
+
     private _viewport: HTMLVideoElement | any;
     private _container: any;
 
     private _label: any;
     private _graphic: any;
 
-    private _showTrace: Boolean = false;
-
     private _checkpoint: any = {
         size: MOTION_DETECT_CHECKPOINT_SIZE,
         coefs: [0.66, 0.33],
         canvas: null,
-        context: function() {
+        context: function () {
             return this.canvas.getContext('2d', { willReadFrequently: true });
         }
     };
@@ -28,7 +27,7 @@ export class MotionDetector extends Events.EventHandler {
         size: MOTION_DETECT_CHECKPOINT_SIZE,
         coefs: [0.96, 0.96],
         canvas: null,
-        context: function() {
+        context: function () {
             return this.canvas.getContext('2d', { willReadFrequently: true });
         }
     };
@@ -41,13 +40,11 @@ export class MotionDetector extends Events.EventHandler {
 
     public initialize = async () => {
 
-        this._viewport = document.querySelector("video");   
+        this._viewport = document.querySelector("video");
 
-        Snaphots.addEventListener(Events.STREAM_SWITCHED, () => this._values = new DeltaValues());
+        Snaphots.addEventListener(STREAM_SWITCHED, () => this._values = new DeltaValues());
 
         this.startDetector();
-        
-        this.dispatchEvent(Events.STREAM_BALANCED, null);
     };
 
     private startDetector = async () => {
@@ -56,7 +53,7 @@ export class MotionDetector extends Events.EventHandler {
 
         this.aimview();
 
-        this._label = document.createElement("label"); this._container.appendChild(this._label);       
+        this._label = document.createElement("label"); this._container.appendChild(this._label);
         this._label.style.setProperty('position', 'absolute');
         this._label.style.setProperty('top', '3%');
         this._label.style.setProperty('left', '13%');
@@ -75,13 +72,10 @@ export class MotionDetector extends Events.EventHandler {
         this._graphic.style.setProperty('width', '100%');
         this._graphic.style.setProperty('display', 'none');
 
-        Controls.addEventListener(Events.CHANGE_TRACE_VISIBILITY, () => { 
-            const map = { 'true': 'block', 'false': 'none'};
-            this._showTrace = !this._showTrace; 
-            //@ts-ignore
-            this._graphic.style.setProperty('display', String(map[String(this._showTrace)]));
-            //@ts-ignore
-            this._label.style.setProperty('display', String(map[String(this._showTrace)]));
+        EventHandler.addEventListener(COLOR_CURVES_STATE_CHANGED, (value: boolean) => {
+            const propValue = value ? 'block' : 'none';
+            this._graphic.style.setProperty('display', propValue);
+            this._label.style.setProperty('display', propValue);
         });
 
         this._viewport.requestVideoFrameCallback(this.onVideoEnterFrame);
@@ -91,19 +85,16 @@ export class MotionDetector extends Events.EventHandler {
         this._checkpoint.canvas = document.createElement("canvas"); //this._container.appendChild(this._points.canvas);         
         this._checkpoint.canvas.width = this._checkpoint.size;
         this._checkpoint.canvas.height = this._checkpoint.size;
-        this._checkpoint.context().globalCompositeOperation = "difference";  
+        this._checkpoint.context().globalCompositeOperation = "difference";
 
         this._shiftpoint.canvas = document.createElement("canvas"); //this._container.appendChild(this._points.canvas);         
         this._shiftpoint.canvas.width = this._shiftpoint.size;
         this._shiftpoint.canvas.height = this._shiftpoint.size;
-        this._shiftpoint.context().globalCompositeOperation = "difference";  
+        this._shiftpoint.context().globalCompositeOperation = "difference";
     }
 
-    private onVideoEnterFrame = (...args: any) => {  
-
+    private onVideoEnterFrame = (...args: any) => {
         this.drawCheckpoint();
-        this.drawShiftpoint(); //TODO refactor
-
         this.analyzeVideoFrame();
     };
 
@@ -116,46 +107,30 @@ export class MotionDetector extends Events.EventHandler {
         context.clearRect(0, 0, size, size);
 
         return context.drawImage(
-            this._viewport, 
-            this._width * this._checkpoint.coefs[0], 
-            this._height * this._checkpoint.coefs[1], 
+            this._viewport,
+            this._width * this._checkpoint.coefs[0],
+            this._height * this._checkpoint.coefs[1],
             size, size, 0, 0, size, size
-        );  
+        );
     }
 
-    private drawShiftpoint = () => {
-        const size = this._shiftpoint.size;
-
-        const context = this._shiftpoint.context();
-
-        context.clearRect(0, 0, size, size);
-
-        return context.drawImage(
-            this._viewport, 
-            this._width * this._shiftpoint.coefs[0], 
-            this._height * this._shiftpoint.coefs[1], 
-            size, size, 0, 0, size, size
-        ); 
-    }
 
     private analyzeVideoFrame = (): any => {
 
         const getPointData = (point: any) => {
             const image: ImageData = point.context().getImageData(0, 0, point.size, point.size);
-            const rgb: {r: number, g: number, b: number}  = Utils.getRgb(image);    
-            const hsv: {h: number, s: number, v: number} = Utils.rbgToHsv(rgb);
+            const rgb: { r: number, g: number, b: number } = Utils.getRgb(image);
+            const hsv: { h: number, s: number, v: number } = Utils.rbgToHsv(rgb);
             return hsv;
         }
 
-        const data = [getPointData(this._checkpoint), getPointData(this._shiftpoint)];
+        const data = getPointData(this._checkpoint);
 
-        this.analyzeDeltaValues(data[0]); 
+        this.analyzeDeltaValues(data);
 
-        if (this._showTrace) {
-            this.trace(data[0]);
+        if (Model.colorCurvesEnabled) {
+            this.trace(data);
         }
-
-        return data[0];
     }
 
     private analyzeDeltaValues = (value: any) => {
@@ -167,51 +142,43 @@ export class MotionDetector extends Events.EventHandler {
         let timeout: number = 0;
 
         if (
-            Math.abs(current - average) > MOTION_DETECT_PIXEL_COEF && 
+            Math.abs(current - average) > MOTION_DETECT_PIXEL_COEF &&
             Math.abs(previous - average) > MOTION_DETECT_PIXEL_COEF
         ) {
             timeout = MOTION_DETECT_DELAY;
             Matrix.hide();
-            this.dispatchEvent(Events.MOTION_DETECTION_STARTED, value);
+            //  this.dispatchEvent(Events.MOTION_DETECTION_STARTED, value);
         }
 
         this._values.add(value);
-
-        setTimeout(() => this._viewport.requestVideoFrameCallback(this.onVideoEnterFrame), timeout);
+        this._viewport.requestVideoFrameCallback(this.onVideoEnterFrame);
+        // setTimeout(() => , timeout);
     }
 
-    private trace = ({ h, s, v }: any) => {     
-        
-        this.drawDeltaGraphics(this._values.hue, "rgb(0, 255, 0, 1)", true, -100);
-       // this.drawDeltaGraphics(this._values.saturation,"rgb(0, 188, 188, 1)", false, 50);
-        this.drawDeltaGraphics(this._values.brightness, "rgb(255, 255, 255, 1)", false, 30);
+    private trace = ({ h, s, v }: any) => {
 
-        this._label.textContent = 
-            '[' + this._values.hue.average.toFixed(1) + 
-            ' Δ ' +  h.toFixed(1) + '] ' +
-            '[' + s.toFixed(1) + '] ' + 
-            '[' + v.toFixed(1) + '] [' + 
-            this._viewport.videoWidth + ' x ' + 
-            this._viewport.videoHeight + ']';
+        this.drawDeltaGraphics(this._values.hue, "rgb(0, 255, 0, 1)", true, -100);
+        // this.drawDeltaGraphics(this._values.saturation,"rgb(0, 188, 188, 1)", false, 50);
+        this.drawDeltaGraphics(this._values.brightness, "rgb(255, 255, 255, 1)", false, 30);
     }
 
     private drawDeltaGraphics = (values: any, color: string, clear: boolean = false, adjust: number = 0) => {
 
-       const ctx = this._graphic.getContext('2d', { willReadFrequently: true });
+        const ctx = this._graphic.getContext('2d', { willReadFrequently: true });
 
-       clear && ctx.clearRect(0, 0, this._width, this._height);
+        clear && ctx.clearRect(0, 0, this._width, this._height);
 
-       ctx.lineWidth = 1;
-       ctx.lineCap = 'round';
-       ctx.strokeStyle = color;
-       ctx.beginPath();
+        ctx.lineWidth = 1;
+        ctx.lineCap = 'round';
+        ctx.strokeStyle = color;
+        ctx.beginPath();
 
         for (let i = 1; i < values.cached.length; i++) {
             ctx.moveTo(i - 1, values.cached[i - 1] + adjust);
             ctx.lineTo(i, values.cached[i] + adjust);
         }
-       ctx.stroke();
-       ctx.closePath();        
+        ctx.stroke();
+        ctx.closePath();
     }
 }
 
@@ -256,7 +223,7 @@ class DeltaValue {
     }
 
     public get last(): number {
-        return this.cached.length ? 
+        return this.cached.length ?
             this.cached[this.cached.length - 1] : undefined;
     }
 

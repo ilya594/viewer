@@ -1,14 +1,15 @@
 
 import Snaphots from "../record/Snaphots";
 import StreamProvider from "../network/StreamProvider";
-import * as Events from "../utils/Events";  
+import * as Events from "../utils/Events";
 import RestService from "../network/RestService";
 import FileSaver from "file-saver";
+import Model from "../store/Model";
 
 
 export class Controls extends Events.EventHandler {
 
-    constructor() { 
+    constructor() {
         super();
     }
 
@@ -16,6 +17,7 @@ export class Controls extends Events.EventHandler {
     private _viewport: any;
 
     private _traceButton: any;
+    private _chartButton: any;
     private _snapsButton: any;
     private _watchButton: any;
     private _voiceButton: any;
@@ -36,7 +38,7 @@ export class Controls extends Events.EventHandler {
 
     public initialize = async () => {
 
-        this._container = document.getElementById("controls"); 
+        this._container = document.getElementById("controls");
 
         this._viewport = document.querySelector("video");
 
@@ -58,19 +60,19 @@ export class Controls extends Events.EventHandler {
 
         this.createWatchButton();
 
-        this.createWatchToggle(); 
-        
+        this.createWatchToggle();
+
         this.createContextMenu();
 
-        this.createJonTravolta();        
+        this.createJonTravolta();
 
-        this.createSaveButtons();        
+        this.createSaveButtons();
     }
 
     public setVisible = (value: boolean) => {
         this._container.style.setProperty('visibility', value ? 'visible' : 'hidden');
-    }       
-    
+    }
+
     public get localSaveEnabled(): boolean {
         return !!document.getElementById("local-save-button")?.style.getPropertyValue('background-color');
     }
@@ -84,13 +86,23 @@ export class Controls extends Events.EventHandler {
     }
 
     private createTraceButton = () => {
-        this._traceButton = document.getElementById("trace-button");      
+        this._traceButton = document.getElementById("trace-button");
         this._traceButton.onclick = () => {
-            this.dispatchEvent(Events.CHANGE_TRACE_VISIBILITY, null);
+            Model.matrixScreenEnabled = !Model.matrixScreenEnabled;
             if (this._traceButton.style.getPropertyValue('background-color')) {
                 this._traceButton.style.removeProperty('background-color');
             } else {
                 this._traceButton.style.setProperty('background-color', '#00ff0077');
+            }
+        }
+
+        this._chartButton = document.getElementById("chart-button");
+        this._chartButton.onclick = () => {
+            Model.colorCurvesEnabled = !Model.colorCurvesEnabled;
+            if (this._chartButton.style.getPropertyValue('background-color')) {
+                this._chartButton.style.removeProperty('background-color');
+            } else {
+                this._chartButton.style.setProperty('background-color', '#00ff0077');
             }
         }
     }
@@ -106,21 +118,21 @@ export class Controls extends Events.EventHandler {
                 //StreamProvider?.sendVoiceMessage(); 
                 this._voiceButton.style.setProperty('background-color', '#00ff0077');
             }
-        }       
+        }
     }
 
     private createFullsButton = () => {
         this._fullsButton = document.getElementById("fullscreen-button");
         this._fullsButton.onclick = () => {
             console.log('[Controls] displayStream requesting fullscreen if avail');
-      
+
             if (document.body.requestFullscreen) {
-              try {
-                document.body.requestFullscreen();
-              } catch (error: any) {
-                console.log('[Controls] displayStream requesting fullscreen error');
-              }
-             }
+                try {
+                    document.body.requestFullscreen();
+                } catch (error: any) {
+                    console.log('[Controls] displayStream requesting fullscreen error');
+                }
+            }
         };
 
         const _fullsButtonStream = document.getElementById("fullscreen-button-stream");
@@ -131,7 +143,7 @@ export class Controls extends Events.EventHandler {
                 _viewport.requestFullscreen();
             } catch (error: any) {
                 console.log('[Controls] displayStream requesting fullscreen error');
-              }
+            }
         });
     }
 
@@ -152,7 +164,7 @@ export class Controls extends Events.EventHandler {
 
     private createWatchToggle = () => {
         this._watchToggle_1 = document.getElementById("watch-toggle-item");
-        
+
         const arrow_0 = this._watchToggle_1.firstElementChild;
 
         const onButtonMouseOver = (index: number) => {
@@ -160,17 +172,17 @@ export class Controls extends Events.EventHandler {
             arrow_0.style.setProperty('top', (2 + (index * 8.25)).toString() + '%');
 
             if (this._filesList?.[index]?.length) {
-                this.showContextMenu(index);                 
+                this.showContextMenu(index);
             } else {
                 this.createJonTravolta();
-            }            
+            }
         }
 
         for (let i = 0; i < 12; i++) {
             const button = document.getElementById("watch-toggle-month-" + i);
             button.onmouseenter = () => onButtonMouseOver(i);
             this._watchButtons_0.push(button);
-        }  
+        }
     }
 
     private onDeleteButtonClick = (contextMenu: any) => {
@@ -182,7 +194,7 @@ export class Controls extends Events.EventHandler {
 
         const [month, name] = contextMenu.nonce.split('/');
 
-        RestService.deleteSnapshot(month, name).then((_: any) => {                    
+        RestService.deleteSnapshot(month, name).then((_: any) => {
             button.classList.remove('button-months-deleting');
             this._imageButtonsBlocked = false;
             this._watchToggle_1.removeChild(button);
@@ -194,7 +206,7 @@ export class Controls extends Events.EventHandler {
         const [month, name] = button.name.split('/');
 
         this._imageButtonsBlocked = true;
-        button.classList.toggle('button-months-downloading');            
+        button.classList.toggle('button-months-downloading');
 
         const result: string = await RestService.getSnapshot(month, name);
         button.classList.remove('button-months-downloading');
@@ -207,16 +219,16 @@ export class Controls extends Events.EventHandler {
 
         //@ts-ignore
         this._contextMenu.firstElementChild.onclick = (event) => {
-          event.preventDefault(); event.stopPropagation();
-          this.onDeleteButtonClick(this._contextMenu);
+            event.preventDefault(); event.stopPropagation();
+            this.onDeleteButtonClick(this._contextMenu);
         }
 
         //@ts-ignore
         this._contextMenu.lastElementChild.onclick = (event) => {
-          event.preventDefault(); event.stopPropagation();
-          this.onImageButtonClick(this._contextMenu.parentElement).then((_: any) => {
-              this.onDeleteButtonClick(this._contextMenu);
-          });
+            event.preventDefault(); event.stopPropagation();
+            this.onImageButtonClick(this._contextMenu.parentElement).then((_: any) => {
+                this.onDeleteButtonClick(this._contextMenu);
+            });
         }
     }
 
@@ -224,31 +236,31 @@ export class Controls extends Events.EventHandler {
         this._imageButtons.length = 0;
         this._filesList[index].forEach((fileName: string) => {
             const imageButton = this._watchButtons_0[0].cloneNode(true);
-                  if (!imageButton) return;
-                  imageButton.textContent = fileName;
-                  imageButton.style.setProperty('font-size', '24px');
-                  imageButton.name = this._folders[index] + '/' + fileName;
-                  imageButton.onclick = () => this.onImageButtonClick(imageButton); 
-                  imageButton.onmouseenter = () => {
-                    if (this._imageButtonsBlocked) return;
-                    this._imageButtons.forEach((button: any) => {
-                        if (button && button !== imageButton) button.style.removeProperty('background-color');
-                    })
-                  }
-                  imageButton.oncontextmenu = () => {
-                    if (this._imageButtonsBlocked) return;
-                    imageButton.appendChild(this._contextMenu);                 
-                    this._contextMenu.style.setProperty('visibility', 'visible');
-                    this._contextMenu.nonce = this._folders[index] + '/' + fileName;
-                    this._contextMenu.onmouseleave = () => {
-                        this._contextMenu.style.setProperty('visibility', 'hidden');
-                        imageButton.style.removeProperty('background-color');
-                    };
-                    imageButton.style.setProperty('background-color', '#ff0000');
-                    return false;
-                }
+            if (!imageButton) return;
+            imageButton.textContent = fileName;
+            imageButton.style.setProperty('font-size', '24px');
+            imageButton.name = this._folders[index] + '/' + fileName;
+            imageButton.onclick = () => this.onImageButtonClick(imageButton);
+            imageButton.onmouseenter = () => {
+                if (this._imageButtonsBlocked) return;
+                this._imageButtons.forEach((button: any) => {
+                    if (button && button !== imageButton) button.style.removeProperty('background-color');
+                })
+            }
+            imageButton.oncontextmenu = () => {
+                if (this._imageButtonsBlocked) return;
+                imageButton.appendChild(this._contextMenu);
+                this._contextMenu.style.setProperty('visibility', 'visible');
+                this._contextMenu.nonce = this._folders[index] + '/' + fileName;
+                this._contextMenu.onmouseleave = () => {
+                    this._contextMenu.style.setProperty('visibility', 'hidden');
+                    imageButton.style.removeProperty('background-color');
+                };
+                imageButton.style.setProperty('background-color', '#ff0000');
+                return false;
+            }
             this._imageButtons.push(imageButton);
-            this._watchToggle_1.appendChild(imageButton); 
+            this._watchToggle_1.appendChild(imageButton);
         });
     }
 
@@ -259,7 +271,7 @@ export class Controls extends Events.EventHandler {
         backgroundImage.style.setProperty('height', '100%');
         backgroundImage.style.setProperty('background-repeat', 'no-repeat');
         backgroundImage.style.setProperty('background-position', 'center');
-        backgroundImage.style.setProperty('opacity',  '77%');            
+        backgroundImage.style.setProperty('opacity', '77%');
         this._watchToggle_1.appendChild(backgroundImage);
     }
 
@@ -274,7 +286,7 @@ export class Controls extends Events.EventHandler {
             }
         }
         localSaveButton.onclick = () => onSaveButtonClick(localSaveButton);
-        remoteSaveButton.onclick = () => onSaveButtonClick(remoteSaveButton); 
+        remoteSaveButton.onclick = () => onSaveButtonClick(remoteSaveButton);
     }
 }
 

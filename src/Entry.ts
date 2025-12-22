@@ -10,8 +10,7 @@ import Controls from "./view/Controls";
 import Sounds from "./utils/Sounds";
 import * as Utils from './utils/Utils';
 import Matrix from "./view/Matrix";
-import AliveReporting from "./network/AliveReporting";
-//import WebStorage from "./store/Storage";
+import Model from "./store/Model";
 
 const route = (): string => window.location.search?.substring(1); 
 
@@ -20,6 +19,9 @@ class Entry {
   private stream: any;
 
     constructor() {     
+
+      Model.initialize();
+      
       switch (route()) {
         case ('show'): {
           this.initializeView();
@@ -74,9 +76,6 @@ class Entry {
 
       const { stream, peerId } = await streamer.initialize();
 
-    //  await RestService.addPeerId(peerId);
-      //await AliveReporting.initialize(peerId);
-
       return stream;
     }
 
@@ -109,12 +108,11 @@ class Entry {
 
       await Snaphots.initialize();
             Snaphots.addEventListener(Events.SNAPSHOT_SEND_HOMIE, (data: any) => {
-              //StreamProvider.sendSnaphot(data);
               RestService.sendSnaphot(data);
-      });
+            });
 
       await MotionDetector.initialize();
-            MotionDetector.addEventListener(Events.MOTION_DETECTION_STARTED, (data: any) => Snaphots.create('', false, data));
+         //   MotionDetector.addEventListener(Events.MOTION_DETECTION_STARTED, (data: any) => Snaphots.create('', false, data));
 
       await Sounds.initialize();
 

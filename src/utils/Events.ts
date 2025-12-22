@@ -1,6 +1,16 @@
 export class EventHandler {
     private readonly events: Record<string, Function[]> = {};
 
+    public dispatchEvent = (eventName: string, data: any = null): void => {
+        const event = this.events[eventName];
+        if (event) {
+            const handlers = [...event];
+            handlers.forEach((handler: Function) => {
+                handler.call(null, data);
+            });
+        }
+    }
+
     public addEventListener(eventName: string, handler: Function): number {
         if (!this.events[eventName]) {
             this.events[eventName] = [];
@@ -8,25 +18,18 @@ export class EventHandler {
         return this.events[eventName].push(handler);
     }
 
-    // Add single event listener that fires only once
     public addSingleEventListener(eventName: string, handler: Function): number {
         const onceHandler = (data: any) => {
-            // Call the original handler
             handler.call(null, data);
-
-            // Remove this handler after it's called
             this.removeSpecificEventListener(eventName, onceHandler);
         };
-
         return this.addEventListener(eventName, onceHandler);
     }
 
-    // Helper method to remove specific handler
     public removeSpecificEventListener(eventName: string, handlerToRemove: Function): boolean {
         if (!this.events[eventName]) {
             return false;
         }
-
         const index = this.events[eventName].findIndex(handler => handler === handlerToRemove);
         if (index !== -1) {
             this.events[eventName].splice(index, 1);
@@ -38,24 +41,15 @@ export class EventHandler {
     public removeEventListener(eventName: string): boolean {
         return delete this.events[eventName];
     }
-
-    public dispatchEvent(eventName: string, data: any = null): void {
-        const event = this.events[eventName];
-        if (event) {
-            // Create a copy to avoid issues if handlers remove themselves
-            const handlers = [...event];
-            handlers.forEach((handler: Function) => {
-                handler.call(null, data);
-            });
-        }
-    }
 }
+
+export default new EventHandler();
 
 export const USER_PROCEEDED = 'user_proceeded';
 
 export const STREAM_RECEIVED = 'stream_received';
 export const STREAM_BALANCED = 'stream_balanced';
-export const ACTIVE_STREAM_RECEIVED = 'active_stream_received'; // New event for when active stream is received
+export const ACTIVE_STREAM_RECEIVED = 'active_stream_received';
 export const STREAM_LOST = 'stream_lost';
 export const STREAM_LOST_GENERIC = 'stream_lost_generic';
 export const STREAM_SWITCHED = 'stream_switched';
@@ -72,6 +66,9 @@ export const MANUAL_RECONNECT_REQUIRED = 'manual_reconnect_required';
 
 export const FACE_DETECTED = 'face_detected';
 export const FACE_RECOGNIZED = 'face_recognized';
+
+
+export const MOTION_DETECTOR_STATE_CHANGED = 'motion_detector_state_changed';
 export const MOTION_DETECTED = 'motion_detected';
 export const MOTION_DETECTION_STARTED = 'motion_detection_started';
 export const MOTION_DETECTION_FINISHED = 'motion_detection_finished';
@@ -92,3 +89,7 @@ export const CONSOLE_EXECUTE_COMMAND = 'console_execute_command';
 export const VOLUME_ADJUST_SPREAD = 'volume_adjust_spread';
 
 export const MOBILE_SWIPE_RIGHT = 'mobile_swipe_right';
+
+export const MATRIX_SCREEN_STATE_CHANGED = 'matrix_screen_state_changed';
+
+export const COLOR_CURVES_STATE_CHANGED = 'color_curves_state_changed';
