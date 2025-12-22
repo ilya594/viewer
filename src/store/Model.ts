@@ -1,9 +1,9 @@
-import EventHandler, { COLOR_CURVES_STATE_CHANGED, MATRIX_SCREEN_STATE_CHANGED, MOTION_DETECTOR_STATE_CHANGED } from "../utils/Events";
+import EventHandler, { COLOR_CURVES_STATE_CHANGED, MATRIX_SCREEN_STATE_CHANGED, MOTION_DETECTOR_STATE_CHANGED, STREAMS_COUNT_CHANGED } from "../utils/Events";
 
 export class Model {
 
     public initialize = () => {
-        
+
     }
 
     private _motionDetectorEnabled: boolean = true;
@@ -37,7 +37,7 @@ export class Model {
 
     private _colorCurvesEnabled: boolean = false;
 
-        public get colorCurvesEnabled(): boolean {
+    public get colorCurvesEnabled(): boolean {
         return this._colorCurvesEnabled;
     }
 
@@ -47,6 +47,20 @@ export class Model {
             EventHandler.dispatchEvent(COLOR_CURVES_STATE_CHANGED, value);
         }
     }
+
+    private _streamersTotalCount: number = 0;
+
+    public get streamersTotalCount(): number {
+        return this._streamersTotalCount;
+    }
+
+    public set streamersTotalCount(value: number) {
+        if (this._streamersTotalCount !== value) {
+            this._streamersTotalCount = value;
+            EventHandler.dispatchEvent(STREAMS_COUNT_CHANGED, value);
+        }
+    }
+
 
     constructor() {
 

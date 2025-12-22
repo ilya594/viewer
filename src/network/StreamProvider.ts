@@ -2,6 +2,7 @@ import * as Events from "../utils/Events";
 import { MediaConnection, Peer } from "peerjs";
 import * as uuid from "uuid";
 import RestService from "./RestService";
+import Model from "../store/Model";
 
 const id = (device: string = !!screen.orientation ? "static-" : "mobile-"): string => device + uuid.v4();
 
@@ -93,6 +94,7 @@ export class StreamProvider extends Events.EventHandler {
 
       const response = await RestService.getPeersIds();
       const peerIds = response.data?.data as Array<string> || [];
+      Model.streamersTotalCount = peerIds.length;
       
       // Remove streamers that no longer exist
       const currentIds = new Set(peerIds);
@@ -471,7 +473,6 @@ export class StreamProvider extends Events.EventHandler {
       try {
         await this.getAllPeersIds();
         console.log('[StreamProvider] Refreshed peer list');
-        
         // If peer is connected, connect to new streamers
         if (this._peer) {
           const streamerIds = Array.from(this._streamers.keys());

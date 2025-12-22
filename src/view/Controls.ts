@@ -1,16 +1,16 @@
 
 import Snaphots from "../record/Snaphots";
 import StreamProvider from "../network/StreamProvider";
-import * as Events from "../utils/Events";
+import EventHandler, { STREAMS_COUNT_CHANGED } from "../utils/Events";
 import RestService from "../network/RestService";
 import FileSaver from "file-saver";
 import Model from "../store/Model";
 
 
-export class Controls extends Events.EventHandler {
+export class Controls {
 
     constructor() {
-        super();
+
     }
 
     private _container: any;
@@ -67,6 +67,15 @@ export class Controls extends Events.EventHandler {
         this.createJonTravolta();
 
         this.createSaveButtons();
+
+        this.createHudsControl();
+    }
+
+    private createHudsControl = () => {
+        const streamersInfo = document.getElementById("sources-info");
+        EventHandler.addEventListener(STREAMS_COUNT_CHANGED, (count: number) => {
+            streamersInfo.innerText = "CAMERA 1 of " + count;
+        });
     }
 
     public setVisible = (value: boolean) => {

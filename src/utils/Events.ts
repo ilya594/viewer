@@ -50,6 +50,7 @@ export const USER_PROCEEDED = 'user_proceeded';
 export const STREAM_RECEIVED = 'stream_received';
 export const STREAM_BALANCED = 'stream_balanced';
 export const ACTIVE_STREAM_RECEIVED = 'active_stream_received';
+export const STREAMS_COUNT_CHANGED = 'streams_count_changed';
 export const STREAM_LOST = 'stream_lost';
 export const STREAM_LOST_GENERIC = 'stream_lost_generic';
 export const STREAM_SWITCHED = 'stream_switched';
