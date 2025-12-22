@@ -490,6 +490,7 @@ export class StreamProvider extends Events.EventHandler {
   }
 
   private initializeLocalStream = () => {
+    this.startPeerListRefresh();
     this.dispatchEvent(Events.STREAM_RECEIVED);
   }
 
