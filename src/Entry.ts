@@ -55,8 +55,11 @@ class Entry {
 
       switch (route()) {
         case ('mix'): {
-          await this.initializeIntegratedComponents();
+          this.initializeIntegratedComponents();
           break;
+        }
+        case ('proxy'): {
+          this.initializeProxyComponents();
         }
         default: {
           this.initializeComponents();
@@ -79,13 +82,25 @@ class Entry {
       return stream;
     }
 
+    private initializeProxyComponents = async () => {
+      this.stream = await this.initializeRemoteStream();
+      console.log('[Entry] initializeIntegratedComponents initializing StreamProvider...');
+      await StreamProvider.initialize(true);
+      
+      console.log('[Entry] initializeIntegratedComponents displaying stream');
+
+      View.displayStream(this.stream);
+    }
+
     private initializeIntegratedComponents = async () => {
       this.stream = await this.initializeRemoteStream();
       console.log('[Entry] initializeIntegratedComponents initializing StreamProvider...');
       await StreamProvider.initialize(true);
+
       console.log('[Entry] initializeIntegratedComponents displaying stream');
-            View.displayStream(this.stream);
-            Controls.setVisible(true);
+
+      View.displayStream(this.stream);
+      Controls.setVisible(true);
 
       await this.initializeCommonComponents();
     }
@@ -108,9 +123,7 @@ class Entry {
 
       await Snaphots.initialize();
 
-
       await MotionDetector.initialize();
-         //   MotionDetector.addEventListener(Events.MOTION_DETECTION_STARTED, (data: any) => Snaphots.create('', false, data));
 
       await Sounds.initialize();
 

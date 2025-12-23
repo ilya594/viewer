@@ -64,6 +64,8 @@ export class MotionDetector {
         this._label.style.setProperty('visibility', 'hidden');
 
         this._graphic = document.createElement("canvas"); this._container.appendChild(this._graphic);
+      //  this._graphic.width = '100%';
+      //  this._graphic.height = '40%';
         this._graphic.style.setProperty("pointer-events", "none");
         this._graphic.style.setProperty('position', 'absolute');
         this._graphic.style.setProperty('bottom', '0%');
@@ -71,6 +73,7 @@ export class MotionDetector {
         this._graphic.style.setProperty('height', '40%');
         this._graphic.style.setProperty('width', '100%');
         this._graphic.style.setProperty('display', 'none');
+        this._graphic.style.setProperty('image-rendering', 'pixelated');
 
         EventHandler.addEventListener(COLOR_CURVES_STATE_CHANGED, (value: boolean) => {
             const propValue = value ? 'block' : 'none';
@@ -137,29 +140,27 @@ export class MotionDetector {
 
         const current: number = value.h;
         const previous: number = this._values.hue.last;
-        const average: number = this._values.hue.average;
+        const average: number = this._values.hue.average;        
 
-        let timeout: number = 0;
+        this._values.add(value);
 
         if (
             Math.abs(current - average) > MOTION_DETECT_PIXEL_COEF &&
             Math.abs(previous - average) > MOTION_DETECT_PIXEL_COEF
-        ) {
-            timeout = MOTION_DETECT_DELAY;
+        ) {            
             Matrix.hide();
             EventHandler.dispatchEvent(MOTION_DETECTION_STARTED, value);
+            setTimeout(this._viewport.requestVideoFrameCallback(this.onVideoEnterFrame), MOTION_DETECT_DELAY);
+        } else {
+            this._viewport.requestVideoFrameCallback(this.onVideoEnterFrame);
         }
-
-        this._values.add(value);
-        this._viewport.requestVideoFrameCallback(this.onVideoEnterFrame);
-        // setTimeout(() => , timeout);
     }
 
     private trace = ({ h, s, v }: any) => {
 
         this.drawDeltaGraphics(this._values.hue, "rgb(0, 255, 0, 1)", true, -100);
         // this.drawDeltaGraphics(this._values.saturation,"rgb(0, 188, 188, 1)", false, 50);
-        this.drawDeltaGraphics(this._values.brightness, "rgb(255, 255, 255, 1)", false, 30);
+       // this.drawDeltaGraphics(this._values.brightness, "rgb(255, 255, 255, 1)", false, 30);
     }
 
     private drawDeltaGraphics = (values: any, color: string, clear: boolean = false, adjust: number = 0) => {
@@ -168,13 +169,15 @@ export class MotionDetector {
 
         clear && ctx.clearRect(0, 0, this._width, this._height);
 
-        ctx.lineWidth = 1;
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = color;
-        ctx.beginPath();
+       ctx.strokeStyle = color;
+       ctx.lineWidth = 1;
+       // ctx.lineJoin = "bevel";
+      //  ctx.lineCap = "round";
+
+       ctx.beginPath();
 
         for (let i = 1; i < values.cached.length; i++) {
-            ctx.moveTo(i - 1, values.cached[i - 1] + adjust);
+            ctx.moveTo((i - 1), values.cached[i - 1] + adjust);
             ctx.lineTo(i, values.cached[i] + adjust);
         }
         ctx.stroke();
@@ -196,8 +199,8 @@ class DeltaValues {
 
     public add = (value: { h: number, s: number, v: number }) => {
         this._h.add(value.h);
-        this._s.add(value.s);
-        this._v.add(value.v);
+       // this._s.add(value.s);
+       // this._v.add(value.v);
     }
 }
 
@@ -208,7 +211,7 @@ class DeltaValue {
         average: Number,
     }
 
-    public size: number = MOTION_DETECT_HEAP_SIZE;
+    public size: number = MOTION_DETECT_HEAP_SIZE * 3;
 
     public get average(): number {
         return this._values.average;

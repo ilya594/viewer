@@ -24,7 +24,7 @@ export class StreamProvider {
     window.addEventListener('online', this.handleNetworkOnline.bind(this));
     window.addEventListener('offline', this.handleNetworkOffline.bind(this));
 
-    window.onunload = () => this.destroy();
+    window.onbeforeunload = () => this.destroy();
     window.onpagehide = () => this.destroy();
   }
 
