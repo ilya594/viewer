@@ -64,8 +64,8 @@ export class MotionDetector {
         this._label.style.setProperty('visibility', 'hidden');
 
         this._graphic = document.createElement("canvas"); this._container.appendChild(this._graphic);
-      //  this._graphic.width = '100%';
-      //  this._graphic.height = '40%';
+        //  this._graphic.width = '100%';
+        //  this._graphic.height = '40%';
         this._graphic.style.setProperty("pointer-events", "none");
         this._graphic.style.setProperty('position', 'absolute');
         this._graphic.style.setProperty('bottom', '0%');
@@ -73,13 +73,18 @@ export class MotionDetector {
         this._graphic.style.setProperty('height', '40%');
         this._graphic.style.setProperty('width', '100%');
         this._graphic.style.setProperty('display', 'none');
-        this._graphic.style.setProperty('image-rendering', 'pixelated');
+        //this._graphic.style.setProperty('image-rendering', 'pixelated');
 
-        EventHandler.addEventListener(COLOR_CURVES_STATE_CHANGED, (value: boolean) => {
+        const handleColorCurvesVisibility = (value: boolean = Model.colorCurvesEnabled) => {
             const propValue = value ? 'block' : 'none';
             this._graphic.style.setProperty('display', propValue);
             this._label.style.setProperty('display', propValue);
+        };
+
+        EventHandler.addEventListener(COLOR_CURVES_STATE_CHANGED, (value: boolean) => {
+            handleColorCurvesVisibility(value);
         });
+        handleColorCurvesVisibility();
 
         this._viewport.requestVideoFrameCallback(this.onVideoEnterFrame);
     }
@@ -129,59 +134,140 @@ export class MotionDetector {
 
         const data = getPointData(this._checkpoint);
 
-        this.analyzeDeltaValues(data);
+        let timeout = 0;
+        if (Model.motionDetectorEnabled) {
+            timeout = this.analyzeDeltaValues(data);
+        }
+        this._values.add(data);
 
         if (Model.colorCurvesEnabled) {
-            this.trace(data);
+            this.trace();
         }
+        setTimeout(() => this._viewport.requestVideoFrameCallback(this.onVideoEnterFrame), timeout);
     }
 
-    private analyzeDeltaValues = (value: any) => {
+    private analyzeDeltaValues = (value: any): number => {
 
         const current: number = value.h;
         const previous: number = this._values.hue.last;
-        const average: number = this._values.hue.average;        
+        const average: number = this._values.hue.average;
 
-        this._values.add(value);
+        let timeout: number = 0;
 
         if (
             Math.abs(current - average) > MOTION_DETECT_PIXEL_COEF &&
             Math.abs(previous - average) > MOTION_DETECT_PIXEL_COEF
-        ) {            
+        ) {
+            timeout = MOTION_DETECT_DELAY;
             Matrix.hide();
             EventHandler.dispatchEvent(MOTION_DETECTION_STARTED, value);
-            setTimeout(this._viewport.requestVideoFrameCallback(this.onVideoEnterFrame), MOTION_DETECT_DELAY);
-        } else {
-            this._viewport.requestVideoFrameCallback(this.onVideoEnterFrame);
         }
+
+        //setTimeout(() => this._viewport.requestVideoFrameCallback(this.onVideoEnterFrame), timeout);
+        return timeout;
     }
 
-    private trace = ({ h, s, v }: any) => {
+    private trace = () => {
 
         this.drawDeltaGraphics(this._values.hue, "rgb(0, 255, 0, 1)", true, -100);
         // this.drawDeltaGraphics(this._values.saturation,"rgb(0, 188, 188, 1)", false, 50);
-       // this.drawDeltaGraphics(this._values.brightness, "rgb(255, 255, 255, 1)", false, 30);
+        // this.drawDeltaGraphics(this._values.brightness, "rgb(255, 255, 255, 1)", false, 30);
     }
 
-    private drawDeltaGraphics = (values: any, color: string, clear: boolean = false, adjust: number = 0) => {
-
+    private drawDeltaGraphics = (
+        values: any,
+        color: string,
+        clear: boolean = false,
+        adjust: number = 0,
+        fillArea: boolean = true,
+        smoothCurve: boolean = false // Enable bezier smoothing
+    ) => {
         const ctx = this._graphic.getContext('2d', { willReadFrequently: true });
 
-        clear && ctx.clearRect(0, 0, this._width, this._height);
-
-       ctx.strokeStyle = color;
-       ctx.lineWidth = 1;
-       // ctx.lineJoin = "bevel";
-      //  ctx.lineCap = "round";
-
-       ctx.beginPath();
-
-        for (let i = 1; i < values.cached.length; i++) {
-            ctx.moveTo((i - 1), values.cached[i - 1] + adjust);
-            ctx.lineTo(i, values.cached[i] + adjust);
+        if (clear) {
+            ctx.clearRect(0, 0, this._width, this._height);
         }
+
+        if (!values?.cached || values.cached.length < 2) {
+            return;
+        }
+
+        const BOTTOM_Y = 500;
+        const points = values.cached.map((y: number, x: number) => ({ x, y: y + adjust }));
+
+        // Draw filled area
+        if (fillArea) {
+            ctx.fillStyle = "rgb(0, 255, 0, 0.25)";
+            ctx.beginPath();
+
+            if (smoothCurve && points.length > 2) {
+                // Draw smooth curve for fill
+                this.drawSmoothCurve(ctx, points);
+            } else {
+                // Draw straight lines
+                ctx.moveTo(points[0].x, points[0].y);
+                for (let i = 1; i < points.length; i++) {
+                    ctx.lineTo(points[i].x, points[i].y);
+                }
+            }
+
+            // Close the path to create fill area
+            ctx.lineTo(points[points.length - 1].x, BOTTOM_Y);
+            ctx.lineTo(points[0].x, BOTTOM_Y);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        // Draw the curve line
+        ctx.lineWidth = 1.5;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = color;
+        ctx.beginPath();
+
+        if (smoothCurve && points.length > 2) {
+            // Draw smooth curve
+            this.drawSmoothCurve(ctx, points);
+        } else {
+            // Draw straight lines
+            ctx.moveTo(points[0].x, points[0].y);
+            for (let i = 1; i < points.length; i++) {
+                ctx.lineTo(points[i].x, points[i].y);
+            }
+        }
+
         ctx.stroke();
-        ctx.closePath();
+    }
+
+    // Helper for drawing smooth bezier curves
+    private drawSmoothCurve = (ctx: CanvasRenderingContext2D, points: Array<{ x: number, y: number }>) => {
+        if (points.length < 2) return;
+
+        // Move to first point
+        ctx.moveTo(points[0].x, points[0].y);
+
+        if (points.length === 2) {
+            // Just draw a line if only 2 points
+            ctx.lineTo(points[1].x, points[1].y);
+            return;
+        }
+
+        // Draw bezier curves for smoother line
+        for (let i = 1; i < points.length - 1; i++) {
+            const xc = (points[i].x + points[i + 1].x) / 2;
+            const yc = (points[i].y + points[i + 1].y) / 2;
+
+            // Quadratic bezier curve
+            ctx.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+        }
+
+        // Curve through the last two points
+        ctx.quadraticCurveTo(
+            points[points.length - 1].x,
+            points[points.length - 1].y,
+            points[points.length - 1].x,
+            points[points.length - 1].y
+        );
     }
 }
 
@@ -199,8 +285,8 @@ class DeltaValues {
 
     public add = (value: { h: number, s: number, v: number }) => {
         this._h.add(value.h);
-       // this._s.add(value.s);
-       // this._v.add(value.v);
+        // this._s.add(value.s);
+        // this._v.add(value.v);
     }
 }
 

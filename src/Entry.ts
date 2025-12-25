@@ -60,6 +60,11 @@ class Entry {
         }
         case ('proxy'): {
           this.initializeProxyComponents();
+          break;
+        }
+        case ('low'): {
+          this.initializeComponentsLow();
+          break;
         }
         default: {
           this.initializeComponents();
@@ -122,6 +127,18 @@ class Entry {
             });
 
       await this.initializeCommonComponents();
+    }
+
+    private initializeComponentsLow = async () => {
+      Model.motionDetectorEnabled = false;
+      Model.colorCurvesEnabled = true;
+      Model.prefferedStreamQuality = 'low';
+
+      await StreamProvider.initialize();
+      EventHandler.addEventListener(STREAM_RECEIVED, (data: any) => {
+          View.displayStream(data.stream);
+          MotionDetector.initialize();
+      });
     }
 
     private initializeCommonComponents = async () => {

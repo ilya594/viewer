@@ -61,6 +61,19 @@ export class Model {
         }
     }
 
+    
+    private _prefferedStreamQuality: 'low' | 'medium' | 'high' = 'high';
+
+    public get prefferedStreamQuality(): 'low' | 'medium' | 'high' {
+        return this._prefferedStreamQuality;
+    }
+
+    public set prefferedStreamQuality(value: 'low' | 'medium' | 'high') {
+        if (this._prefferedStreamQuality !== value) {
+            this._prefferedStreamQuality = value;            
+        }
+    }
+
 
     constructor() {
 

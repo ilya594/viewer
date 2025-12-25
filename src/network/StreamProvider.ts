@@ -397,7 +397,7 @@ export class StreamProvider {
       
       connection?.on('open', () => {
         console.log(`[StreamProvider] Connected to streamer: ${streamerId}`);
-        connection.send({ type: 'custom-media-stream-request' });
+        connection.send({ type: 'custom-media-stream-request', quality: Model.prefferedStreamQuality });
       });
       
       connection?.on('close', () => {
