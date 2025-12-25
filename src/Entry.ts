@@ -77,29 +77,36 @@ class Entry {
       
       console.log('[Entry] initializeRemoteStream streamer imported. created instance. initializing...');
 
-      const { stream, peerId } = await streamer.initialize();
+      const {
+        peerId,
+        primaryStream,
+        streams,
+        qualities,
+        stats
+      } = await streamer.initialize();
 
-      return stream;
+     // debugger;
+      return { primaryStream, streams };
     }
 
     private initializeProxyComponents = async () => {
-      this.stream = await this.initializeRemoteStream();
+      const { primaryStream, streams } = await this.initializeRemoteStream();
       console.log('[Entry] initializeIntegratedComponents initializing StreamProvider...');
-      await StreamProvider.initialize(true);
+      await StreamProvider.initialize(true, streams);
       
       console.log('[Entry] initializeIntegratedComponents displaying stream');
 
-      View.displayStream(this.stream);
+      View.displayStream((this.stream = primaryStream));
     }
 
     private initializeIntegratedComponents = async () => {
-      this.stream = await this.initializeRemoteStream();
+      const { primaryStream, streams } = await this.initializeRemoteStream();
       console.log('[Entry] initializeIntegratedComponents initializing StreamProvider...');
-      await StreamProvider.initialize(true);
+      await StreamProvider.initialize(true, streams);
 
       console.log('[Entry] initializeIntegratedComponents displaying stream');
 
-      View.displayStream(this.stream);
+      View.displayStream((this.stream = primaryStream));
       Controls.setVisible(true);
 
       await this.initializeCommonComponents();

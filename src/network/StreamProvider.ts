@@ -3,11 +3,13 @@ import { MediaConnection, Peer } from "peerjs";
 import * as uuid from "uuid";
 import RestService from "./RestService";
 import Model from "../store/Model";
+import View from "../view/View";
 
 const id = (device: string = !!screen.orientation ? "static-" : "mobile-"): string => device + uuid.v4();
 
 export class StreamProvider {
   private _streamers: Map<string, Streamer> = new Map();
+  private _streams: Map<string, MediaStream>;
   private _index: number = 0;
   private _peer: Peer | null = null;
   private _activeStreamerId: string | null = null;
@@ -28,8 +30,9 @@ export class StreamProvider {
     window.onpagehide = () => this.destroy();
   }
 
-  public initialize = async (local: boolean = false) => {
+  public initialize = async (local: boolean = false, streams: Map<string, MediaStream> = undefined) => {
     if (local) {
+      this._streams = streams;
       this.initializeLocalStream();
     } else {
       await this.initializePeerStream();
@@ -37,6 +40,10 @@ export class StreamProvider {
 
     this._isInitialized = true;
     return this;
+  }
+
+  public switchStreamQuality = (quality: string) => {
+    View.displayStream(this._streams.get(quality));
   }
 
   public getNextStream = (): MediaStream | null => {

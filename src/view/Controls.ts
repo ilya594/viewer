@@ -24,6 +24,10 @@ export class Controls {
 
     private _fullsButton: any;
 
+    private _lowButton: any;
+    private _medButton: any;
+    private _higButton: any;
+
     //private _watchToggle_0: any;
     private _watchToggle_1: any;
 
@@ -69,6 +73,8 @@ export class Controls {
         this.createSaveButtons();
 
         this.createHudsControl();
+
+        this.createQualButtons();
     }
 
     private createHudsControl = () => {
@@ -114,6 +120,33 @@ export class Controls {
                 this._chartButton.style.setProperty('background-color', '#00ff0077');
             }
         }
+    }
+    
+
+    private createQualButtons = () => {
+        this._lowButton = document.getElementById("low-button");
+        this._medButton = document.getElementById("med-button");
+        this._higButton = document.getElementById("hig-button");
+        this._higButton.style.setProperty('background-color', '#00ff0077');
+        const list = [this._lowButton, this._medButton, this._higButton];
+
+        const clickHandler = (target: any, quality: string) => {
+            list.forEach((button: any) => {
+                if (button.style.getPropertyValue('background-color')) {
+                    button.style.removeProperty('background-color');
+                }
+            });
+            if (target.style.getPropertyValue('background-color')) {
+                target.style.removeProperty('background-color');
+            } else {
+                target.style.setProperty('background-color', '#00ff0077');
+            }
+            StreamProvider.switchStreamQuality(quality);
+        };               
+
+        this._lowButton.onclick = () => clickHandler(this._lowButton, 'low');
+        this._medButton.onclick = () => clickHandler(this._medButton, 'medium');
+        this._higButton.onclick = () => clickHandler(this._higButton, 'high');
     }
 
     private createVoiceButton = () => {
