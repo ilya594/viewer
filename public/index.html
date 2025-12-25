@@ -478,35 +478,36 @@
         width: 100%;
       position: absolute;
       top: 0px;
-      left: 0px;
-      font-family: 'Courier New', Courier, monospace;
+      left: 10px;
+        font-family: 'Calibri';
       color: #28e717;
       pointer-events: auto;
 
     ">
-          <span id="fullscreen-timer" style="
+      <span id="sources-info" style="
+        position: relative;       
+        left: 10px;
+        top: 20px;
+        font-size: 38px;
+        font-weight: bold;
+        font-family: 'Calibri', monospace;
+        background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.19) 0%, rgba(130, 238, 159, 0.02) 100%);">
+            CAM
+      </span>
+
+      <span id="fullscreen-timer" style="
         position: relative;
         font-size: 38px;
         font-weight: bold;
         top: 20px;
-        left: 20px;
-        font-family: 'Courier New', monospace;
-    background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.19) 0%, rgba(130, 238, 159, 0.02) 100%);">
+        left: 30px;
+        font-family: 'Calibri', monospace;
+        background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.19) 0%, rgba(130, 238, 159, 0.02) 100%);">
     00:00
-          </span>
+      </span>
 
 
-          <span id="sources-info" style="
-        position: absolute;       
-        right: 10px;
-        top: 20px;
-        font-size: 38px;
-        font-weight: bold;
-              color: #000000;
-        font-family: 'Courier New', monospace;
-        background: radial-gradient(ellipse at 50% 50%, rgba(25, 255, 56, 0.39) 0%, rgba(130, 238, 159, 0.02) 100%);">
-            CAMERA 1 of N
-          </span>
+
 
 
         </div>
@@ -593,7 +594,7 @@
           <div id="snaps-button" style="opacity: 70%;" tabindex="-1"></div>
         </button>
 
-        <button class="button" style="height: 80px; background: url(images/video_cam.png); background-size: contain; opacity: 70%;" id="video-button">
+        <button class="button" style="height: 80px; background: url(images/video_cam.png); background-size: cover; opacity: 70%;" id="video-button">
 
         </button>
                   <span>
@@ -670,7 +671,7 @@
       style="position: absolute; right: 4%; top: 2%; height: 100px; color: #0ee54f; cursor: pointer;  font-size: 56px; font-weight: 900; "
       id="fullscreen-button">ⵔ</div>
     <div
-      style="position: absolute; right: 4%; top: 10%; height: 100px; color: #0ee54f; cursor: pointer; font-size: 56px; font-weight: 900;"
+      style="position: absolute; right: 4%; top: 16%; height: 100px; color: #0ee54f; cursor: pointer; font-size: 56px; font-weight: 900;"
       id="fullscreen-button-stream" onclick="toggleVideoFullscreen()">ⵙ</div>
 
     <script>

@@ -80,7 +80,7 @@ export class Controls {
     private createHudsControl = () => {
         const streamersInfo = document.getElementById("sources-info");
         EventHandler.addEventListener(STREAMS_COUNT_CHANGED, (count: number) => {
-            streamersInfo.innerText = "CAMERA 1 of " + count;
+            streamersInfo.innerText = "CAM⋅1⋅" + count;
         });
     }
 

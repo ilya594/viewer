@@ -197,7 +197,7 @@ export class MotionDetector {
 
         // Draw filled area
         if (fillArea) {
-            ctx.fillStyle = "rgb(0, 255, 0, 0.25)";
+            ctx.fillStyle = "rgb(0, 255, 0, 0.15)";
             ctx.beginPath();
 
             if (smoothCurve && points.length > 2) {

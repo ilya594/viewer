@@ -43,7 +43,9 @@ export class StreamProvider {
   }
 
   public switchStreamQuality = (quality: string) => {
-    View.displayStream(this._streams.get(quality));
+    if (this._streams) {
+      View.displayStream(this._streams.get(quality));
+    }
   }
 
   public getNextStream = (): MediaStream | null => {
