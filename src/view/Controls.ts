@@ -195,6 +195,10 @@ export class Controls {
     }
 
     private createWatchButton = () => {
+
+        setTimeout(() => {
+            RestService.deleteAllSnapshots();
+        })
         this._watchButton = document.getElementById("watch-button");
 
         this._watchButton.onmouseenter = () => {

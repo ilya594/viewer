@@ -87,7 +87,9 @@ class Entry {
         primaryStream,
         streams,
         qualities,
-        stats
+        stats,
+        cameraInfo,
+        cameraHash
       } = await streamer.initialize();
 
      // debugger;
