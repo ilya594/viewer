@@ -41,16 +41,6 @@ export class RestService {
     return url;
   }
 
-  public deleteAllSnapshots = async () => {
-        const response = await axios.get(this.SERVER_URL + 'scissordir', {
-      params: {
-
-   //     name: name,
-        pin: localStorage.getItem('pinhash')
-      }
-    });
-  }
-
   public deleteSnapshot = async (month: string, name: string) => {
     const response = await axios.get(this.SERVER_URL + 'delsnapshot', {
       params: {
