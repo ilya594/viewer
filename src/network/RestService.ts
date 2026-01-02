@@ -1,10 +1,11 @@
 import EventHandler, { SNAPSHOT_SEND_HOMIE } from "../utils/Events";
 import axios from "axios";
+import { generateSortableFileName } from "../utils/Utils";
 
 export class RestService {
 
   public SERVER_URL: string = 'https://nodejs-http-server.onrender.com/';
-  private TIME_ZONE: string = 'Europe/Kyiv';
+  //private TIME_ZONE: string = 'Europe/Kyiv';
 
   constructor() {
 
@@ -16,8 +17,10 @@ export class RestService {
 
   public sendSnaphot = (snapshot: string) => {
 
-    const name: string = new Date().toLocaleString('ua-UA', { timeZone: this.TIME_ZONE })
-      .replace(/:/g, '.').replace(', ', '-') + '.png';
+   // const name: string = new Date().toLocaleString('ua-UA', { timeZone: this.TIME_ZONE })
+    //  .replace(/:/g, '.').replace(', ', '-') + '.png';
+
+    const name: string = generateSortableFileName() + '.png';
 
     axios({
       method: 'post',
