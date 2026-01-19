@@ -50,6 +50,7 @@ export class StreamProvider {
 
   public getNextStream = (): MediaStream | null => {
     const activeStreamers = Array.from(this._streamers.values()).filter(s => s.stream);
+    activeStreamers.push(new Streamer('local'));
     
     if (activeStreamers.length === 0) {
       EventHandler.dispatchEvent(NO_STREAMS_AVAILABLE);
