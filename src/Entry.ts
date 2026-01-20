@@ -489,7 +489,7 @@ class TmpVideo {
       testVideo.style.cssText = 'position:fixed; top:10px; right:10px; width:300px; z-index:9999;';
 
       const source = document.createElement('source');
-      source.src = 'http://195.137.244.53:8888/camera/video1_stream.m3u8';
+      source.src = '//195.137.244.53:8888/camera/video1_stream.m3u8';
       source.type = 'application/vnd.apple.mpegurl';
 
       testVideo.appendChild(source);
@@ -506,7 +506,7 @@ class TmpVideo {
     // Использование
     replaceBodyWithFullscreenVideo(
       './images/solars.mp4',
-      'http://195.137.244.53:8888/camera/video1_stream.m3u8',
+      '//195.137.244.53:8888/camera/video1_stream.m3u8',
       {
         autoplay: true,
         muted: true,
