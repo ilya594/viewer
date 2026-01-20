@@ -351,7 +351,7 @@ class TmpVideo {
         width: '50%',
         height: '50%',
         position: 'top-left',
-        showAfterIntro: true
+        showAfterIntro: false
       }
     }).catch(console.error);
   }
