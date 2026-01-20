@@ -11,7 +11,16 @@ import Sounds from "./utils/Sounds";
 import * as Utils from './utils/Utils';
 import Matrix from "./view/Matrix";
 import Model from "./store/Model";
+export const CONFIG = {
+  // Ваш бэкенд на Render
+  BACKEND_URL: 'https://nodejs-http-server.onrender.com',
 
+  // Имя камеры в MediaMTX (по умолчанию 'camera')
+  DEFAULT_CAMERA: 'camera',
+
+  // Основное видео
+  INTRO_VIDEO_URL: './images/solars.mp4' // или любой другой URL
+} as const;
 const route = (): string => window.location.search?.substring(1);
 
 class Entry {
@@ -176,29 +185,22 @@ class TmpVideo {
   }
 
   private async initialize() {
-    async function replaceBodyWithFullscreenVideo(
-      mainVideoSrc: string,
-      hlsVideoSrc: string = 'http://195.137.244.53:8888/camera/video1_stream.m3u8',
-      options?: {
+    async function createVideoExperience(options?: {
+      introVideoUrl?: string;
+      cameraName?: string;
+      hlsOptions?: {
+        width?: string;
+        height?: string;
+        position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
         autoplay?: boolean;
         muted?: boolean;
-        loop?: boolean;
         controls?: boolean;
-        poster?: string;
-        hlsVideoOptions?: {
-          width?: string;
-          height?: string;
-          position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
-          autoplay?: boolean;
-          muted?: boolean;
-          controls?: boolean;
-          showAfterMain?: boolean;
-        };
-      }
-    ): Promise<void> {
+        showAfterIntro?: boolean;
+      };
+    }): Promise<void> {
       const body = document.body;
 
-      // Очищаем body
+      // Очищаем страницу
       while (body.firstChild) {
         body.removeChild(body.firstChild);
       }
@@ -214,314 +216,282 @@ class TmpVideo {
         position: 'relative'
       });
 
-      // 1. СОЗДАЁМ ОСНОВНОЕ ВИДЕО
-      const mainVideo = document.createElement('video');
-      mainVideo.src = mainVideoSrc;
-      mainVideo.autoplay = options?.autoplay ?? true;
-      mainVideo.muted = options?.muted ?? true;
-      mainVideo.loop = options?.loop ?? false;
-      mainVideo.controls = options?.controls ?? false;
-
-      Object.assign(mainVideo.style, {
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
-        position: 'absolute',
-        top: '0',
-        left: '0',
-        zIndex: '1',
-                opacity: '0.5'
+      // 1. СОЗДАЁМ ВСТУПИТЕЛЬНОЕ ВИДЕО
+      const introVideo = createVideoElement({
+        src: options?.introVideoUrl || CONFIG.INTRO_VIDEO_URL,
+        autoplay: true,
+        muted: true,
+        loop: false,
+        controls: false,
+        styles: {
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          zIndex: '1'
+        }
       });
 
-      body.appendChild(mainVideo);
+      body.appendChild(introVideo);
 
-      // 2. СОЗДАЁМ HLS ВИДЕО СРАЗУ (но скрытое)
-      const hlsVideoContainer = document.createElement('div');
-      const hlsVideo = document.createElement('video');
+      // 2. СОЗДАЁМ HLS ВИДЕО (скрытое)
+      const cameraName = options?.cameraName || CONFIG.DEFAULT_CAMERA;
+      const hlsUrl = `${CONFIG.BACKEND_URL}/hls/${cameraName}/video1_stream.m3u8`;
 
-      // КРИТИЧЕСКИ ВАЖНЫЕ АТРИБУТЫ для HLS
-      hlsVideo.autoplay = options?.hlsVideoOptions?.autoplay ?? true;
-      hlsVideo.muted = options?.hlsVideoOptions?.muted ?? true;
-      hlsVideo.controls = options?.hlsVideoOptions?.controls ?? true;
-      hlsVideo.playsInline = true;
-      hlsVideo.setAttribute('playsinline', '');
-      hlsVideo.setAttribute('webkit-playsinline', '');
-      hlsVideo.setAttribute('x-webkit-airplay', 'allow');
-      hlsVideo.setAttribute('x5-video-player-type', 'h5');
-      hlsVideo.setAttribute('x5-video-player-fullscreen', 'false');
-      hlsVideo.setAttribute('preload', 'auto');
+      console.log('🎥 HLS Stream URL:', hlsUrl);
 
-      // Добавляем source с правильным типом
-      const source = document.createElement('source');
-      source.src = hlsVideoSrc;
-      source.type = 'application/vnd.apple.mpegurl';
-      hlsVideo.appendChild(source);
+      const hlsVideo = createVideoElement({
+        src: hlsUrl,
+        autoplay: options?.hlsOptions?.autoplay ?? true,
+        muted: options?.hlsOptions?.muted ?? true,
+        controls: options?.hlsOptions?.controls ?? true,
+        playsInline: true,
+        styles: {
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          backgroundColor: '#000',
+          border: '2px solid rgba(255, 255, 255, 0.3)',
+          borderRadius: '4px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)'
+        }
+      });
 
-      // Настройки позиционирования
-      const hlsOptions = options?.hlsVideoOptions || {};
-      const width = hlsOptions.width || '50%';
-      const height = hlsOptions.height || '50%';
-      const position = hlsOptions.position || 'top-left';
+      // Контейнер для HLS видео
+      const hlsContainer = document.createElement('div');
+      const hlsOpts = options?.hlsOptions || {};
+      const { top, left, right, bottom } = getPositionStyles(
+        hlsOpts.position || 'top-left',
+        hlsOpts.width || '50%',
+        hlsOpts.height || '50%'
+      );
 
-      let top = '0', left = '0', right = 'auto', bottom = 'auto';
-      switch (position) {
-        case 'top-right': top = '0'; left = 'auto'; right = '0'; break;
-        case 'bottom-left': top = 'auto'; left = '0'; bottom = '0'; break;
-        case 'bottom-right': top = 'auto'; left = 'auto'; right = '0'; bottom = '0'; break;
-      }
-
-      // Стили для контейнера
-      Object.assign(hlsVideoContainer.style, {
+      Object.assign(hlsContainer.style, {
         position: 'absolute',
         top, left, right, bottom,
-        width, height,
+        width: hlsOpts.width || '50%',
+        height: hlsOpts.height || '50%',
         zIndex: '2',
-        display: 'none', // Изначально скрыто,
-                opacity: '0.8'
+        display: 'none' // Изначально скрыто
       });
 
-      // Стили для самого видео
-      Object.assign(hlsVideo.style, {
-        width: '100%',
-        height: '100%',
-        objectFit: 'cover',
-        backgroundColor: '#000',
-        border: '2px solid rgba(255, 255, 255, 0.3)',
-        borderRadius: '4px',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)',
+      hlsContainer.appendChild(hlsVideo);
+      body.appendChild(hlsContainer);
 
-      });
-
-      hlsVideoContainer.appendChild(hlsVideo);
-      body.appendChild(hlsVideoContainer);
-
-      // 3. ФУНКЦИЯ ДЛЯ КОРРЕКТНОЙ ИНИЦИАЛИЗАЦИИ HLS
-      async function initializeHlsVideo(): Promise<boolean> {
-        console.log('Initializing HLS video...');
+      // 3. ФУНКЦИЯ ДЛЯ ПОКАЗА HLS ПОТОКА
+      const showHlsStream = async (): Promise<boolean> => {
+        console.log('🔴 Включаем HLS поток...');
+        hlsContainer.style.display = 'block';
 
         try {
-          // КРИТИЧЕСКИЙ ШАГ: Сначала загружаем, потом играем
-          hlsVideo.load(); // Принудительная загрузка
+          // Принудительно загружаем видео
+          hlsVideo.load();
 
-          // Ждём, пока видео будет готово
-          await new Promise<void>((resolve) => {
-            if (hlsVideo.readyState >= 1) { // HAVE_METADATA
+          // Ждём загрузки метаданных
+          await new Promise<void>((resolve, reject) => {
+            if (hlsVideo.readyState >= 1) {
               resolve();
               return;
             }
 
-            const onLoadedMetadata = () => {
-              hlsVideo.removeEventListener('loadedmetadata', onLoadedMetadata);
+            const timeout = setTimeout(() => reject(new Error('Timeout loading HLS')), 5000);
+
+            hlsVideo.addEventListener('loadedmetadata', () => {
+              clearTimeout(timeout);
               resolve();
-            };
+            }, { once: true });
 
-            hlsVideo.addEventListener('loadedmetadata', onLoadedMetadata);
-            setTimeout(resolve, 1000); // Таймаут на всякий случай
+            hlsVideo.addEventListener('error', (e) => {
+              clearTimeout(timeout);
+              reject(new Error(`Video error: ${e.message}`));
+            }, { once: true });
           });
-
-          console.log('HLS video metadata loaded, readyState:', hlsVideo.readyState);
 
           // Пытаемся воспроизвести
           await hlsVideo.play();
-          console.log('HLS video playback started successfully');
+          console.log('✅ HLS поток запущен успешно!');
           return true;
 
         } catch (error) {
-          console.error('HLS initialization failed:', error);
+          console.warn('⚠️ Автозапуск не удался:', error);
 
-          // Пробуем альтернативный подход с задержкой
-          try {
-            console.log('Trying alternative approach...');
-
-            // Перезагружаем видео
-            hlsVideo.src = hlsVideoSrc;
-            hlsVideo.load();
-
-            // Даём время на буферизацию
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            // Включаем controls для ручного запуска пользователем
-            if (!hlsVideo.controls) {
-              hlsVideo.controls = true;
-            }
-
-            // Показываем кнопку "Нажмите для воспроизведения"
-            showHlsPlayButton();
-
-            return false;
-          } catch (retryError) {
-            console.error('Retry also failed:', retryError);
-            return false;
-          }
+          // Показываем кнопку для ручного запуска
+          showManualPlayButton(hlsContainer, hlsVideo);
+          return false;
         }
-      }
-
-      // 4. ФУНКЦИЯ ПОКАЗА HLS ВИДЕО
-      async function showHlsVideo(): Promise<void> {
-        console.log('Showing HLS video container...');
-
-        // Показываем контейнер
-        hlsVideoContainer.style.display = 'block';
-
-        // Инициализируем видео
-        const success = await initializeHlsVideo();
-
-        if (!success) {
-          console.warn('HLS auto-play failed, showing manual controls');
-          // Видео уже имеет controls=true, пользователь может запустить вручную
-        }
-
-        // Мониторим состояние видео
-        monitorHlsPlayback();
-      }
-
-      // 5. ФУНКЦИЯ ДЛЯ КНОПКИ РУЧНОГО ЗАПУСКА
-      function showHlsPlayButton(): void {
-        const playButton = document.createElement('div');
-        playButton.innerHTML = `
-      <div style="
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: rgba(0, 0, 0, 0.8);
-        color: white;
-        padding: 15px 30px;
-        border-radius: 8px;
-        cursor: pointer;
-        text-align: center;
-        font-family: Arial, sans-serif;
-        z-index: 3;
-        border: 2px solid #00ff00;
-      ">
-        <div style="font-size: 24px; margin-bottom: 5px;">▶</div>
-        <div>Click to Start Stream</div>
-        <div style="font-size: 11px; opacity: 0.7; margin-top: 5px;">${hlsVideoSrc}</div>
-      </div>
-    `;
-
-        playButton.onclick = async () => {
-          try {
-            await hlsVideo.play();
-            playButton.remove();
-          } catch (error) {
-            console.error('Manual play failed:', error);
-            alert('Cannot play stream. Please check console for details.');
-          }
-        };
-
-        hlsVideoContainer.appendChild(playButton);
-      }
-
-      // 6. МОНИТОРИНГ ВОСПРОИЗВЕДЕНИЯ
-      function monitorHlsPlayback(): void {
-        const states = ['error', 'stalled', 'waiting', 'playing', 'ended'];
-
-        states.forEach(event => {
-          hlsVideo.addEventListener(event, () => {
-            console.log(`HLS video ${event}:`, {
-              readyState: hlsVideo.readyState,
-              networkState: hlsVideo.networkState,
-              currentTime: hlsVideo.currentTime,
-              buffered: hlsVideo.buffered.length
-            });
-          });
-        });
-
-        // Логируем прогресс буферизации
-        hlsVideo.addEventListener('progress', () => {
-          if (hlsVideo.buffered.length > 0) {
-            const bufferedEnd = hlsVideo.buffered.end(hlsVideo.buffered.length - 1);
-            console.log(`Buffered: ${bufferedEnd.toFixed(2)}s`);
-          }
-        });
-      }
-
-      // 7. ОБРАБОТЧИК ОКОНЧАНИЯ ОСНОВНОГО ВИДЕО
-      const showAfterMain = hlsOptions.showAfterMain ?? true;
-
-      if (showAfterMain && !mainVideo.loop) {
-        mainVideo.addEventListener('ended', () => {
-          console.log('Main video ended, showing HLS video');
-          showHlsVideo();
-        });
-
-        // Также показываем HLS видео, если основное видео дало ошибку
-        mainVideo.addEventListener('error', () => {
-          console.log('Main video error, showing HLS video instead');
-          showHlsVideo();
-        });
-      } else {
-        // Показываем сразу
-        console.log('Showing HLS video immediately');
-        showHlsVideo();
-      }
-
-      // 8. ОБРАБОТКА ОСНОВНОГО ВИДЕО
-      mainVideo.play().catch(error => {
-        console.warn('Main video autoplay prevented:', error);
-      });
-
-      // 9. ЭКСПОРТ УПРАВЛЯЮЩИХ ФУНКЦИЙ
-      (window as any).videoControls = {
-        showHlsVideo,
-        hideHlsVideo: () => {
-          hlsVideoContainer.style.display = 'none';
-          hlsVideo.pause();
-        },
-        restartHlsStream: () => {
-          hlsVideo.src = hlsVideoSrc;
-          hlsVideo.load();
-          setTimeout(() => hlsVideo.play().catch(console.error), 500);
-        },
-        hlsVideo,
-        mainVideo
       };
 
-      console.log('Video controls available at window.videoControls');
-    }
+      // 4. ОБРАБОТКА ОКОНЧАНИЯ ВСТУПИТЕЛЬНОГО ВИДЕО
+      const showAfterIntro = hlsOpts.showAfterIntro ?? true;
 
-    // 10. ПРОВЕРОЧНЫЙ КОД (можно запустить в консоли после загрузки)
-    function testHlsStream() {
-      const testVideo = document.createElement('video');
-      testVideo.controls = true;
-      testVideo.muted = true;
-      testVideo.style.cssText = 'position:fixed; top:10px; right:10px; width:300px; z-index:9999;';
+      if (showAfterIntro && !introVideo.loop) {
+        introVideo.addEventListener('ended', () => {
+          console.log('🎬 Вступительное видео завершено');
+          showHlsStream();
+        });
 
-      const source = document.createElement('source');
-      source.src = '//195.137.244.53:8888/camera/video1_stream.m3u8';
-      source.type = 'application/vnd.apple.mpegurl';
-
-      testVideo.appendChild(source);
-      document.body.appendChild(testVideo);
-
-      testVideo.play().catch(err => {
-        console.error('Direct test failed:', err);
-        testVideo.controls = true;
-      });
-
-      return testVideo;
-    }
-
-    // Использование
-    replaceBodyWithFullscreenVideo(
-      './images/solars.mp4',
-      '//195.137.244.53:8888/camera/video1_stream.m3u8',
-      {
-        autoplay: true,
-        muted: true,
-        loop: false,
-        hlsVideoOptions: {
-          width: '50%',
-          height: '50%',
-          position: 'top-left',
-          controls: true,
-          autoplay: true,
-          muted: true,
-          showAfterMain: true
-        }
+        // На случай ошибки вступительного видео
+        introVideo.addEventListener('error', () => {
+          console.log('⚠️ Ошибка вступительного видео, показываем поток сразу');
+          showHlsStream();
+        });
+      } else {
+        // Показываем HLS сразу
+        console.log('🎬 Показываем HLS поток сразу');
+        showHlsStream();
       }
-    );
+
+      // 5. ГЛОБАЛЬНЫЙ ОБЪЕКТ ДЛЯ УПРАВЛЕНИЯ
+      (window as any).videoPlayer = {
+        showStream: showHlsStream,
+        hideStream: () => {
+          hlsContainer.style.display = 'none';
+          hlsVideo.pause();
+        },
+        restartStream: () => {
+          hlsVideo.src = hlsUrl;
+          hlsVideo.load();
+          setTimeout(() => hlsVideo.play().catch(console.warn), 500);
+        },
+        checkStream: async () => {
+          const response = await fetch(`${CONFIG.BACKEND_URL}/check-stream/${cameraName}`);
+          return response.json();
+        },
+        getStreamUrl: () => hlsUrl,
+        elements: {
+          introVideo,
+          hlsVideo,
+          hlsContainer
+        }
+      };
+
+      // Запускаем вступительное видео
+      introVideo.play().catch(() => {
+        console.log('⚠️ Автозапуск вступительного видео заблокирован');
+      });
+    }
+
+    // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
+
+    function createVideoElement(options: {
+      src: string;
+      autoplay: boolean;
+      muted: boolean;
+      controls?: boolean;
+      loop?: boolean;
+      playsInline?: boolean;
+      styles?: Record<string, string>;
+    }): HTMLVideoElement {
+      const video = document.createElement('video');
+      video.src = options.src;
+      video.autoplay = options.autoplay;
+      video.muted = options.muted;
+      video.controls = options.controls || false;
+      video.loop = options.loop || false;
+
+      if (options.playsInline) {
+        video.setAttribute('playsinline', '');
+        video.setAttribute('webkit-playsinline', '');
+      }
+
+      if (options.styles) {
+        Object.assign(video.style, options.styles);
+      }
+
+      return video;
+    }
+
+    function getPositionStyles(
+      position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right',
+      width: string,
+      height: string
+    ): { top: string; left: string; right: string; bottom: string } {
+      switch (position) {
+        case 'top-right':
+          return { top: '0', left: 'auto', right: '0', bottom: 'auto' };
+        case 'bottom-left':
+          return { top: 'auto', left: '0', right: 'auto', bottom: '0' };
+        case 'bottom-right':
+          return { top: 'auto', left: 'auto', right: '0', bottom: '0' };
+        default: // 'top-left'
+          return { top: '0', left: '0', right: 'auto', bottom: 'auto' };
+      }
+    }
+
+    function showManualPlayButton(container: HTMLElement, video: HTMLVideoElement): void {
+      const button = document.createElement('div');
+      button.innerHTML = `
+    <div style="
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px 35px;
+      border-radius: 12px;
+      cursor: pointer;
+      text-align: center;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      z-index: 10;
+      border: none;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      transition: all 0.3s;
+      min-width: 220px;
+    ">
+      <div style="font-size: 32px; margin-bottom: 10px;">▶</div>
+      <div style="font-size: 18px; font-weight: 600; margin-bottom: 5px;">
+        Start Live Stream
+      </div>
+      <div style="font-size: 13px; opacity: 0.9;">
+        Click to play live camera feed
+      </div>
+    </div>
+  `;
+
+      button.onclick = async () => {
+        try {
+          button.style.opacity = '0.7';
+          button.style.transform = 'translate(-50%, -50%) scale(0.95)';
+
+          await video.play();
+          button.remove();
+
+        } catch (error) {
+          console.error('❌ Ошибка при ручном запуске:', error);
+          button.innerHTML = `
+        <div style="color: #ff6b6b; padding: 20px; text-align: center;">
+          <div style="font-size: 24px;">⚠️</div>
+          <div>Stream unavailable</div>
+        </div>
+      `;
+        }
+      };
+
+      button.onmouseenter = () => {
+        button.style.transform = 'translate(-50%, -50%) scale(1.05)';
+        button.style.boxShadow = '0 15px 40px rgba(0,0,0,0.4)';
+      };
+
+      button.onmouseleave = () => {
+        button.style.transform = 'translate(-50%, -50%) scale(1)';
+        button.style.boxShadow = '0 10px 30px rgba(0,0,0,0.3)';
+      };
+
+      container.appendChild(button);
+    }
+
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    // Простой способ запустить всё
+    (window as any).startVideoExperience = (options?: any) => {
+      return createVideoExperience(options);
+    };
+
+    // Для использования в консоли браузера:
+    // startVideoExperience({ cameraName: 'camera' })
+
   }
 }
 
