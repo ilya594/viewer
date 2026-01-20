@@ -228,7 +228,7 @@ class TmpVideo {
       introVideo.src = introVideoUrl;
       introVideo.autoplay = true;
       introVideo.muted = true;
-      introVideo.loop = false;
+      introVideo.loop = true;
       introVideo.controls = false;
       introVideo.playsInline = true;
 
