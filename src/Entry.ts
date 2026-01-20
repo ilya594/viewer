@@ -185,7 +185,7 @@ class TmpVideo {
   }
 
   private async initialize() {
-    async function createVideoExperience(options?: {
+    const createVideoExperience = async (options?: {
       introVideoUrl?: string;
       cameraName?: string;
       hlsOptions?: {
@@ -197,7 +197,7 @@ class TmpVideo {
         controls?: boolean;
         showAfterIntro?: boolean;
       };
-    }): Promise<void> {
+    }): Promise<void> =>{
       const body = document.body;
 
       // Очищаем страницу
@@ -485,12 +485,12 @@ class TmpVideo {
 
     // ========== ИНИЦИАЛИЗАЦИЯ ==========
     // Простой способ запустить всё
-    (window as any).startVideoExperience = (options?: any) => {
-      return createVideoExperience(options);
-    };
+ //   (window as any).startVideoExperience = (options?: any) => {
+ //     return createVideoExperience(options);
+  //  };
 
-    // Для использования в консоли браузера:
-    // startVideoExperience({ cameraName: 'camera' })
+  //   Для использования в консоли браузера:
+     createVideoExperience({ cameraName: 'camera' })
 
   }
 }
