@@ -51,7 +51,7 @@ export class View extends Events.EventHandler {
     //  if (deviceId) {
     //    (viewport as any).setSinkId(deviceId);
    //   }
-      viewport.srcObject = stream;
+    //  viewport.srcObject = stream;
     //this.createDevicesInfoLabel(devices);
     }
 

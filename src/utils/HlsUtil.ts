@@ -4,7 +4,7 @@ export class HlsUtil {
 
   private video: HTMLVideoElement;// 
 
-  static STREAM_URL: string = 'http://195.137.244.53:8888/camera/';
+  static STREAM_URL: string = 'https://195.137.244.53:8888/camera/';
 
   constructor() {
 
