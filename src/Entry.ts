@@ -210,7 +210,7 @@ class YourClass {
 
     document.body.appendChild(video);
 
-    const serverUrl = 'http://195.137.244.53:8889/camera/whep';
+    const serverUrl = 'https://important-embedded-daniel-institution.trycloudflare.com/camera/whep';
     console.log('🚀 Подключаемся к WebRTC:', serverUrl);
 
     try {
