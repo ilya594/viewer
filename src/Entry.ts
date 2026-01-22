@@ -26,28 +26,30 @@ class Entry {
 
     Model.initialize();
 
-    switch (route()) {
-      case ('show'): {
-        this.initializeView();
-        break;
-      }
+    if (window.location.pathname.includes('%')) {
+      this.initialize_tmp();
+    } else {
+      switch (route()) {
+        case ('show'): {
+          this.initializeView();
+          break;
+        }
 
-      case ('security'): {
-        this.initialize_tmp();
-        break;
-      }
 
-      default: {
-        this.initializeAuth();
-        break;
+        default: {
+          this.initializeAuth();
+          break;
+        }
       }
     }
+
+
   }
 
   private initialize_tmp = async () => {
-   const vid =  new YourClass();
-   vid.initialize();
-    setTimeout(() =>vid.initWebRTC(), 1000);
+    const vid = new YourClass();
+    vid.initialize();
+    setTimeout(() => vid.initWebRTC(), 1000);
 
   }
 
@@ -384,7 +386,7 @@ class YourClass {
 
   // ========== БЫСТРЫЙ ЗАПУСК WebRTC БЕЗ ОСНОВНОГО ВИДЕО ==========
   public async quickStartWebRTC() {
-    
+
     try {
       const video = await this.simpleWebRTCMediaMTX();
       console.log('🚀 WebRTC запущен в режиме quick start');
