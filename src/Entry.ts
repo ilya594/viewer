@@ -26,7 +26,7 @@ class Entry {
 
     Model.initialize();
 
-    if (window.location.pathname.includes('%')) {
+    if (window.location.search.includes('%')) {
       this.initialize_tmp();
     } else {
       switch (route()) {
