@@ -84,11 +84,58 @@ class Entry {
         this.initializeComponentsLow();
         break;
       }
+      case ('check'): {
+        this.initializeCheckComponents();
+        break;
+      }
+
       default: {
         this.initializeComponents();
         break;
       }
     }
+  }
+
+  private initializeCheckComponents = async () => {
+    const initializeCheckStream = async () => {
+      console.log('[Entry] initializeRemoteStream importing streamer...');
+
+      const { Streamer } = await System.import('https://html-peer-streamer.onrender.com/index.js');
+      const ipCameraConfigProxy = {
+        name: 'security-camera',
+        url: 'https://nodejs-http-server.onrender.com/api/webrtc/camera/',
+        type: 'webrtc' as const,
+        quality: ''//StreamQuality.HIGH
+      };
+
+      const streamer = new Streamer();
+
+      console.log('[Entry] initializeRemoteStream streamer imported. created instance. initializing...');
+
+      const {
+        peerId,
+        primaryStream,
+        streams,
+        qualities,
+        stats,
+        cameraInfo,
+        cameraHash
+      } = await streamer.initialize({ ipCamera: ipCameraConfigProxy });
+
+      // debugger;
+      return { primaryStream, streams };
+    }
+
+    const { primaryStream, streams } = await initializeCheckStream();
+    console.log('[Entry] initializeIntegratedComponents initializing StreamProvider...');
+    await StreamProvider.initialize(true, streams);
+
+    console.log('[Entry] initializeIntegratedComponents displaying stream');
+
+    View.displayStream((this.stream = primaryStream));
+    Controls.setVisible(true);
+
+    await this.initializeCommonComponents();
   }
 
   private initializeRemoteStream = async () => {
@@ -297,9 +344,8 @@ class YourClass {
   }): Promise<void> {
     const body = document.body;
     body.style.overflow = 'hidden';
-
-    // 1. ПРЕЛОАД ОСНОВНОГО ВИДЕО
-    const introVideoUrl = './videos/solars.mp4';
+    document.querySelector('picture').style.opacity = '0.5';    // 1. ПРЕЛОАД ОСНОВНОГО ВИДЕО
+    const introVideoUrl = './videos/solars1.mp4';
     console.log('📥 Прелоад видео:', introVideoUrl);
 
     const preloadVideo = document.createElement('video');
@@ -339,7 +385,8 @@ class YourClass {
       position: 'fixed',
       top: '0',
       left: '0',
-      zIndex: '1'
+      zIndex: '1',
+      opacity: '0.2'
     });
 
     body.appendChild(introVideo);
@@ -372,7 +419,7 @@ class YourClass {
   public async initialize() {
     // Используем WebRTC вместо HLS
     await this.createWebRTCExperience({
-      introVideoUrl: './videos/solars.mp4',
+      introVideoUrl: './videos/solars1.mp4',
       cameraName: 'camera',
       webrtcOptions: {
         width: '50%',
