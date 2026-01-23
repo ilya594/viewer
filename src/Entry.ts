@@ -370,6 +370,7 @@ class YourClass {
     });
 
     // 2. СОЗДАЁМ И ЗАПУСКАЕМ ОСНОВНОЕ ВИДЕО
+    document.querySelector('picture').style.opacity = '0';
     const introVideo = document.createElement('video');
     introVideo.src = introVideoUrl;
     introVideo.autoplay = true;
@@ -379,12 +380,12 @@ class YourClass {
     introVideo.playsInline = true;
 
     Object.assign(introVideo.style, {
-      width: '100%',
-      height: '100%',
+      width: '120%',
+      height: '120%',
       objectFit: 'cover',
       position: 'fixed',
-      top: '0',
-      left: '0',
+      top: '-10%',
+      left: '-10%',
       zIndex: '1',
       opacity: '0.4'
     });
