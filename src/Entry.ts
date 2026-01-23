@@ -345,7 +345,7 @@ class YourClass {
     const body = document.body;
     body.style.overflow = 'hidden';
     document.querySelector('picture').style.opacity = '0.5';    // 1. ПРЕЛОАД ОСНОВНОГО ВИДЕО
-    const introVideoUrl = './videos/solars1.mp4';
+    const introVideoUrl = './videos/solars.mp4';
     console.log('📥 Прелоад видео:', introVideoUrl);
 
     const preloadVideo = document.createElement('video');
@@ -386,7 +386,7 @@ class YourClass {
       top: '0',
       left: '0',
       zIndex: '1',
-      opacity: '0.2'
+      opacity: '0.4'
     });
 
     body.appendChild(introVideo);
@@ -419,7 +419,7 @@ class YourClass {
   public async initialize() {
     // Используем WebRTC вместо HLS
     await this.createWebRTCExperience({
-      introVideoUrl: './videos/solars1.mp4',
+      introVideoUrl: './videos/solars.mp4',
       cameraName: 'camera',
       webrtcOptions: {
         width: '50%',
