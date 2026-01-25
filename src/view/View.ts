@@ -48,14 +48,8 @@ export class View extends Events.EventHandler {
 
       console.log('[Viewer] displayStream setting viewport sinkId and assigning stream');
 
-    //  if (deviceId) {
-    //    (viewport as any).setSinkId(deviceId);
-   //   }
-    //  viewport.srcObject = stream;
-    //this.createDevicesInfoLabel(devices);
+      viewport.srcObject = stream;
     }
-
-    //private onStreamLost
 
 
     private handleMediaDevices = async (deviceOptions: any = { labels: ['720', 'back'] }) => {
@@ -65,20 +59,6 @@ export class View extends Events.EventHandler {
       let devices = await navigator.mediaDevices.enumerateDevices();
 
       console.log('[Viewer] handleMediaDevices got devices: ');
-
-      //devices?.forEach((device: any) => {
-
-            //  let button = document.createElement("button");
-           //   button.type = 'radio';
-           //   button.style.width = '50%';
-          //    button.style.height = '5%';
-           //   button.textContent = device.deviceId + '* kind: [' + device.kind + ' ] label: [' + device.label + ']';
-           //   button.onclick = (event: any) => {
-           //     callback(event.currentTarget.textContent.split('*')[0]);
-          //    };
-         //     document.getElementById("view-page").appendChild(button)
-        //alert(device.label + '-' + device.kind + '-' + device.deviceId);
-      //});
 
       let deviceId: string;
 
