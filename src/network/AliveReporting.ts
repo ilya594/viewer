@@ -12,15 +12,6 @@ class AliveReporting {
             clearInterval(this._interval);
         }
         return (this._interval = setInterval(() => this.sendHeartbeat(id), HEARTBEAT_INTERVAL));
-
-        /*return window.addEventListener('beforeunload', async () => {
-            clearInterval(this._interval);
-
-            navigator.sendBeacon(
-              RestService.SERVER_URL + 'removepeerid',
-              JSON.stringify({ id: id })
-            );
-        });*/
     }
 
     private sendHeartbeat = (peerId: string) => {

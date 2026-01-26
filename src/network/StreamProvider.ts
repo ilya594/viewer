@@ -467,12 +467,12 @@ export class StreamProvider {
       30000
     );
     
-    console.log(`[StreamProvider] Will recreate peer in ${delay}ms (attempt ${this._peerReconnectAttempts})`);
+    //console.log(`[StreamProvider] Will recreate peer in ${delay}ms (attempt ${this._peerReconnectAttempts})`);
     
-    this._reconnectTimeout = setTimeout(() => {
+    /*this._reconnectTimeout = setTimeout(() => {
       console.log('[StreamProvider] Recreating peer...');
       this.createPeer();
-    }, delay);
+    }, delay);*/
   }
 
   private startPeerListRefresh = () => {
