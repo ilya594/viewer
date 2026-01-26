@@ -22,7 +22,7 @@
     "webpack-dev-server": "^5.0.4"
   },
   "dependencies": {
-    "@tensorflow/tfjs": "^4.17.0",
+    "@tensorflow/tfjs": "^4.22.0",
     "@tweenjs/tween.js": "^23.1.1",
     "axios": "^1.7.2",
     "bcrypt-ts": "^5.0.2",

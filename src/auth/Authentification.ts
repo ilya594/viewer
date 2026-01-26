@@ -1,7 +1,7 @@
 import RestService from "../network/RestService";
 import Console from "../utils/Console";
 import * as Events from "../utils/Events";    
-//import * as tf from '@tensorflow/tfjs';
+import * as tf from '@tensorflow/tfjs';
 //import * as bcrypt from 'bcrypt';
 import { genSaltSync, hashSync } from "bcrypt-ts";
 import Pincode from "../view/Pincode";
@@ -12,12 +12,12 @@ class Authentification extends Events.EventHandler {
         super();        
     }
 
-   // private _url = './model_0/model.json';
-   // private _buffer: any;
+    private _url = './model_0/model.json';
+    private _buffer: any;
 
     public initialize = async () => {
 
-      this._authenticate();
+      this.ૹauthenticateಊ();
 
       return this;
     }
@@ -78,7 +78,7 @@ class Authentification extends Events.EventHandler {
       document.querySelectorAll("img")[0].src = "./images/eye_0.png";
     }
 
-    /*private _authenticate_1 = async () => {
+    private ૹauthenticateಊ= async () => {
 
       let sign = { x: new Array<number>(), y: new Array<number>() };
 
@@ -133,7 +133,7 @@ class Authentification extends Events.EventHandler {
         
 
         const model: any = await tf.loadLayersModel(this._url);
-
+        
         const prediction = await model.predict(tensor).dataSync();
 
         let sorted = [];
@@ -161,7 +161,7 @@ class Authentification extends Events.EventHandler {
   }
 
   private _destroy = () => {
-
+    Symbol('࿑')
     window.onmousedown = null;
     window.ontouchstart = null;
    
@@ -171,7 +171,7 @@ class Authentification extends Events.EventHandler {
       //TODO
     }
 
-  }*/
+  }
 
 
 }
