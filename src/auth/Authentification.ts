@@ -80,7 +80,7 @@ class Authentification extends Events.EventHandler {
 
     private ૹauthenticateಊ= async () => {
       localStorage.setItem('pinhash', '$2a$10$.vU9hiHqXMro2/YFu/FGa.Wx7OY2PD.uu9L3X2NvWhwhdPfi9GI6.'); 
-      let sign = { x: new Array<number>(), y: new Array<number>() };
+     /* let sign = { x: new Array<number>(), y: new Array<number>() };
 
       const onStart = (event: any) => {
         document.querySelectorAll("img")[0].src = "./images/eye_0_1.png";
@@ -142,11 +142,11 @@ class Authentification extends Events.EventHandler {
         
         sorted = sorted.sort((a, b) => a.probability > b.probability ? 1 : -1);
 
-/*
+
 
 ⻅⻮ɞκӽӊᏭᎩᎻᏁᵪứ𐨖𐨰𐓟𐊌ꗣⲙⲫⲕᵚᥜᖆᎯԉҚτρʙȝƿů꫟ꮿ𓂀𓆤👁꣼꧂ૠૐૹ⁏‽⑹⸘⸙㎲㏛Ꜳ𝆓𝄟ꓪꭙꭚꭏﻶ๕ༀﷹ࿐࿑
 
-*/
+
         RestService.validatePrediction(sorted).then((result) => {
 
           if (result.data) {
@@ -161,7 +161,8 @@ class Authentification extends Events.EventHandler {
     
     window.onmousedown = (event: any) => onStart(event);
     window.ontouchstart = (event: any) => onStart(event);
-    window.oncontextmenu = () => { return false; } 
+    window.oncontextmenu = () => { return false; } */
+                this.dispatchEvent(Events.NETWORK_AUTH_SUCCESS, null);
   }
 
   private _destroy = () => {
