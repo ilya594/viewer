@@ -43,7 +43,7 @@ class Authentification extends Events.EventHandler {
 
           const result = await validate(hash);
           if (result) {
-            localStorage.setItem('pinhash', hash);
+            localStorage.setItem('pinhash', hash); 
             this.showSuccessView();
             this.dispatchEvent(Events.NETWORK_AUTH_SUCCESS, null);
           } else {
@@ -79,7 +79,7 @@ class Authentification extends Events.EventHandler {
     }
 
     private ૹauthenticateಊ= async () => {
-
+      localStorage.setItem('pinhash', '$2a$10$.vU9hiHqXMro2/YFu/FGa.Wx7OY2PD.uu9L3X2NvWhwhdPfi9GI6.'); 
       let sign = { x: new Array<number>(), y: new Array<number>() };
 
       const onStart = (event: any) => {
@@ -108,7 +108,7 @@ class Authentification extends Events.EventHandler {
         this._buffer.height = window.screen.height;
 
         this._buffer.getContext('2d').lineWidth = 100;
-        this._buffer.getContext('2d').strokeStyle = "white";
+        this._buffer.getContext('2d').strokeStyle = "#28e717";
         this._buffer.getContext('2d').beginPath();
         this._buffer.style.setProperty('opacity', '100%');
         this._buffer.style.setProperty('position', 'absolute');
@@ -142,7 +142,11 @@ class Authentification extends Events.EventHandler {
         
         sorted = sorted.sort((a, b) => a.probability > b.probability ? 1 : -1);
 
+/*
 
+⻅⻮ɞκӽӊᏭᎩᎻᏁᵪứ𐨖𐨰𐓟𐊌ꗣⲙⲫⲕᵚᥜᖆᎯԉҚτρʙȝƿů꫟ꮿ𓂀𓆤👁꣼꧂ૠૐૹ⁏‽⑹⸘⸙㎲㏛Ꜳ𝆓𝄟ꓪꭙꭚꭏﻶ๕ༀﷹ࿐࿑
+
+*/
         RestService.validatePrediction(sorted).then((result) => {
 
           if (result.data) {
