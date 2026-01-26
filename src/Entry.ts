@@ -91,7 +91,7 @@ class Entry {
       }
 
       default: {
-        debugger;
+      //  debugger;
         this.initializeComponents();
 
         break;

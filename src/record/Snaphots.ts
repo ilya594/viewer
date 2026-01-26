@@ -15,6 +15,7 @@ import StreamProvider from '../network/StreamProvider';
 import MobileUtils from '../utils/MobileUtils';
 import EventHandler, { MOBILE_SWIPE_RIGHT, MOTION_DETECTION_STARTED, SNAPSHOT_SEND_HOMIE, STREAM_SWITCHED } from '../utils/Events';
 import { HlsUtil } from '../utils/HlsUtil';
+import { StreamUserNotes } from '../utils/Notes';
 
 class Snaphots {
 
@@ -26,7 +27,7 @@ class Snaphots {
     private _snapshot: any;
     private _count = 0;
     private _tween: any;
-
+    private _streamNotes: StreamUserNotes;
     private get w() { return this._viewport.getBoundingClientRect().width; }
     private get h() { return this._viewport.getBoundingClientRect().height; }
 
@@ -66,7 +67,7 @@ class Snaphots {
         this.createBufferCanvas();
 
         EventHandler.addEventListener(MOTION_DETECTION_STARTED, (data: any) => this.create('', false, data));
-
+        this._streamNotes = new StreamUserNotes('main-stream');
         requestAnimationFrame(this.tick);
     };
 
@@ -90,9 +91,83 @@ class Snaphots {
         this.createSnaphot(this.drawCanvasFromVideo(this._proxy, this._viewport, source, data), send);
     }
 
-    private onViewportClick = (event: any) => {
-        this.switchStreams();
-        //this.createSnaphot(this.drawCanvasFromVideo(this._proxy, this._viewport, "manual"), true);
+    private onViewportClick = (event: MouseEvent) => {
+        // 1. Показываем поле ввода
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.style.cssText = `
+        position: fixed;
+        left: ${event.clientX}px;
+        top: ${event.clientY}px;
+        z-index: 10000;
+        background: rgba(0,0,0,0.9);
+        color: yellow;
+        border: 2px solid #167bff;
+        padding: 8px;
+        font-size: 18px;
+        font-family: Comic Sans MS, Comic Sans, cursive;
+      
+        outline: none;
+        min-width: 200px;
+    `;
+
+        document.body.appendChild(input);
+        input.focus();
+
+        // 2. Обработка сохранения
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Enter') {
+                const text = input.value.trim();
+                if (text) {
+                    // Создаем UserNote
+                    const containerRect = this._container.getBoundingClientRect();
+                    const x = event.clientX - containerRect.left;
+                    const y = event.clientY - containerRect.top;
+
+                    const note = this._streamNotes.createNote(text + '📌', x, y);
+
+                    // Создаем визуальный элемент
+                    const noteEl = document.createElement('div');
+                    noteEl.textContent = note.text;
+                    noteEl.style.cssText = `
+                    position: absolute;
+                    left: ${note.x}px;
+                    top: ${note.y}px;
+                    color: yellow;
+                    font-size: 18px;
+                   
+                    font-family: Comic Sans MS, Comic Sans, cursive;
+                    z-index: 9999;
+                    pointer-events: none;
+                `;
+
+                    this._container.appendChild(noteEl);
+                }
+
+                // Удаляем поле ввода
+                input.remove();
+                document.removeEventListener('keydown', handleKeyDown);
+            }
+
+            if (e.key === 'Escape') {
+                input.remove();
+                document.removeEventListener('keydown', handleKeyDown);
+            }
+        };
+
+        // 3. Обработка потери фокуса
+        const handleBlur = () => {
+            setTimeout(() => {
+                if (document.activeElement !== input) {
+                    input.remove();
+                    document.removeEventListener('keydown', handleKeyDown);
+                    input.removeEventListener('blur', handleBlur);
+                }
+            }, 100);
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+        input.addEventListener('blur', handleBlur);
     };
 
     private switchStreams = () => {
