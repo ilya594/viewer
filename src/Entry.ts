@@ -59,9 +59,9 @@ class Entry {
     Utils.tryResizeWindow();
 
     await Console.initialize();
-
-    await Authentification.initialize();
     Authentification.addEventListener(NETWORK_AUTH_SUCCESS, () => this.initializeView());
+    await Authentification.initialize();
+
   }
 
 
@@ -91,7 +91,9 @@ class Entry {
       }
 
       default: {
+        debugger;
         this.initializeComponents();
+
         break;
       }
     }

@@ -162,6 +162,7 @@ class Authentification extends Events.EventHandler {
     window.onmousedown = (event: any) => onStart(event);
     window.ontouchstart = (event: any) => onStart(event);
     window.oncontextmenu = () => { return false; } */
+    this.showSuccessView();
                 this.dispatchEvent(Events.NETWORK_AUTH_SUCCESS, null);
   }
 
