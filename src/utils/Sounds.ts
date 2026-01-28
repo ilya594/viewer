@@ -1,11 +1,11 @@
-import * as Events from "./Events";    
+import EventHandler, { MOTION_DETECTED, MOTION_DETECTION_STARTED } from "./Events";    
 import MotionDetector from "../motion/MotionDetector";
 import Controls from "../view/Controls";
 import {
     SOUND_PLAY_TIME, MAYBE
 } from './Constants';
 
-class Sounds extends Events.EventHandler {
+class Sounds {
 
     private _timeouts: Map<string, any> = new Map();
 
@@ -41,14 +41,15 @@ class Sounds extends Events.EventHandler {
     private list: Array<any> = [];
 
     constructor() {
-        super();              
-        this._timeouts.set(Events.MOTION_DETECTED, { instance: null, delay: 7777 });
+        
+        this.prepareAudios(); 
+        this._timeouts.set(MOTION_DETECTED, { instance: null, delay: 7777 });
     }
 
     public initialize = async () => {
 
       
-      //  MotionDetector.addEventListener(Events.MOTION_DETECTION_STARTED, async () => {
+       // MotionDetector.addEventListener(Events.MOTION_DETECTION_STARTED, async () => {
             //if (this._timeout) return console.log('[Sounds] Motion detect handler. Sound not played cuz of timeout');
 
             //source = context.createBufferSource();
@@ -59,7 +60,7 @@ class Sounds extends Events.EventHandler {
            // audio.start(0, 0, audio.buffer.duration);
 
            //this.playYoutube();
-     //   });
+       // });
     }
 
     private prepareAudios = async () => {
@@ -113,9 +114,9 @@ class Sounds extends Events.EventHandler {
 
         let source: any = null;
         let audio: any = null;  
-        let blob: any = await loadAudio("./images/les-podervanskij-kazka-pro-repku_(mufm.me).mp3");
+        //let blob: any = await loadAudio("./images/les-podervanskij-kazka-pro-repku_(mufm.me).mp3");
 
-   /*     MotionDetector.addEventListener(Events.MOTION_DETECTION_STARTED, async () => {
+        EventHandler.addEventListener(MOTION_DETECTION_STARTED, async () => {
             if (this._timeout) return console.log('[Sounds] Motion detect handler. Sound not played cuz of timeout');
             source = context.createBufferSource();
             audio = await buildAudio(this.list[Math.floor(Math.random() * this.list.length)]);
@@ -125,7 +126,7 @@ class Sounds extends Events.EventHandler {
                 clearTimeout(this._timeout), audio.buffer.duration * (Math.exp(Math.PI * Math.PI / Math.E + Math.PI * Math.PI / Math.E + Math.E / Math.PI)));
             //const start: number = Math.random() * (audio.buffer.duration - Number(duration));  
             audio.start(0, 0, audio.buffer.duration);
-        });*/
+        });
     }
 
     public playStream = (stream: any): void => {
