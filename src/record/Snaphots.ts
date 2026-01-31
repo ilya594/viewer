@@ -43,6 +43,7 @@ class Snaphots {
         this._container.appendChild(this._snapsaver);
         this._snapsaver.style.setProperty('position', 'absolute');
         this._snapsaver.addEventListener("click", this.onViewportClick);
+        this._snapsaver.addEventListener("touchstart", this.onTouchStart);
         this._snapsaver.style.setProperty('transform', 'translate(' + 0 + 'px,' + 0 + 'px)' + 'scale(' + 1 + ',' + 1 + ')');
 
         let context = this._snapsaver.getContext('2d', { willReadFrequently: true });
@@ -65,7 +66,7 @@ class Snaphots {
         this.createBufferCanvas();
 
         EventHandler.addEventListener(MOTION_DETECTION_STARTED, (data: any) => this.create('', false, data));
-        
+
         // Инициализируем менеджер заметок
         EventHandler.addEventListener(STREAM_RECEIVED, async () => {
             await NotesManager.initialize("view-page");
@@ -94,8 +95,20 @@ class Snaphots {
         this.createSnaphot(this.drawCanvasFromVideo(this._proxy, this._viewport, source, data), send);
     }
 
+    private onTouchStart = async (event: TouchEvent) => {
+        event.preventDefault(); 
+        const touch = event.touches[0] || event.changedTouches[0];
+
+        const mouseEvent = new MouseEvent('click', {
+            clientX: touch.clientX,
+            clientY: touch.clientY,
+            bubbles: true,
+            cancelable: true
+        });
+        await this.onViewportClick(mouseEvent);
+    };
+
     private onViewportClick = async (event: MouseEvent) => {
-        // Делегируем создание заметки менеджеру
         await NotesManager.createNote(event);
     };
 
