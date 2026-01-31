@@ -1,3 +1,5 @@
+import Storage from './../store/Storage';;
+
 export class StreamUserNotes {
     private _notes: Map<string, UserNote>;
     private _streamId: string;
@@ -221,6 +223,61 @@ export class StreamUserNotes {
         return notesManager;
     }
 
+      public async saveToStorage(storageKey?: string): Promise<boolean> {
+        try {
+            const key = storageKey || `notes_stream_${this._streamId}`;
+            const data = this.toJSON();
+            
+            // Сериализуем в строку для хранилища
+            const serializedData = JSON.stringify(data);
+            
+            // Используем ваш WebStorage
+            await Storage.setItem(key, serializedData);
+            
+            console.log(`Заметки сохранены в хранилище с ключом: ${key}`);
+            return true;
+        } catch (error) {
+            console.error('Ошибка при сохранении заметок в хранилище:', error);
+            return false;
+        }
+    }
+
+    /**
+     * Загружает заметки потока из хранилища
+     * @param storageKey Ключ для загрузки (по умолчанию: `notes_stream_{streamId}`)
+     * @returns Promise<StreamUserNotes> Новый экземпляр с загруженными данными
+     */
+    public static async loadFromStorage(
+        streamId: string, 
+        storageKey?: string
+    ): Promise<StreamUserNotes> {
+        try {
+            const key = storageKey || `notes_stream_${streamId}`;
+            
+            // Получаем данные из хранилища
+            const storedData = await Storage.getItem(key);
+            
+            if (!storedData) {
+                console.warn(`Для ключа "${key}" не найдено данных в хранилище`);
+                return new StreamUserNotes(streamId);
+            }
+            
+            // Парсим данные
+            //@ts-ignore
+            const parsedData = JSON.parse(storedData);
+            
+            // Восстанавливаем из JSON
+            const notesManager = StreamUserNotes.fromJSON(parsedData);
+            
+            console.log(`Заметки загружены из хранилища с ключом: ${key}`);
+            return notesManager;
+        } catch (error) {
+            console.error('Ошибка при загрузке заметок из хранилища:', error);
+            // Возвращаем пустой менеджер в случае ошибки
+            return new StreamUserNotes(streamId);
+        }
+    }
+
     // Экспорт/импорт
     public exportToFile(filename: string = `notes_${this._streamId}_${Date.now()}.json`): void {
         const data = JSON.stringify(this.toJSON(), null, 2);
@@ -234,6 +291,8 @@ export class StreamUserNotes {
         
         URL.revokeObjectURL(url);
     }
+
+    
 
     public static async importFromFile(file: File): Promise<StreamUserNotes> {
         return new Promise((resolve, reject) => {
