@@ -142,6 +142,8 @@ class Matrix {
             " нaχƴй ㄨㄦ੦ഠ〇ㄇㄐ૯ㄏㄏ πiȝgyютьㄇㄈ ㄋ ㄏ ㄐ ㄒ	ㄗ ㄙ ㄚ	 ㄤ ㄥ ㄦ ㄨ ㄩ	4TG";
 
         const matrix = str.split("");
+//цɜ𝗒​ⲙꮟɯ​𝗒οⲧҗ​ⲫ​ϲы𝗒ɜ​66щⲕ𝗒
+//цзумьшуотжфсыузббщку
 
         let cols = w / font;
         let pool: any = [];
