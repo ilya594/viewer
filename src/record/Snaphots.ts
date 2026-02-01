@@ -46,6 +46,8 @@ class Snaphots {
         this._snapsaver.addEventListener("touchstart", this.onTouchStart);
         this._snapsaver.style.setProperty('transform', 'translate(' + 0 + 'px,' + 0 + 'px)' + 'scale(' + 1 + ',' + 1 + ')');
 
+        document.getElementById("next-stream-button").addEventListener("click", this.switchStreams);
+        document.getElementById("next-stream-button").addEventListener("touchstart", this.switchStreams);
         let context = this._snapsaver.getContext('2d', { willReadFrequently: true });
         context.clearRect(0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
 
