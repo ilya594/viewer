@@ -50,7 +50,7 @@ export class StreamProvider {
 
   public getNextStream = (): MediaStream | null => {
     const activeStreamers = Array.from(this._streamers.values()).filter(s => s.stream);
-    
+
     if (activeStreamers.length === 0) {
       EventHandler.dispatchEvent(NO_STREAMS_AVAILABLE);
       return null;
@@ -64,6 +64,27 @@ export class StreamProvider {
 
     const streamer = activeStreamers[this._index];
     this._activeStreamerId = streamer?.id || null;
+    
+    return streamer?.stream || null;
+  }
+
+  public getNextStreamSilently = (): MediaStream | null => {
+    const activeStreamers = Array.from(this._streamers.values()).filter(s => s.stream);
+
+    if (activeStreamers.length === 0) {
+      EventHandler.dispatchEvent(NO_STREAMS_AVAILABLE);
+      return null;
+    }
+
+    let index = this._index;
+    if (index >= activeStreamers.length - 1) {
+      index = 0;
+    } else {
+      index = index + 1;
+    }
+
+    const streamer = activeStreamers[index];
+   // this._activeStreamerId = streamer?.id || null;
     
     return streamer?.stream || null;
   }

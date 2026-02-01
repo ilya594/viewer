@@ -16,7 +16,9 @@ export const MOTION_DETECT_PIXEL_COEF = 44;
 export const MOTION_DETECT_IMAGE_COEF = 0.05;
 export const MOTION_DETECT_HEAP_SIZE = 100;
 export const MOTION_DETECT_CHECKPOINT_SIZE = 44;
-
+export const PREVIEW_SIZE = 160; // Размер превью видео (ширина)
+export const PREVIEW_HEIGHT = 90; // Высота превью видео
+export const PREVIEW_MARGIN = 20; // Отступ от краев
 export const PINCODE_CHAR_LENGTH = 4;
 
 export const MATRIX_COOLDOWN_DELAY = 77777;
