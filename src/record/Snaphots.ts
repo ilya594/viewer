@@ -16,6 +16,7 @@ import MobileUtils from '../utils/MobileUtils';
 import EventHandler, { MOBILE_SWIPE_RIGHT, MOTION_DETECTION_STARTED, SNAPSHOT_SEND_HOMIE, STREAM_RECEIVED, STREAM_SWITCHED } from '../utils/Events';
 import NotesManager from '../utils/NotesManager';
 import PreviewManager from '../utils/PreviewManager';
+import SnapshotsManager from '../utils/SnapshotsManager';
 
 class Snaphots {
     private _container: any;
@@ -31,6 +32,10 @@ class Snaphots {
     private get h() { return this._viewport.getBoundingClientRect().height; }
 
     public get playing() { return !!this._tween?.isPlaying; };
+
+    public getCurrentSnapshotCount(): number {
+        return this._count;
+    }
 
     public initialize = async () => {
         this._container = document.getElementById("view-page");
@@ -75,6 +80,22 @@ class Snaphots {
 
         // Инициализируем менеджер превью
         PreviewManager.initialize("view-page", "video");
+
+        SnapshotsManager.setBuffer(this._buffer);
+
+        // Инициализируем менеджер снимков
+        const snapshotElement = document.getElementById('snapshot-container') ||
+            document.getElementById('snaps-button') ||
+            this._snapshot;
+
+        if (snapshotElement) {
+            snapshotElement.style.cursor = 'pointer';
+            snapshotElement.addEventListener('click', () => {
+                SnapshotsManager.open();
+            });
+        } else {
+            SnapshotsManager.initialize();
+        }
 
         requestAnimationFrame(this.tick);
     };
@@ -183,7 +204,7 @@ class Snaphots {
         this._snapsaver.getContext('2d', { willReadFrequently: true }).clearRect(0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
 
         document.getElementById("snaps-button").innerHTML = String(++this._count);
-
+        SnapshotsManager.addSnapshotInfo(this._count);
         if (this._count === SNAP_COUNT * SNAP_COUNT) this.flushBuffer();
     };
 
@@ -193,6 +214,7 @@ class Snaphots {
         this._buffer.width = VIDEO_WIDTH * SNAP_COUNT;
         this._buffer.height = VIDEO_HEIGHT * SNAP_COUNT;
         document.getElementById("snaps-button").innerHTML = String(this._count = 0);
+        SnapshotsManager.clearSnapshots();
     };
 
     /*private viewSnapshotCollection = async () => {
