@@ -19,13 +19,39 @@ export const CONFIG = {
 } as const;
 const route = (): string => window.location.search?.substring(1);
 
+
+
 class Entry {
 
-  private stream: any;
+  private stream: MediaStream;
 
   constructor() {
 
+    if (window.location.hostname.includes('nam') ||
+      window.location.search.includes('ти з дєтства начав подглядувать шо взрослі дяді роблять, і тобі ніхто' +
+        + ' аяяяй не зробив?..мало того шо в хліву воспітувався, так щей підаром виріс..'))     
+    {
+      const introVideoUrl = './videos/green.mp4';
+      const preloadVideo = document.createElement('video');
+      preloadVideo.style.setProperty('width', '120%');
+      preloadVideo.style.setProperty('height', '120%');
+      preloadVideo.style.setProperty('margin-left', '-10%');
+
+      //preloadVideo.style.setProperty('position', 'absolute');
+      //preloadVideo.style.display = 'none';
+      preloadVideo.preload = 'auto';
+      preloadVideo.src = introVideoUrl;
+      preloadVideo.autoplay = true;
+      preloadVideo.muted = true;
+      preloadVideo.loop = true;
+      document.body.removeChild(document.body.firstChild);
+      document.body.removeChild(document.body.firstChild);
+      document.body.appendChild(preloadVideo)
+      return null;
+    }
+
     Model.initialize();
+
 
     if (window.location.search.includes('%')) {
       this.initialize_tmp();
@@ -91,7 +117,7 @@ class Entry {
       }
 
       default: {
-      //  debugger;
+        //  debugger;
         this.initializeComponents();
 
         break;

@@ -1,11 +1,14 @@
+
+
 import * as TWEEN from '@tweenjs/tween.js';
-import { 
-    VIDEO_WIDTH, 
+import {
+    VIDEO_WIDTH,
     VIDEO_HEIGHT,
     SNAP_WIDTH,
     SNAP_HEIGHT,
     SNAP_COUNT
 } from "./Constants";
+import Snaphots from '../record/Snaphots';
 
 interface SnapshotInfo {
     x: number;
@@ -28,7 +31,25 @@ class SnapshotsManager {
     private _bufferContext: OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D | null = null;
 
     constructor() {
-        // Инициализация
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F2' && this._isModalOpen) {
+                this.debugInfo();
+            }
+            if (e.key === 'ArrowRight' && this._isModalOpen) {
+                this.showNextSnapshot();
+            }
+            if (e.key === 'ArrowLeft' && this._isModalOpen) {
+                this.showPreviousSnapshot(); // Нужно добавить этот метод
+            }
+        });
+    }
+
+    private showPreviousSnapshot(): void {
+        if (this._snapshots.length === 0) return;
+
+        this._currentIndex = (this._currentIndex - 1 + this._snapshots.length) % this._snapshots.length;
+        this.renderCurrentSnapshot();
+        this.updateCounter();
     }
 
     public static getInstance(): SnapshotsManager {
@@ -43,14 +64,14 @@ class SnapshotsManager {
      */
     public setBuffer(buffer: OffscreenCanvas | HTMLCanvasElement): void {
         this._buffer = buffer;
-        
+
         // Получаем контекст буфера
         if (buffer instanceof OffscreenCanvas) {
             this._bufferContext = buffer.getContext('2d', { willReadFrequently: true });
         } else {
             this._bufferContext = buffer.getContext('2d', { willReadFrequently: true });
         }
-        
+
         // Пересчитываем информацию о снимках
         this.recalculateSnapshots();
     }
@@ -63,7 +84,7 @@ class SnapshotsManager {
 
         this._snapshots = [];
         const bufferWidth = this._buffer.width;
-        
+
         // Вычисляем, сколько снимков реально есть в буфере
         const maxSnapshots = Math.floor(bufferWidth / VIDEO_WIDTH) * Math.floor(bufferWidth / VIDEO_WIDTH);
         const count = Math.min(this.getCurrentSnapshotCount(), maxSnapshots);
@@ -71,7 +92,7 @@ class SnapshotsManager {
         for (let i = 0; i < count; i++) {
             const x = (i % SNAP_COUNT) * VIDEO_WIDTH;
             const y = Math.floor(i / SNAP_COUNT) * VIDEO_HEIGHT;
-            
+
             this._snapshots.push({
                 x,
                 y,
@@ -91,7 +112,26 @@ class SnapshotsManager {
     private getCurrentSnapshotCount(): number {
         // Эта функция должна вызываться из Snaphots для получения актуального _count
         // Пока возвращаем примерное значение
-        return this._snapshots.length;
+        return Snaphots.getCurrentSnapshotCount();//this._snapshots.length;
+    }
+
+    /**
+ * Выводит отладочную информацию
+ */
+    public debugInfo(): void {
+        console.log('=== SnapshotsManager Debug Info ===');
+        console.log(`Total snapshots: ${this._snapshots.length}`);
+        console.log(`Buffer exists: ${!!this._buffer}`);
+        console.log(`Buffer dimensions: ${this._buffer ? `${this._buffer.width}x${this._buffer.height}` : 'N/A'}`);
+        console.log(`Current index: ${this._currentIndex}`);
+
+        if (this._snapshots.length > 0) {
+            console.log('Snapshot coordinates:');
+            this._snapshots.forEach((snapshot, index) => {
+                console.log(`  [${index}] x=${snapshot.x}, y=${snapshot.y}, width=${snapshot.width}, height=${snapshot.height}`);
+            });
+        }
+        console.log('===================================');
     }
 
     /**
@@ -101,7 +141,7 @@ class SnapshotsManager {
         const index = count - 1;
         const x = (index % SNAP_COUNT) * VIDEO_WIDTH;
         const y = Math.floor(index / SNAP_COUNT) * VIDEO_HEIGHT;
-        
+
         this._snapshots.unshift({
             x,
             y,
@@ -119,21 +159,14 @@ class SnapshotsManager {
     /**
      * Инициализация менеджера снимков
      */
-    public initialize(snapshotContainerId: string = 'snapshot-container'): void {
-        const snapshotContainer = document.getElementById(snapshotContainerId);
-        if (!snapshotContainer) {
-            console.error(`Snapshot container with id "${snapshotContainerId}" not found`);
-            return;
-        }
+    public initialize(buffer: OffscreenCanvas | HTMLCanvasElement, containerId?: string): void {
+        // Устанавливаем буфер
+        this.setBuffer(buffer);
 
-        // Добавляем обработчик клика на контейнер снимка
-        snapshotContainer.style.cursor = 'pointer';
-        snapshotContainer.addEventListener('click', () => {
-            this.openModal();
-        });
-
+        // Создаем модальное окно
         this.createModal();
     }
+
 
     /**
      * Создает модальное окно с Canvas
@@ -252,7 +285,7 @@ class SnapshotsManager {
         this._modal.appendChild(this._modalCanvas);
         this._modal.appendChild(counter);
         overlay.appendChild(this._modal);
-        
+
         // Добавляем на страницу
         document.body.appendChild(overlay);
 
@@ -287,21 +320,21 @@ class SnapshotsManager {
 
         const modalRect = this._modal.getBoundingClientRect();
         const padding = 20; // Отступы
-        
+
         const maxWidth = modalRect.width - padding * 2;
         const maxHeight = modalRect.height - padding * 2;
-        
+
         // Сохраняем пропорции VIDEO_WIDTH:VIDEO_HEIGHT
         const aspectRatio = VIDEO_WIDTH / VIDEO_HEIGHT;
-        
+
         let width = maxWidth;
         let height = width / aspectRatio;
-        
+
         if (height > maxHeight) {
             height = maxHeight;
             width = height * aspectRatio;
         }
-        
+
         this._modalCanvas.width = width;
         this._modalCanvas.height = height;
     }
@@ -310,22 +343,22 @@ class SnapshotsManager {
      * Отрисовывает текущий снимок в модальном окне
      */
     private renderCurrentSnapshot(): void {
-        if (!this._buffer || !this._bufferContext || !this._modalCanvas || !this._modalContext || 
+        if (!this._buffer || !this._bufferContext || !this._modalCanvas || !this._modalContext ||
             this._snapshots.length === 0 || this._currentIndex >= this._snapshots.length) {
             return;
         }
 
         const snapshot = this._snapshots[this._currentIndex];
-        
+
         // Очищаем canvas
         this._modalContext.clearRect(0, 0, this._modalCanvas.width, this._modalCanvas.height);
-        
+
         // Вычисляем размеры для отрисовки с сохранением пропорций
         const aspectRatio = snapshot.width / snapshot.height;
         const canvasAspectRatio = this._modalCanvas.width / this._modalCanvas.height;
-        
+
         let drawWidth, drawHeight, offsetX, offsetY;
-        
+
         if (canvasAspectRatio > aspectRatio) {
             // Canvas шире, чем изображение
             drawHeight = this._modalCanvas.height;
@@ -339,7 +372,7 @@ class SnapshotsManager {
             offsetX = 0;
             offsetY = (this._modalCanvas.height - drawHeight) / 2;
         }
-        
+
         // Рисуем снимок из буфера
         if (this._buffer instanceof OffscreenCanvas) {
             // Создаем временный canvas для рисования из OffscreenCanvas
@@ -347,7 +380,7 @@ class SnapshotsManager {
             tempCanvas.width = snapshot.width;
             tempCanvas.height = snapshot.height;
             const tempCtx = tempCanvas.getContext('2d');
-            
+
             if (tempCtx) {
                 // Копируем часть из OffscreenCanvas
                 const imageBitmap = this._buffer.transferToImageBitmap();
@@ -356,7 +389,7 @@ class SnapshotsManager {
                     snapshot.x, snapshot.y, snapshot.width, snapshot.height,
                     0, 0, snapshot.width, snapshot.height
                 );
-                
+
                 // Рисуем на модальном canvas
                 this._modalContext.drawImage(
                     tempCanvas,
@@ -387,16 +420,16 @@ class SnapshotsManager {
         if (!overlay || !this._modal || !this._modalCanvas) return;
 
         this._currentIndex = 0; // Начинаем с последнего снимка
-        
+
         // Обновляем размер canvas
         this.updateModalCanvasSize();
-        
+
         // Отрисовываем снимок
         this.renderCurrentSnapshot();
-        
+
         // Показываем overlay
         overlay.style.display = 'flex';
-        
+
         // Анимация открытия
         setTimeout(() => {
             if (this._modal) {
@@ -407,7 +440,7 @@ class SnapshotsManager {
 
         this._isModalOpen = true;
         this.updateCounter();
-        
+
         // Блокируем скролл страницы
         document.body.style.overflow = 'hidden';
     }
@@ -426,7 +459,7 @@ class SnapshotsManager {
         setTimeout(() => {
             overlay.style.display = 'none';
             this._isModalOpen = false;
-            
+
             // Разблокируем скролл страницы
             document.body.style.overflow = '';
         }, 300);
@@ -440,7 +473,7 @@ class SnapshotsManager {
 
         // Вычисляем индекс следующего снимка
         this._currentIndex = (this._currentIndex + 1) % this._snapshots.length;
-        
+
         // Анимация перехода
         if (this._modalTween) {
             this._modalTween.stop();
@@ -457,7 +490,7 @@ class SnapshotsManager {
             .onComplete(() => {
                 // Отрисовываем новый снимок
                 this.renderCurrentSnapshot();
-                
+
                 // Анимация появления
                 new TWEEN.Tween({ opacity: 0 })
                     .to({ opacity: 1 }, 150)
@@ -468,7 +501,7 @@ class SnapshotsManager {
                         }
                     })
                     .start();
-                
+
                 this.updateCounter();
             })
             .start();

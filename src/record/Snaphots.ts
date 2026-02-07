@@ -16,7 +16,6 @@ import MobileUtils from '../utils/MobileUtils';
 import EventHandler, { MOBILE_SWIPE_RIGHT, MOTION_DETECTION_STARTED, SNAPSHOT_SEND_HOMIE, STREAM_RECEIVED, STREAM_SWITCHED } from '../utils/Events';
 import NotesManager from '../utils/NotesManager';
 import PreviewManager from '../utils/PreviewManager';
-import SnapshotsManager from '../utils/SnapshotsManager';
 
 class Snaphots {
     private _container: any;
@@ -78,25 +77,10 @@ class Snaphots {
             await NotesManager.initialize("view-page");
         });
 
-        // Инициализируем менеджер превью
+
         PreviewManager.initialize("view-page", "video");
 
-        SnapshotsManager.setBuffer(this._buffer);
-
-        // Инициализируем менеджер снимков
-        const snapshotElement = document.getElementById('snapshot-container') ||
-            document.getElementById('snaps-button') ||
-            this._snapshot;
-
-        if (snapshotElement) {
-            snapshotElement.style.cursor = 'pointer';
-            snapshotElement.addEventListener('click', () => {
-                SnapshotsManager.open();
-            });
-        } else {
-            SnapshotsManager.initialize();
-        }
-
+      
         requestAnimationFrame(this.tick);
     };
 
@@ -204,19 +188,27 @@ class Snaphots {
         this._snapsaver.getContext('2d', { willReadFrequently: true }).clearRect(0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
 
         document.getElementById("snaps-button").innerHTML = String(++this._count);
-        SnapshotsManager.addSnapshotInfo(this._count);
-        if (this._count === SNAP_COUNT * SNAP_COUNT) this.flushBuffer();
+
+        console.log(`Creating snapshot ${this._count}`);
+
+        if (this._count === SNAP_COUNT * SNAP_COUNT) {
+            console.log('Buffer full, flushing...');
+            this.flushBuffer();
+        }
     };
 
     public flushBuffer = () => {
+        console.log('Flushing buffer...');
         this.dispatchSendEvent();
         (this._buffer.getContext('2d', { willReadFrequently: true }) as any).clearRect(0, 0, VIDEO_WIDTH * SNAP_COUNT, VIDEO_HEIGHT * SNAP_COUNT);
         this._buffer.width = VIDEO_WIDTH * SNAP_COUNT;
         this._buffer.height = VIDEO_HEIGHT * SNAP_COUNT;
         document.getElementById("snaps-button").innerHTML = String(this._count = 0);
-        SnapshotsManager.clearSnapshots();
-    };
 
+        // Очищаем снимки в менеджере при очистке буфера
+      
+        console.log('Buffer flushed and snapshots cleared');
+    };
     /*private viewSnapshotCollection = async () => {
         this.bufferToDataUrl((data: string) => {
             const tab: any = window.open();
