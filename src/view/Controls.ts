@@ -75,7 +75,38 @@ export class Controls {
         this.createHudsControl();
 
         this.createQualButtons();
+    
+        this.setupVideoInvertOnWheel(this._viewport);
     }
+
+    private setupVideoInvertOnWheel = (videoElement: any) => {
+
+    let isInverted = false;
+
+    videoElement.addEventListener('wheel', function(event: any) {
+        // Предотвращаем стандартное поведение прокрутки
+        event.preventDefault();
+        
+        // Переключаем состояние инвертирования
+        isInverted = !isInverted;
+        
+        // Применяем или убираем трансформацию
+        if (isInverted) {
+            videoElement.style.transform = 'scale(1, -1)';
+            videoElement.style.webkitTransform = 'scale(1, -1)';
+            videoElement.style.mozTransform = 'scale(1, -1)';
+        } else {
+            videoElement.style.transform = '';
+            videoElement.style.webkitTransform = '';
+            videoElement.style.mozTransform = '';
+        }
+    });
+
+    // Опционально: отключаем прокрутку страницы при наведении на видео
+    videoElement.addEventListener('wheel', function(event: any) {
+        event.stopPropagation();
+    }, { passive: false });
+}
 
     private createHudsControl = () => {
         const streamersInfo = document.getElementById("sources-info");
