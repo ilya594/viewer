@@ -1,257 +1,123 @@
-{
-    "format": "layers-model",
-    "generatedBy": "keras v2.2.4-tf",
-    "convertedBy": "TensorFlow.js Converter v1.2.2.1",
-    "modelTopology": {
-        "keras_version": "2.2.4-tf",
-        "backend": "tensorflow",
-        "model_config": {
-            "class_name": "Sequential",
-            "config": {
-                "name": "sequential",
-                "layers": [
-                    {
-                        "class_name": "Reshape",
-                        "config": {
-                            "name": "reshape",
-                            "trainable": true,
-                            "batch_input_shape": [
-                                null,
-                                28,
-                                28
-                            ],
-                            "dtype": "float32",
-                            "target_shape": [
-                                28,
-                                28,
-                                1
-                            ]
-                        }
-                    },
-                    {
-                        "class_name": "Conv2D",
-                        "config": {
-                            "name": "conv2d",
-                            "trainable": true,
-                            "batch_input_shape": [
-                                null,
-                                28,
-                                28,
-                                1
-                            ],
-                            "dtype": "float32",
-                            "filters": 16,
-                            "kernel_size": [
-                                5,
-                                5
-                            ],
-                            "strides": [
-                                1,
-                                1
-                            ],
-                            "padding": "same",
-                            "data_format": "channels_last",
-                            "dilation_rate": [
-                                1,
-                                1
-                            ],
-                            "activation": "relu",
-                            "use_bias": true,
-                            "kernel_initializer": {
-                                "class_name": "GlorotUniform",
-                                "config": {
-                                    "seed": null,
-                                    "dtype": "float32"
-                                }
-                            },
-                            "bias_initializer": {
-                                "class_name": "Zeros",
-                                "config": {
-                                    "dtype": "float32"
-                                }
-                            },
-                            "kernel_regularizer": null,
-                            "bias_regularizer": null,
-                            "activity_regularizer": null,
-                            "kernel_constraint": null,
-                            "bias_constraint": null
-                        }
-                    },
-                    {
-                        "class_name": "MaxPooling2D",
-                        "config": {
-                            "name": "max_pooling2d",
-                            "trainable": true,
-                            "dtype": "float32",
-                            "pool_size": [
-                                2,
-                                2
-                            ],
-                            "padding": "valid",
-                            "strides": [
-                                2,
-                                2
-                            ],
-                            "data_format": "channels_last"
-                        }
-                    },
-                    {
-                        "class_name": "Dropout",
-                        "config": {
-                            "name": "dropout",
-                            "trainable": true,
-                            "dtype": "float32",
-                            "rate": 0.2,
-                            "noise_shape": null,
-                            "seed": null
-                        }
-                    },
-                    {
-                        "class_name": "Flatten",
-                        "config": {
-                            "name": "flatten",
-                            "trainable": true,
-                            "dtype": "float32",
-                            "data_format": "channels_last"
-                        }
-                    },
-                    {
-                        "class_name": "Dense",
-                        "config": {
-                            "name": "dense",
-                            "trainable": true,
-                            "dtype": "float32",
-                            "units": 128,
-                            "activation": "relu",
-                            "use_bias": true,
-                            "kernel_initializer": {
-                                "class_name": "GlorotUniform",
-                                "config": {
-                                    "seed": null,
-                                    "dtype": "float32"
-                                }
-                            },
-                            "bias_initializer": {
-                                "class_name": "Zeros",
-                                "config": {
-                                    "dtype": "float32"
-                                }
-                            },
-                            "kernel_regularizer": null,
-                            "bias_regularizer": null,
-                            "activity_regularizer": null,
-                            "kernel_constraint": null,
-                            "bias_constraint": null
-                        }
-                    },
-                    {
-                        "class_name": "Dense",
-                        "config": {
-                            "name": "dense_1",
-                            "trainable": true,
-                            "dtype": "float32",
-                            "units": 10,
-                            "activation": "softmax",
-                            "use_bias": true,
-                            "kernel_initializer": {
-                                "class_name": "GlorotUniform",
-                                "config": {
-                                    "seed": null,
-                                    "dtype": "float32"
-                                }
-                            },
-                            "bias_initializer": {
-                                "class_name": "Zeros",
-                                "config": {
-                                    "dtype": "float32"
-                                }
-                            },
-                            "kernel_regularizer": null,
-                            "bias_regularizer": null,
-                            "activity_regularizer": null,
-                            "kernel_constraint": null,
-                            "bias_constraint": null
-                        }
-                    }
-                ]
-            }
-        },
-        "training_config": {
-            "optimizer_config": {
-                "class_name": "Adam",
-                "config": {
-                    "name": "Adam",
-                    "learning_rate": 0.0010000000474974513,
-                    "decay": 0.0,
-                    "beta_1": 0.8999999761581421,
-                    "beta_2": 0.9990000128746033,
-                    "epsilon": 1e-07,
-                    "amsgrad": false
-                }
+[App
+] /analyze: detections: [
+    {
+        "age": 47.53466033935547,
+        "detection": {
+            "_box": {
+                "_height": 154.39037394924998,
+                "_width": 116.04743003845215,
+                "_x": 113.67567348480225,
+                "_y": 19.38721476339732
             },
-            "loss": "sparse_categorical_crossentropy",
-            "metrics": [
-                "accuracy"
-            ],
-            "weighted_metrics": null,
-            "sample_weight_mode": null,
-            "loss_weights": null
-        }
+            "_className": "",
+            "_classScore": 0.9901608228683472,
+            "_imageDims": {
+                "_height": 706,
+                "_width": 1216
+            },
+            "_score": 0.9901608228683472
+        },
+        "gender": "female",
+        "genderProbability": 0.8617639690637589
     },
-    "weightsManifest": [
-        {
-            "paths": [
-                "group1-shard1of1.bin"
-            ],
-            "weights": [
-                {
-                    "name": "conv2d/kernel",
-                    "shape": [
-                        5,
-                        5,
-                        1,
-                        16
-                    ],
-                    "dtype": "float32"
-                },
-                {
-                    "name": "conv2d/bias",
-                    "shape": [
-                        16
-                    ],
-                    "dtype": "float32"
-                },
-                {
-                    "name": "dense/kernel",
-                    "shape": [
-                        3136,
-                        128
-                    ],
-                    "dtype": "float32"
-                },
-                {
-                    "name": "dense/bias",
-                    "shape": [
-                        128
-                    ],
-                    "dtype": "float32"
-                },
-                {
-                    "name": "dense_1/kernel",
-                    "shape": [
-                        128,
-                        10
-                    ],
-                    "dtype": "float32"
-                },
-                {
-                    "name": "dense_1/bias",
-                    "shape": [
-                        10
-                    ],
-                    "dtype": "float32"
-                }
-            ]
-        }
-    ]
-}
+    {
+        "age": 51.944129943847656,
+        "detection": {
+            "_box": {
+                "_height": 242.57215588502206,
+                "_width": 182.26597499847412,
+                "_x": 146.8543176651001,
+                "_y": 420.4483054832176
+            },
+            "_className": "",
+            "_classScore": 0.9894586801528931,
+            "_imageDims": {
+                "_height": 706,
+                "_width": 1216
+            },
+            "_score": 0.9894586801528931
+        },
+        "gender": "male",
+        "genderProbability": 0.9072646498680115
+    },
+    {
+        "age": 34.48688507080078,
+        "detection": {
+            "_box": {
+                "_height": 139.78307099775836,
+                "_width": 114.80162048339844,
+                "_x": 1009.5068397521973,
+                "_y": 26.275566216671102
+            },
+            "_className": "",
+            "_classScore": 0.9820851683616638,
+            "_imageDims": {
+                "_height": 706,
+                "_width": 1216
+            },
+            "_score": 0.9820851683616638
+        },
+        "gender": "male",
+        "genderProbability": 0.6442739367485046
+    },
+    {
+        "age": 37.72185134887695,
+        "detection": {
+            "_box": {
+                "_height": 128.21443258471763,
+                "_width": 93.05248260498047,
+                "_x": 463.3741111755371,
+                "_y": 11.338979393544824
+            },
+            "_className": "",
+            "_classScore": 0.9662924408912659,
+            "_imageDims": {
+                "_height": 706,
+                "_width": 1216
+            },
+            "_score": 0.9662924408912659
+        },
+        "gender": "male",
+        "genderProbability": 0.7506404519081116
+    },
+    {
+        "age": 23.40169906616211,
+        "detection": {
+            "_box": {
+                "_height": 156.00233515986685,
+                "_width": 129.55158233642578,
+                "_x": 733.0077133178711,
+                "_y": 54.00982743080216
+            },
+            "_className": "",
+            "_classScore": 0.9243186712265015,
+            "_imageDims": {
+                "_height": 706,
+                "_width": 1216
+            },
+            "_score": 0.9243186712265015
+        },
+        "gender": "male",
+        "genderProbability": 0.9665607810020447
+    },
+    {
+        "age": 42.39243698120117,
+        "detection": {
+            "_box": {
+                "_height": 199.41677188552183,
+                "_width": 131.3651580810547,
+                "_x": 672.128116607666,
+                "_y": 454.20321665548715
+            },
+            "_className": "",
+            "_classScore": 0.8825960755348206,
+            "_imageDims": {
+                "_height": 706,
+                "_width": 1216
+            },
+            "_score": 0.8825960755348206
+        },
+        "gender": "male",
+        "genderProbability": 0.6231627464294434
+    }
+]
