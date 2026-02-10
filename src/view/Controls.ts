@@ -81,9 +81,9 @@ export class Controls {
 
     private setupVideoInvertOnWheel = (videoElement: any) => {
 
-    videoElement.style.transform = 'scale(1, -1)';
-    videoElement.style.webkitTransform = 'scale(1, -1)';
-    videoElement.style.mozTransform = 'scale(1, -1)';
+    videoElement.style.transform = 'scale(-1, -1)';
+    videoElement.style.webkitTransform = 'scale(-1, -1)';
+    videoElement.style.mozTransform = 'scale(-1, -1)';
 
     let isInverted = false;
 
@@ -96,9 +96,9 @@ export class Controls {
         
         // Применяем или убираем трансформацию
         if (isInverted) {
-            videoElement.style.transform = 'scale(1, -1)';
-            videoElement.style.webkitTransform = 'scale(1, -1)';
-            videoElement.style.mozTransform = 'scale(1, -1)';
+            videoElement.style.transform = 'scale(-1, -1)';
+            videoElement.style.webkitTransform = 'scale(-1, -1)';
+            videoElement.style.mozTransform = 'scale(-1, -1)';
         } else {
             videoElement.style.transform = '';
             videoElement.style.webkitTransform = '';
