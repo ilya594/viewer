@@ -254,7 +254,7 @@ export class StreamProvider {
     
     const params = {
       host: "nodejs-peer-server.onrender.com",
-      path: "/othertmp",
+      path: "/peer",
       secure: true,
       config: {
         iceServers: [
