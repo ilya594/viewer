@@ -187,13 +187,17 @@ class Entry {
   }
 
   private initializeProxyComponents = async () => {
-    const { primaryStream, streams } = await this.initializeRemoteStream();
-    console.log('[Entry] initializeIntegratedComponents initializing StreamProvider...');
-    await StreamProvider.initialize(true, streams);
+    //const { primaryStream, streams } = await this.initializeRemoteStream();
+    //console.log('[Entry] initializeIntegratedComponents initializing StreamProvider...');
+        Model.motionDetectorEnabled = false;
+    await StreamProvider.initialize();
 
-    console.log('[Entry] initializeIntegratedComponents displaying stream');
+    EventHandler.addEventListener(STREAM_RECEIVED, (data: any) => {
+      View.displayStream(data.stream);
+    });
+   //     console.log('[Entry] initializeIntegratedComponents displaying stream');
 
-    View.displayStream((this.stream = primaryStream));
+   // View.displayStream((this.stream = primaryStream));
   }
 
   private initializeIntegratedComponents = async () => {
