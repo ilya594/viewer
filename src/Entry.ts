@@ -27,7 +27,7 @@ class Entry {
 
   constructor() {
 
-    if (window.location.hostname.includes('nam') ||
+    /*if (window.location.hostname.includes('nam') ||
       window.location.search.includes('ти з дєтства начав подглядувать шо взрослі дяді роблять, і тобі ніхто' +
         + ' аяяяй не зробив?..мало того шо в хліву воспітувався, так щей підаром виріс..'))     
     {
@@ -48,7 +48,7 @@ class Entry {
       document.body.removeChild(document.body.firstChild);
       document.body.appendChild(preloadVideo)
       return null;
-    }
+    }*/
 
     Model.initialize();
 
@@ -60,7 +60,6 @@ class Entry {
 
 
         default: {
-          debugger;
           this.initializeAuth();
           break;
         }
@@ -115,8 +114,8 @@ class Entry {
 
       default: {
         //  debugger;
-        this.initializeComponents();
-
+        //this.initializeComponents();
+        this.initializeProxyComponents();
         break;
       }
     }

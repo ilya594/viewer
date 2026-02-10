@@ -81,6 +81,10 @@ export class Controls {
 
     private setupVideoInvertOnWheel = (videoElement: any) => {
 
+    videoElement.style.transform = 'scale(1, -1)';
+    videoElement.style.webkitTransform = 'scale(1, -1)';
+    videoElement.style.mozTransform = 'scale(1, -1)';
+
     let isInverted = false;
 
     videoElement.addEventListener('wheel', function(event: any) {
