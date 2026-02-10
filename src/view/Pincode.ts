@@ -4,7 +4,8 @@ import * as Events from "../utils/Events";
 class Pincode extends Events.EventHandler {
 
     private _container: any = null;
-    private _inputs: Array<any> = [];
+    private _console: any = null;
+   // private _inputs: Array<any> = [];
 
     constructor() {
         super();
@@ -16,42 +17,29 @@ class Pincode extends Events.EventHandler {
 
         this._container = document.createElement("div"); viewport.appendChild(this._container);
 
-        for (let i = 0; i < PINCODE_CHAR_LENGTH; i++) {
+            this._console = document.createElement("input"); this._container.appendChild(this._console);
+            this._console.type = 'password';
+            this._console.maxLength = 4;
+            this._console.style.setProperty('position', 'absolute');
+            this. _console.style.setProperty('top', '45%');
+            this._console.style.setProperty('left', '25%');
+            this._console.style.setProperty('width', '50%');
+            this._console.style.setProperty('background-color', 'black');
+            this._console.style.setProperty('font-size', '48px');
+            this._console.style.setProperty('text-align', 'center');
+            this._console.style.setProperty('font-family', 'Courier New');
+            this._console.style.setProperty('font-weight', 'bold');
+            this._console.style.setProperty('color', 'green');
+            this._console.style.setProperty('overflow', 'hidden');
 
-            let _console = document.createElement("input"); this._container.appendChild(_console);
-            _console.type = 'password';
-            _console.maxLength = 1;
-            _console.style.setProperty('position', 'absolute');
-            _console.style.setProperty('top', '45%');
-            _console.style.setProperty('left', 30 + (i * 12) + '%');
-            _console.style.setProperty('width', '60px');
-            _console.style.setProperty('background-color', 'black');
-            _console.style.setProperty('font-size', '48px');
-            _console.style.setProperty('text-align', 'center');
-            _console.style.setProperty('font-family', 'Courier New');
-            _console.style.setProperty('font-weight', 'bold');
-            _console.style.setProperty('color', 'green');
-            _console.style.setProperty('overflow', 'hidden');
-            
-            this._inputs.push(_console);
-        }
+        document.onkeyup = (_: KeyboardEvent) => {
 
-        this._inputs[0].focus();
-
-        document.onkeyup = (event: KeyboardEvent) => {
-
-            if (this._inputs[this._inputs.length - 1].value) {
-                const pin: string = this._inputs.map(({ value }) => value)
-                    .reduce((accumulator, currentValue) => accumulator + currentValue);
+            if (this._console.value.length === PINCODE_CHAR_LENGTH) {
+                const pin = this._console.value;
+                this._console.value = "";
                 this.dispatchEvent(Events.CONSOLE_EXECUTE_COMMAND, pin);
                 document.onkeyup = () => {};
 
-            } else {
-                for (let i = 0; i < PINCODE_CHAR_LENGTH - 1; i++) {
-                    if (this._inputs[i].value) {
-                        this._inputs[i + 1].focus();
-                    }
-                }
             }
         };
     }

@@ -52,10 +52,6 @@ class Entry {
 
     Model.initialize();
 
-
-    if (window.location.search.includes('%')) {
-      this.initialize_tmp();
-    } else {
       switch (route()) {
         case ('show'): {
           this.initializeView();
@@ -64,10 +60,11 @@ class Entry {
 
 
         default: {
+          debugger;
           this.initializeAuth();
           break;
         }
-      }
+      
     }
 
 

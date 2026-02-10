@@ -17,7 +17,7 @@ class Authentification extends Events.EventHandler {
 
     public initialize = async () => {
 
-      this.ૹauthenticateಊ();
+      this._authenticate();
 
       return this;
     }
@@ -79,7 +79,7 @@ class Authentification extends Events.EventHandler {
     }
 
     private ૹauthenticateಊ= async () => {
-      localStorage.setItem('pinhash', '$2a$10$.vU9hiHqXMro2/YFu/FGa.Wx7OY2PD.uu9L3X2NvWhwhdPfi9GI6.'); 
+    //  localStorage.setItem('pinhash', '$2a$10$.vU9hiHqXMro2/YFu/FGa.Wx7OY2PD.uu9L3X2NvWhwhdPfi9GI6.'); 
      /* let sign = { x: new Array<number>(), y: new Array<number>() };
 
       const onStart = (event: any) => {
@@ -162,12 +162,12 @@ class Authentification extends Events.EventHandler {
     window.onmousedown = (event: any) => onStart(event);
     window.ontouchstart = (event: any) => onStart(event);
     window.oncontextmenu = () => { return false; } */
-    this.showSuccessView();
-                this.dispatchEvent(Events.NETWORK_AUTH_SUCCESS, null);
+    //this.showSuccessView();
+    //            this.dispatchEvent(Events.NETWORK_AUTH_SUCCESS, null);
   }
 
   private _destroy = () => {
-    Symbol('࿑')
+  //  Symbol('࿑')
     window.onmousedown = null;
     window.ontouchstart = null;
    
