@@ -155,6 +155,8 @@ class Entry {
  
     Model.motionDetectorEnabled = false;
     //await StreamProvider.initialize();
+    document.querySelector("video").muted = true;
+   document.querySelector("video").playsInline = true;
     const stream = await getWhepStream('https://node-mediamtx-proxy.onrender.com/camera/whep');
     View.displayStream(stream);
   //  EventHandler.addEventListener(STREAM_RECEIVED, (data: any) => {
