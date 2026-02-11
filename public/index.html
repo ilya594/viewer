@@ -730,34 +730,7 @@
           }
         }
       }
-      setInterval(() => {
-  const container = document.getElementById('video-container');
-  const video = document.querySelector("video");
-  
-  if (video) {
-    // Всегда применяем зеркальную трансформацию
-    const transform = 'scale(-1, -1)';
     
-    // Принудительно устанавливаем inline стили
- //   container.style.transform = transform;
- //   container.style.webkitTransform = transform;
- //   container.style.mozTransform = transform;
-    
-    video.style.transform = transform;
-    video.style.webkitTransform = transform;
-    video.style.mozTransform = transform;
-    
-    // Для fullscreen
-    if (document.fullscreenElement === container ||
-      document.webkitFullscreenElement === container ||
-        document.mozFullScreenElement === container ||
-        document.msFullscreenElement === container) {
-      
-  //    container.style.cssText += `transform: ${transform} !important;`;
-    video.style.cssText += `transform: ${transform} !important;`;
-   }
-  }
-}, 1000); // Каждую секунду
     </script>
     <script>
       class FullscreenOverlay {
