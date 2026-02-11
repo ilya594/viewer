@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
 
 </head>
@@ -378,9 +379,7 @@
 <meta name="description" content="HTML5">
 <meta name="author" content="Author">
 <script src="system.js"></script>
-<script src="https://html-media-broker.onrender.com/index.js">
-  const broker = new Wrapper();
-</script>
+
 <script>
   System.import('./index.js');
 </script>
@@ -429,7 +428,7 @@
   height: 100%;
   display: none;
 ">
-<video id="main-video" autoplay style="
+      <video id="main-video" autoplay style="
     display: none;
     visibility: hidden;
     width: 100%;
@@ -486,7 +485,7 @@
       pointer-events: auto;
 
     ">
-      <span id="sources-info" style="
+          <span id="sources-info" style="
         position: relative;       
         left: 10px;
         top: 20px;
@@ -495,9 +494,9 @@
         font-family: 'Calibri', monospace;
         background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.19) 0%, rgba(130, 238, 159, 0.02) 100%);">
             CAM
-      </span>
+          </span>
 
-      <span id="fullscreen-timer" style="
+          <span id="fullscreen-timer" style="
         position: relative;
         font-size: 38px;
         font-weight: bold;
@@ -505,8 +504,8 @@
         left: 30px;
         font-family: 'Calibri', monospace;
         background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.19) 0%, rgba(130, 238, 159, 0.02) 100%);">
-    00:00
-      </span>
+            00:00
+          </span>
 
 
 
@@ -586,8 +585,7 @@
     </div>
     <audio id="audio-container"></audio>
 
-    <div id="controls"
-      style="position: absolute; top: 8%; left: 1%; visibility: hidden; 
+    <div id="controls" style="position: absolute; top: 8%; left: 1%; visibility: hidden; 
       background: linear-gradient(.25turn, black, 78%, transparent);
       box-shadow: -20px 0px black; opacity: 70%;">
 
@@ -596,17 +594,25 @@
           <div id="snaps-button" style="opacity: 70%;" tabindex="-1"></div>
         </button>
 
-        <button class="button" style="height: 80px; background: url(images/video_cam.png); background-size: cover; opacity: 70%;" id="video-button">
+        <button class="button"
+          style="height: 80px; background: url(images/video_cam.png); background-size: cover; opacity: 70%;"
+          id="video-button">
 
         </button>
-                  <span>
-          <button id="low-button" class="button" style="width: 40px; height: 40px; min-height: 10px; padding-bottom: 0%; line-height: 1; font-size: 36px;" tabindex="-1">L</button>
-          <button id="med-button" class="button" style="width: 40px; height: 40px; min-height: 10px; padding-bottom: 0%; line-height: 1; font-size: 36px;" tabindex="-1">M</button>
-          <button id="hig-button" class="button" style="width: 40px; height: 40px; min-height: 10px; padding-bottom: 0%; line-height: 1; font-size: 36px;  z-index: 9998;"  tabindex="-1">H</button>
-          </span>
+        <span>
+          <button id="low-button" class="button"
+            style="width: 40px; height: 40px; min-height: 10px; padding-bottom: 0%; line-height: 1; font-size: 36px;"
+            tabindex="-1">L</button>
+          <button id="med-button" class="button"
+            style="width: 40px; height: 40px; min-height: 10px; padding-bottom: 0%; line-height: 1; font-size: 36px;"
+            tabindex="-1">M</button>
+          <button id="hig-button" class="button"
+            style="width: 40px; height: 40px; min-height: 10px; padding-bottom: 0%; line-height: 1; font-size: 36px;  z-index: 9998;"
+            tabindex="-1">H</button>
+        </span>
 
 
-        <button id="watch-button" class="button" 
+        <button id="watch-button" class="button"
           style="background-image: url(./images/guy_watching.png); z-index: 9990; visibility: hidden; opacity: 0%;">
           <div style="visibility: hidden;" tabindex="0">
             <div
@@ -642,13 +648,15 @@
             </div>
           </div>
         </button>
-        <button id="voice-button" class="button" style="background-image: url(./images/loud_speaker.png); background-size: cover; opacity: 100%;"
+        <button id="voice-button" class="button"
+          style="background-image: url(./images/loud_speaker.png); background-size: cover; opacity: 100%;"
           tabindex="0"></button>
         <span>
           <button id="local-save-button" class="button"
-            style="width: 60px; height: 60px; font-size: 36px; line-height: 22px; padding-bottom: 0%" tabindex="0"><br />১୪</button>
-          <button id="remote-save-button" class="button" style="width: 60px; height: 60px; margin-left: 6px; padding-bottom: 0%"
-            tabindex="0">໗</button>
+            style="width: 60px; height: 60px; font-size: 36px; line-height: 22px; padding-bottom: 0%"
+            tabindex="0"><br />১୪</button>
+          <button id="remote-save-button" class="button"
+            style="width: 60px; height: 60px; margin-left: 6px; padding-bottom: 0%" tabindex="0">໗</button>
         </span>
         <span>
           <button id="chart-button" class="button" style="width: 60px; height: 60px; font-size: 36px; line-height: 22px; 
@@ -675,17 +683,16 @@
 
     <div
       style="position: absolute; right: 4%; top: 2%; height: 100px; color: #0ee54f; cursor: pointer;  font-size: 56px; font-weight: 900; "
-      id="fullscreen-button">[x]</div>
+      id="fullscreen-button">〄</div>
     <div
-      style="position: absolute; right: 4%; top: 16%; height: 100px; color: #0ee54f; cursor: pointer; font-size: 56px; font-weight: 900;"
-      id="fullscreen-button-stream" onclick="toggleVideoFullscreen()">(o)</div>
+      style="display: none;position: absolute; right: 4%; top: 16%; height: 100px; color: #0ee54f; cursor: pointer; font-size: 56px; font-weight: 900;"
+      id="fullscreen-button-stream" onclick="toggleVideoFullscreen()">〄</div>
 
     <div
       style="display: none; position: absolute; right: 2%; bottom: 15%; height: 100px; color: #0ee54f; cursor: pointer; font-size: 76px; font-weight: 900;"
       id="next-stream-button">꣼𓂀</div>
     <script>
-
-      function toggleVideoFullscreen() {
+   function toggleVideoFullscreen() {
         const videoContainer = document.getElementById('video-container');
         const video = document.getElementById('main-video');
 
@@ -723,6 +730,34 @@
           }
         }
       }
+      setInterval(() => {
+  const container = document.getElementById('video-container');
+  const video = document.querySelector("video");
+  
+  if (video) {
+    // Всегда применяем зеркальную трансформацию
+    const transform = 'scale(-1, -1)';
+    
+    // Принудительно устанавливаем inline стили
+ //   container.style.transform = transform;
+ //   container.style.webkitTransform = transform;
+ //   container.style.mozTransform = transform;
+    
+    video.style.transform = transform;
+    video.style.webkitTransform = transform;
+    video.style.mozTransform = transform;
+    
+    // Для fullscreen
+    if (document.fullscreenElement === container ||
+      document.webkitFullscreenElement === container ||
+        document.mozFullScreenElement === container ||
+        document.msFullscreenElement === container) {
+      
+  //    container.style.cssText += `transform: ${transform} !important;`;
+    video.style.cssText += `transform: ${transform} !important;`;
+   }
+  }
+}, 1000); // Каждую секунду
     </script>
     <script>
       class FullscreenOverlay {
@@ -941,6 +976,8 @@
       document.addEventListener('DOMContentLoaded', () => {
         window.fullscreenOverlay = new FullscreenOverlay();
       });
+
+
     </script>
   </div>
 

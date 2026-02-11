@@ -27,29 +27,6 @@ class Entry {
 
   constructor() {
 
-    /*if (window.location.hostname.includes('nam') ||
-      window.location.search.includes('ти з дєтства начав подглядувать шо взрослі дяді роблять, і тобі ніхто' +
-        + ' аяяяй не зробив?..мало того шо в хліву воспітувався, так щей підаром виріс..'))     
-    {
-      const introVideoUrl = './videos/green.mp4';
-      const preloadVideo = document.createElement('video');
-      preloadVideo.style.setProperty('width', '120%');
-      preloadVideo.style.setProperty('height', '120%');
-      preloadVideo.style.setProperty('margin-left', '-10%');
-
-      //preloadVideo.style.setProperty('position', 'absolute');
-      //preloadVideo.style.display = 'none';
-      preloadVideo.preload = 'auto';
-      preloadVideo.src = introVideoUrl;
-      preloadVideo.autoplay = true;
-      preloadVideo.muted = true;
-      preloadVideo.loop = true;
-      document.body.removeChild(document.body.firstChild);
-      document.body.removeChild(document.body.firstChild);
-      document.body.appendChild(preloadVideo)
-      return null;
-    }*/
-
     Model.initialize();
 
       switch (route()) {
@@ -62,18 +39,8 @@ class Entry {
         default: {
           this.initializeAuth();
           break;
-        }
-      
+        }      
     }
-
-
-  }
-
-  private initialize_tmp = async () => {
-    const vid = new IPCamView_tmp();
-    vid.initialize();
-    setTimeout(() => vid.initWebRTC(), 1000);
-
   }
 
   private initializeAuth = async () => {
@@ -113,8 +80,6 @@ class Entry {
       }
 
       default: {
-        //  debugger;
-        //this.initializeComponents();
         this.initializeProxyComponents();
         break;
       }
@@ -187,14 +152,14 @@ class Entry {
   }
 
   private initializeProxyComponents = async () => {
-    //const { primaryStream, streams } = await this.initializeRemoteStream();
-    //console.log('[Entry] initializeIntegratedComponents initializing StreamProvider...');
-        Model.motionDetectorEnabled = false;
-    await StreamProvider.initialize();
-
-    EventHandler.addEventListener(STREAM_RECEIVED, (data: any) => {
-      View.displayStream(data.stream);
-    });
+ 
+    Model.motionDetectorEnabled = false;
+    //await StreamProvider.initialize();
+    const stream = await getWhepStream('https://node-mediamtx-proxy.onrender.com/camera/whep');
+    View.displayStream(stream);
+  //  EventHandler.addEventListener(STREAM_RECEIVED, (data: any) => {
+  //    View.displayStream(data.stream);
+  //  });
    //     console.log('[Entry] initializeIntegratedComponents displaying stream');
 
    // View.displayStream((this.stream = primaryStream));
@@ -253,9 +218,55 @@ class Entry {
   }
 }
 
-
-
-
-
-
 new Entry();
+
+const getWhepStream = async (url: string) => {
+  const pc = new RTCPeerConnection({
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' }
+    ]
+  });
+
+  // Promise, который резолвится когда приходит первый поток
+  const streamPromise = new Promise((resolve, reject) => {
+    pc.ontrack = (event) => {
+      resolve(event.streams[0]);
+    };
+
+    pc.onconnectionstatechange = () => {
+      if (pc.connectionState === 'failed') {
+        reject(new Error('WebRTC connection failed'));
+      }
+    };
+  });
+
+  // создаём offer
+  const offer = await pc.createOffer({
+    offerToReceiveVideo: true,
+    offerToReceiveAudio: true
+  });
+
+  await pc.setLocalDescription(offer);
+
+  // отправляем SDP
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/sdp'
+    },
+    body: offer.sdp
+  });
+
+  if (!response.ok) {
+    throw new Error(`WHEP error: ${response.status}`);
+  }
+
+  const answerSDP = await response.text();
+
+  await pc.setRemoteDescription({
+    type: 'answer',
+    sdp: answerSDP
+  });
+
+  return streamPromise;
+};

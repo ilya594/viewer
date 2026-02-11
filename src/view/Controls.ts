@@ -76,7 +76,7 @@ export class Controls {
 
         this.createQualButtons();
     
-        this.setupVideoInvertOnWheel(this._viewport);
+      //  this.setupVideoInvertOnWheel(this._viewport);
     }
 
     private setupVideoInvertOnWheel = (videoElement: any) => {
