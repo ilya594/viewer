@@ -40,7 +40,7 @@ export class StreamMessageHandler {
     private eventCounter: number = 0;
     private lastMessageTime: Date | null = null;
     
-    private constructor(url: string = 'ws://python-stream-handler.onrender.com') {
+    private constructor(url: string = 'wss://python-stream-handler.onrender.com') {
         this.url = url;
         this.initListeners();
     }
