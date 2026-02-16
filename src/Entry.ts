@@ -12,6 +12,7 @@ import * as Utils from './utils/Utils';
 import Matrix from "./view/Matrix";
 import Model from "./store/Model";
 import IPCamView_tmp from "./view/IPCamView_tmp";
+import { StreamMessageHandler } from "./network/StreamMessageHandler";
 export const CONFIG = {
   BACKEND_URL: 'https://nodejs-http-server.onrender.com',
   DEFAULT_CAMERA: 'camera',
@@ -156,9 +157,16 @@ class Entry {
     Model.motionDetectorEnabled = false;
     //await StreamProvider.initialize();
     document.querySelector("video").muted = true;
-   document.querySelector("video").playsInline = true;
+    document.querySelector("video").playsInline = true;
     const stream = await getWhepStream('https://node-mediamtx-proxy.onrender.com/camera/whep');
     View.displayStream(stream);
+    
+    const messageHandler: any = StreamMessageHandler.getInstance();
+    await messageHandler.connect();
+    messageHandler.on('motion', (data: any) => {
+      console.log('Motion event received:', data);
+     // MotionDetector.handleMotionEvent(data);
+    });
   //  EventHandler.addEventListener(STREAM_RECEIVED, (data: any) => {
   //    View.displayStream(data.stream);
   //  });
@@ -224,51 +232,34 @@ new Entry();
 
 const getWhepStream = async (url: string) => {
   const pc = new RTCPeerConnection({
-    iceServers: [
-      { urls: 'stun:stun.l.google.com:19302' }
-    ]
+    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
   });
 
-  // Promise, который резолвится когда приходит первый поток
-  const streamPromise = new Promise((resolve, reject) => {
-    pc.ontrack = (event) => {
-      resolve(event.streams[0]);
-    };
+  pc.addTransceiver('video', { direction: 'recvonly' });
+  pc.addTransceiver('audio', { direction: 'recvonly' });
 
+  const streamPromise = new Promise((resolve, reject) => {
+    pc.ontrack = (event) => resolve(event.streams[0]);
     pc.onconnectionstatechange = () => {
       if (pc.connectionState === 'failed') {
-        reject(new Error('WebRTC connection failed'));
+        reject(new Error('WebRTC failed'));
       }
     };
   });
 
-  // создаём offer
-  const offer = await pc.createOffer({
-    offerToReceiveVideo: true,
-    offerToReceiveAudio: true
-  });
-
+  const offer = await pc.createOffer();
   await pc.setLocalDescription(offer);
 
-  // отправляем SDP
   const response = await fetch(url, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/sdp'
-    },
+    headers: { 'Content-Type': 'application/sdp' },
     body: offer.sdp
   });
 
-  if (!response.ok) {
-    throw new Error(`WHEP error: ${response.status}`);
-  }
+  if (!response.ok) throw new Error(response.status.toString());
 
-  const answerSDP = await response.text();
-
-  await pc.setRemoteDescription({
-    type: 'answer',
-    sdp: answerSDP
-  });
+  const answer = await response.text();
+  await pc.setRemoteDescription({ type: 'answer', sdp: answer });
 
   return streamPromise;
 };
