@@ -209,7 +209,7 @@ export class StreamMessageHandler {
                         console.error('Ping failed:', error);
                     });
             }
-        }, 30000); // Каждые 30 секунд
+        }, 10000); // Каждые 30 секунд
     }
     
     /**
@@ -263,7 +263,7 @@ export class StreamMessageHandler {
     public async send<T = any>(
         type: MessageType, 
         data?: any, 
-        timeoutMs: number = 5000
+        timeoutMs: number = 15000
     ): Promise<T> {
         if (!this.connected) {
             throw new Error('WebSocket not connected');
