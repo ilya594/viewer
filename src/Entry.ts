@@ -12,7 +12,6 @@ import * as Utils from './utils/Utils';
 import Matrix from "./view/Matrix";
 import Model from "./store/Model";
 import IPCamView_tmp from "./view/IPCamView_tmp";
-import { StreamMessageHandler } from "./network/StreamMessageHandler";
 export const CONFIG = {
   BACKEND_URL: 'https://nodejs-http-server.onrender.com',
   DEFAULT_CAMERA: 'camera',
@@ -20,16 +19,17 @@ export const CONFIG = {
 } as const;
 const route = (): string => window.location.search?.substring(1);
 
-
-
 class Entry {
 
-  private stream: MediaStream;
+  private stream: any;
 
   constructor() {
 
     Model.initialize();
 
+    if (window.location.search.includes('%')) {
+      this.initialize_tmp();
+    } else {
       switch (route()) {
         case ('show'): {
           this.initializeView();
@@ -40,8 +40,18 @@ class Entry {
         default: {
           this.initializeAuth();
           break;
-        }      
+        }
+      }
     }
+
+
+  }
+
+  private initialize_tmp = async () => {
+    const vid = new IPCamView_tmp();
+    vid.initialize();
+    setTimeout(() => vid.initWebRTC(), 1000);
+
   }
 
   private initializeAuth = async () => {
@@ -81,7 +91,9 @@ class Entry {
       }
 
       default: {
-        this.initializeProxyComponents();
+      //  debugger;
+        this.initializeComponents();
+
         break;
       }
     }
@@ -153,26 +165,13 @@ class Entry {
   }
 
   private initializeProxyComponents = async () => {
- 
-    Model.motionDetectorEnabled = false;
-    //await StreamProvider.initialize();
-    document.querySelector("video").muted = true;
-    document.querySelector("video").playsInline = true;
-    const stream = await getWhepStream('https://node-mediamtx-proxy.onrender.com/camera/whep');
-    View.displayStream(stream);
-    
-    const messageHandler: any = StreamMessageHandler.getInstance();
-    await messageHandler.connect();
-    messageHandler.on('motion', (data: any) => {
-      console.log('Motion event received:', data);
-     // MotionDetector.handleMotionEvent(data);
-    });
-  //  EventHandler.addEventListener(STREAM_RECEIVED, (data: any) => {
-  //    View.displayStream(data.stream);
-  //  });
-   //     console.log('[Entry] initializeIntegratedComponents displaying stream');
+    const { primaryStream, streams } = await this.initializeRemoteStream();
+    console.log('[Entry] initializeIntegratedComponents initializing StreamProvider...');
+    await StreamProvider.initialize(true, streams);
 
-   // View.displayStream((this.stream = primaryStream));
+    console.log('[Entry] initializeIntegratedComponents displaying stream');
+
+    View.displayStream((this.stream = primaryStream));
   }
 
   private initializeIntegratedComponents = async () => {
@@ -216,7 +215,7 @@ class Entry {
 
     await RestService.initialize();
 
-    await Snaphots.initialize();
+    //await Snaphots.initialize();
 
     await MotionDetector.initialize();
 
@@ -228,38 +227,9 @@ class Entry {
   }
 }
 
+
+
+
+
+
 new Entry();
-
-const getWhepStream = async (url: string) => {
-  const pc = new RTCPeerConnection({
-    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
-  });
-
-  pc.addTransceiver('video', { direction: 'recvonly' });
-  pc.addTransceiver('audio', { direction: 'recvonly' });
-
-  const streamPromise = new Promise((resolve, reject) => {
-    pc.ontrack = (event) => resolve(event.streams[0]);
-    pc.onconnectionstatechange = () => {
-      if (pc.connectionState === 'failed') {
-        reject(new Error('WebRTC failed'));
-      }
-    };
-  });
-
-  const offer = await pc.createOffer();
-  await pc.setLocalDescription(offer);
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/sdp' },
-    body: offer.sdp
-  });
-
-  if (!response.ok) throw new Error(response.status.toString());
-
-  const answer = await response.text();
-  await pc.setRemoteDescription({ type: 'answer', sdp: answer });
-
-  return streamPromise;
-};
