@@ -253,8 +253,9 @@ export class StreamProvider {
     this.destroyPeer();
     
     const params = {
-      host: "nodejs-peer-server.onrender.com",
+      host: "python-stream-handler.onrender.com",
       path: "/peer",
+      port: 9000,
       secure: true,
       config: {
         iceServers: [
