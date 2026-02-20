@@ -255,7 +255,6 @@ export class StreamProvider {
     const params = {
       host: "python-stream-handler.onrender.com",
       path: "/peer",
-      port: 9000,
       secure: true,
       config: {
         iceServers: [
