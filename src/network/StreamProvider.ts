@@ -426,10 +426,10 @@ export class StreamProvider {
     
     try {
       console.log(`[StreamProvider] Connecting to streamer: ${streamerId}`);
-      const connection = this._peer.connect(streamerId, {
+      const connection = this._peer.connect(streamerId/*, {
         reliable: true,
         serialization: 'json'
-      });
+      }*/);
       
       connection?.on('open', () => {
         console.log(`[StreamProvider] Connected to streamer: ${streamerId}`);
