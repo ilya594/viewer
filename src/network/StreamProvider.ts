@@ -253,16 +253,29 @@ export class StreamProvider {
     this.destroyPeer();
     
     const params = {
-      host: "python-stream-handler.onrender.com",
-      path: "/peer",
-      secure: true,
-      config: {
+    host: "python-stream-handler.onrender.com",
+    path: '/peer',  // Важно: должен совпадать с путем в сервере
+    secure: true,  // false для HTTP, true для HTTPS
+    key: 'peerjs',  // Ключ должен совпадать
+    debug: 3,  // Максимальный уровень логирования
+    config: {
         iceServers: [
-          { urls: 'stun:stun.l.google.com:19302' },
-          { urls: 'stun:global.stun.twilio.com:3478' }
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:global.stun.twilio.com:3478' },
+            {
+                urls: [
+                    'turn:openrelay.metered.ca:80',
+                    'turn:openrelay.metered.ca:443',
+                    'turn:openrelay.metered.ca:443?transport=tcp'
+                ],
+                username: 'openrelayproject',
+                credential: 'openrelayproject'
+            }
         ]
-      }
-    };
+    }
+};
+
+    
     
     this._peer = new Peer(id(), params);
     
