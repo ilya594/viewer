@@ -29,15 +29,17 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     port: 8008,
-    /*https: {
-      key: fs.readFileSync('./cert/key.pem'),
-      cert: fs.readFileSync('./cert/cert.pem'),
-      ca: fs.readFileSync('./cert/csr.pem')
-    },*/
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-        "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
-      },
+    allowedHosts: 'all',               // или 'stairs.live' — чтобы не ругался на Host header
+    client: {
+      webSocketURL: 'auto://0.0.0.0:0/ws',  // или 'wss://stairs.live/ws' — если хочешь явно
+    },
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
+    },
+    // ← Добавь это
+    hot: true,  // если используешь HMR
+    // proxy: { ... } если нужно, но сейчас не обязательно
   }
 }
