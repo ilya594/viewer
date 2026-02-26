@@ -4,7 +4,7 @@ import { generateSortableFileName } from "../utils/Utils";
 
 export class RestService {
 
-  public SERVER_URL: string = 'http://195.137.244.53:8000/';//'https://nodejs-http-server.onrender.com/';
+  public SERVER_URL: string = '//195.137.244.53:8000/nserver';//'https://nodejs-http-server.onrender.com/';
   //private TIME_ZONE: string = 'Europe/Kyiv';
 
   constructor() {
