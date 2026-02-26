@@ -4,7 +4,7 @@ export class IPCamView_tmp {
 
   public async getStream(): Promise<MediaStream> {
 
-    const serverUrl = 'http://localhost:8000/api/webrtc/camera/';
+    const serverUrl = 'https://stairs.live/nserver/api/webrtc/camera/';
     console.log('🚀 Подключаемся к WebRTC:', serverUrl);
 
     return new Promise(async (resolve, reject) => {
