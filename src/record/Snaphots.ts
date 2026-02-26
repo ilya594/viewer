@@ -77,9 +77,7 @@ class Snaphots {
             await NotesManager.initialize("view-page");
         });
 
-
         PreviewManager.initialize("view-page", "video");
-
       
         requestAnimationFrame(this.tick);
     };
@@ -123,7 +121,7 @@ class Snaphots {
         context?.drawImage(video, 0, 0, w, h);
         Utils.addTimeStamp(canvas);
         Utils.addSourceStamp(canvas, source);
-        Utils.addDataStamp(canvas, data);
+        //Utils.addDataStamp(canvas, data);
         return canvas;
     };
 
