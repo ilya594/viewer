@@ -45,7 +45,7 @@ export class SnapshotViewer {
   private async loadFiles(): Promise<void> {
     // Получаем список файлов через серверный эндпоинт
     // (предполагаем, что у тебя есть API /api/detections/list)
-    const response = await fetch('/detections');
+    const response = await RestService.getSnapshotsList();//fetch('/detections');
 
     //if (!response.ok) {
     //  throw new Error(`HTTP ${response.status}: ${response.statusText}`);

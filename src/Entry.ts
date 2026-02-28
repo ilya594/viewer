@@ -14,7 +14,7 @@ import Model from "./store/Model";
 import IPCamView_tmp from "./view/IPCamView_tmp";
 import Detector from "./motion/YoloDetector";
 import YoloDetector from "./motion/YoloDetector";
-//import SnapshotViewer from "./view/SnapshotViewer";
+import SnapshotViewer from "./view/SnapshotViewer";
 export const CONFIG = {
   BACKEND_URL: 'https://nodejs-http-server.onrender.com',
   DEFAULT_CAMERA: 'camera',
@@ -185,7 +185,7 @@ class Entry {
 
     View.displayStream(stream);
     Sounds.playStream(stream);
-    //SnapshotViewer.initialize();
+    SnapshotViewer.initialize();
     //Controls.setVisible(true);
   }
 
