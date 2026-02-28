@@ -29,7 +29,8 @@ module.exports = {
   devServer: {
     historyApiFallback: true,
     port: 8008,
-    allowedHosts: 'all',               // или 'stairs.live' — чтобы не ругался на Host header
+    allowedHosts: 'all',    
+    webSocketServer: false,           // или 'stairs.live' — чтобы не ругался на Host header
    // client: {
    //   webSocketURL: 'auto://0.0.0.0:0/ws',  // или 'wss://stairs.live/ws' — если хочешь явно
   //  },
