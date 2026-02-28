@@ -35,7 +35,7 @@ export class SnapshotViewer {
   public async initialize() {
     try {
       await this.loadFiles();
-      this.render();
+      //this.render();
     } catch (err) {
       console.error('Failed to initialize SnapshotViewer:', err);
       this.container.innerHTML = `<div class="error">Ошибка загрузки: ${err.message}</div>`;
@@ -46,7 +46,7 @@ export class SnapshotViewer {
     // Получаем список файлов через серверный эндпоинт
     // (предполагаем, что у тебя есть API /api/detections/list)
     const response = await RestService.getSnapshotsList();//fetch('/detections');
-
+return;
     //if (!response.ok) {
     //  throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     //}
