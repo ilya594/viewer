@@ -5,6 +5,7 @@ import EventHandler, { STREAMS_COUNT_CHANGED } from "../utils/Events";
 import RestService from "../network/RestService";
 import FileSaver from "file-saver";
 import Model from "../store/Model";
+import SnapshotViewer from "./SnapshotViewer";
 
 
 export class Controls {
@@ -75,6 +76,10 @@ export class Controls {
         this.createHudsControl();
 
         this.createQualButtons();
+
+        document.getElementById("photo-list-button").onclick = () => {
+            SnapshotViewer.showhide();
+        }
     
       //  this.setupVideoInvertOnWheel(this._viewport);
     }

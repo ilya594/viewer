@@ -185,7 +185,8 @@ class Entry {
 
     View.displayStream(stream);
     Sounds.playStream(stream);
-    SnapshotViewer.initialize();
+    await SnapshotViewer.initialize();
+    SnapshotViewer.showhide();
     //Controls.setVisible(true);
   }
 
