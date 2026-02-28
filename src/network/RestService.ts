@@ -64,6 +64,10 @@ export class RestService {
     });
   };
 
+  public getSnapshotsList = async () => {
+    return fetch(this.SERVER_URL + 'getsnapshotslist');
+  }
+
   public validatePrediction = async (prediction: any) => {
     const response = await axios.get(this.SERVER_URL + 'valprediction', {
       params: {
