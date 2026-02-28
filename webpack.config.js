@@ -30,16 +30,16 @@ module.exports = {
     historyApiFallback: true,
     port: 8008,
     allowedHosts: 'all',               // или 'stairs.live' — чтобы не ругался на Host header
-    client: {
-      webSocketURL: 'auto://0.0.0.0:0/ws',  // или 'wss://stairs.live/ws' — если хочешь явно
-    },
+   // client: {
+   //   webSocketURL: 'auto://0.0.0.0:0/ws',  // или 'wss://stairs.live/ws' — если хочешь явно
+  //  },
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
       "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
     },
     // ← Добавь это
-    hot: true,  // если используешь HMR
+   // hot: true,  // если используешь HMR
     // proxy: { ... } если нужно, но сейчас не обязательно
   }
 }
