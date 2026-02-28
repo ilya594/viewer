@@ -39,7 +39,8 @@ module.exports = {
       "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
     },
     // ← Добавь это
-   // hot: true,  // если используешь HMR
+    hot: false,  // если используешь HMR
+    liveReload: false
     // proxy: { ... } если нужно, но сейчас не обязательно
   }
 }
